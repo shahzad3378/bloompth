@@ -1,82 +1,118 @@
+import Link from "next/link";
+
+const highlights = [
+  "Quality Products",
+  "UAE-Based Support",
+  "Fast Fulfillment",
+  "Dedicated Assistance",
+];
+
 const features = [
   {
-    title: "Ready Stock in UAE",
-    description: "Products available locally for fast order processing.",
+    title: "Quality Products",
+    description:
+      "Browse carefully selected products suitable for online sellers and growing eCommerce businesses.",
   },
   {
-    title: "Same-Day Dispatch",
-    description: "Confirmed orders can be prepared and dispatched quickly.",
+    title: "No Inventory Hassle",
+    description:
+      "Source products without managing large quantities of stock or making heavy upfront investments.",
   },
   {
-    title: "Wholesale Prices",
-    description: "Competitive pricing specially designed for online sellers.",
+    title: "UAE Fulfillment Support",
+    description:
+      "Get reliable support for product sourcing, storage, packing and order fulfillment.",
   },
   {
-    title: "Dedicated Support",
-    description: "Our UAE team is ready to assist sellers with their orders.",
+    title: "Simple Seller Onboarding",
+    description:
+      "Choose products, contact our team and start selling through your preferred online channels.",
   },
 ];
 
 export default function Hero() {
   return (
     <section className="overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950 text-white">
-      <div className="mx-auto grid min-h-[620px] max-w-7xl gap-12 px-6 py-20 lg:grid-cols-2 lg:items-center">
+      <div className="mx-auto grid max-w-7xl gap-14 px-6 py-20 lg:grid-cols-2 lg:items-center lg:py-28">
         <div>
-          <span className="inline-flex rounded-full border border-emerald-400/40 bg-emerald-400/10 px-4 py-2 text-sm font-semibold text-emerald-300">
-            UAE Ready Stock for Online Sellers
+          <span className="inline-flex rounded-full border border-emerald-400/30 bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-300">
+            Product sourcing and dropshipping support in the UAE
           </span>
 
-          <h1 className="mt-6 text-4xl font-black leading-tight sm:text-5xl lg:text-6xl">
-            Powering UAE Sellers with{" "}
-            <span className="text-emerald-400">
-              Ready Stock & Fast Fulfillment
-            </span>
+          <h1 className="mt-7 max-w-3xl text-4xl font-black leading-tight sm:text-5xl lg:text-6xl">
+            Start Your
+            <span className="text-emerald-400"> Dropshipping Business </span>
+            with BloomPath
           </h1>
 
-          <p className="mt-6 max-w-xl text-lg leading-8 text-slate-300">
-            Access ready-stock products in the UAE without investing heavily in
-            inventory. We store, pack and dispatch while you focus on growing
-            your online business.
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
+            Discover products for your online store and contact BloomPath for
+            sourcing and fulfillment support. We help sellers start simply and
+            grow step by step.
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-4">
-            <button className="rounded-lg bg-emerald-500 px-7 py-4 font-bold text-white transition hover:bg-emerald-400">
-              Become a Seller
-            </button>
-
-            <button className="rounded-lg border border-white/30 px-7 py-4 font-bold text-white transition hover:bg-white hover:text-slate-950">
+          <div className="mt-9 flex flex-wrap gap-4">
+            <Link
+              href="/products"
+              className="rounded-xl bg-emerald-500 px-7 py-4 text-base font-bold text-white transition hover:bg-emerald-400"
+            >
               Browse Products
-            </button>
+            </Link>
+
+            <Link
+              href="/contact"
+              className="rounded-xl border border-white/30 px-7 py-4 text-base font-bold text-white transition hover:bg-white hover:text-slate-950"
+            >
+              Contact Us
+            </Link>
           </div>
 
-          <div className="mt-10 flex flex-wrap gap-6 text-sm text-slate-300">
-            <span>✓ Ready stock in UAE</span>
-            <span>✓ Fast dispatch</span>
-            <span>✓ Seller support</span>
+          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {highlights.map((highlight) => (
+              <div
+                key={highlight}
+                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4"
+              >
+                <div className="text-lg font-black text-emerald-400">✓</div>
+                <p className="mt-1 text-sm font-semibold text-slate-200">
+                  {highlight}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
 
         <div className="relative">
-          <div className="absolute -left-10 -top-10 h-40 w-40 rounded-full bg-emerald-500/20 blur-3xl" />
-          <div className="absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-emerald-500/20 blur-3xl" />
+          <div className="absolute -left-10 top-10 h-48 w-48 rounded-full bg-emerald-500/20 blur-3xl" />
+          <div className="absolute bottom-0 right-0 h-48 w-48 rounded-full bg-emerald-500/20 blur-3xl" />
 
-          <div className="relative grid grid-cols-2 gap-4 rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur">
-            {features.map((feature) => (
-              <article
-                key={feature.title}
-                className="rounded-2xl bg-white p-5 text-slate-900 shadow-lg"
-              >
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-xl">
-                  ✓
+          <div className="relative rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur sm:p-8">
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-300">
+              Why BloomPath
+            </p>
+
+            <h2 className="mt-3 text-3xl font-black">
+              A simpler way to start selling online
+            </h2>
+
+            <div className="mt-7 grid gap-4 sm:grid-cols-2">
+              {features.map((feature) => (
+                <div
+                  key={feature.title}
+                  className="rounded-2xl bg-white p-5 text-slate-900 shadow-lg"
+                >
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-xl">
+                    ✓
+                  </div>
+
+                  <h3 className="mt-4 text-lg font-bold">{feature.title}</h3>
+
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    {feature.description}
+                  </p>
                 </div>
-
-                <h2 className="font-bold">{feature.title}</h2>
-
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  {feature.description}
-                </p>
-              </article>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>

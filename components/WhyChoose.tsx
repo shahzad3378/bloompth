@@ -1,108 +1,124 @@
-const bloompthBenefits = [
-  "Ready stock available in the UAE",
-  "Same-day order processing",
-  "Flexible wholesale quantities",
-  "UAE-based seller support",
-  "Product images and descriptions",
-  "Packing and dispatch assistance",
+import Link from "next/link";
+
+const bloomPathBenefits = [
+  "Browse products selected for online selling",
+  "UAE-based sourcing and fulfillment support",
+  "Simple process for new and growing sellers",
+  "Local assistance for product inquiries",
+  "Clear stock and product information",
+  "Step-by-step support to get started",
 ];
 
-const otherSupplierProblems = [
-  "Long international shipping time",
+const traditionalChallenges = [
+  "Large upfront inventory purchases",
+  "Long international shipping times",
+  "Import and customs complications",
   "High minimum order quantities",
-  "Import and customs delays",
-  "No dedicated local support",
-  "Manual packing and fulfillment",
-  "Uncertain product availability",
+  "Limited local support",
+  "Difficult product sourcing process",
 ];
 
 export default function WhyChoose() {
   return (
-    <section id="about" className="bg-slate-50 py-16">
+    <section
+      id="about"
+      className="bg-gradient-to-b from-slate-100 to-white py-24"
+    >
       <div className="mx-auto max-w-7xl px-6">
         <div className="text-center">
-          <p className="text-sm font-bold uppercase tracking-widest text-emerald-600">
-            Why Sellers Choose Us
-          </p>
+          <span className="rounded-full bg-emerald-100 px-5 py-2 text-sm font-bold uppercase tracking-wider text-emerald-700">
+            Why BloomPath?
+          </span>
 
-          <h2 className="mt-3 text-3xl font-black text-slate-950 sm:text-4xl">
-            A better way to source and fulfill orders in the UAE
+          <h2 className="mt-6 text-4xl font-black text-slate-900 lg:text-5xl">
+            A Simpler Way to Source Products
           </h2>
 
-          <p className="mx-auto mt-4 max-w-2xl leading-7 text-slate-600">
-            BLOOMPTH helps online sellers access ready stock, local support and
-            faster fulfillment without importing products themselves.
+          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-600">
+            BloomPath helps online sellers discover products and connect with
+            local sourcing and fulfillment support in the UAE.
           </p>
         </div>
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-[1fr_auto_1fr] lg:items-stretch">
-          <article className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm">
-            <h3 className="text-xl font-black text-slate-950">
-              Other Suppliers
+        <div className="mt-16 grid gap-8 lg:grid-cols-[1fr_auto_1fr]">
+          <div className="rounded-3xl border border-red-100 bg-white p-8 shadow-lg">
+            <h3 className="text-center text-2xl font-black text-red-600">
+              Common Supplier Challenges
             </h3>
 
-            <div className="mt-6 space-y-4">
-              {otherSupplierProblems.map((problem) => (
+            <div className="mt-8 space-y-4">
+              {traditionalChallenges.map((item) => (
                 <div
-                  key={problem}
-                  className="flex items-start gap-3 rounded-xl bg-red-50 p-4"
+                  key={item}
+                  className="flex items-start gap-4 rounded-2xl bg-red-50 p-4"
                 >
-                  <span className="font-black text-red-500">✕</span>
-                  <p className="text-sm font-medium text-slate-700">
-                    {problem}
-                  </p>
+                  <span className="text-xl font-black text-red-600">✕</span>
+
+                  <p className="font-medium text-slate-700">{item}</p>
                 </div>
               ))}
             </div>
-          </article>
+          </div>
 
           <div className="flex items-center justify-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-slate-950 text-lg font-black text-white shadow-xl">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-slate-950 text-2xl font-black text-white shadow-2xl">
               VS
             </div>
           </div>
 
-          <article className="rounded-3xl bg-slate-950 p-7 text-white shadow-xl">
-            <h3 className="text-xl font-black">
-              Why Choose <span className="text-emerald-400">BLOOMPTH</span>
+          <div className="rounded-3xl bg-slate-950 p-8 text-white shadow-2xl">
+            <h3 className="text-center text-2xl font-black">
+              The Bloom
+              <span className="text-emerald-400">Path</span> Approach
             </h3>
 
-            <div className="mt-6 space-y-4">
-              {bloompthBenefits.map((benefit) => (
+            <div className="mt-8 space-y-4">
+              {bloomPathBenefits.map((item) => (
                 <div
-                  key={benefit}
-                  className="flex items-start gap-3 rounded-xl bg-white/5 p-4"
+                  key={item}
+                  className="flex items-start gap-4 rounded-2xl bg-white/5 p-4"
                 >
-                  <span className="font-black text-emerald-400">✓</span>
-                  <p className="text-sm font-medium text-slate-200">
-                    {benefit}
-                  </p>
+                  <span className="text-xl font-black text-emerald-400">✓</span>
+
+                  <p className="text-slate-200">{item}</p>
                 </div>
               ))}
             </div>
-          </article>
+          </div>
         </div>
 
-        <div className="mt-10 rounded-3xl bg-gradient-to-r from-emerald-600 to-emerald-500 px-7 py-10 text-white shadow-xl sm:px-10">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div className="mt-20 overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-700 p-8 text-white shadow-2xl sm:p-12">
+          <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
             <div>
-              <p className="text-sm font-bold uppercase tracking-widest text-emerald-100">
-                Start Your Seller Journey
-              </p>
+              <span className="rounded-full bg-white/20 px-4 py-2 text-sm font-bold uppercase tracking-wider">
+                Get Started
+              </span>
 
-              <h3 className="mt-2 text-3xl font-black">
-                Become a BLOOMPTH seller today
+              <h3 className="mt-6 text-3xl font-black sm:text-4xl">
+                Ready to Explore Products for Your Online Store?
               </h3>
 
-              <p className="mt-3 max-w-2xl text-emerald-50">
-                Register your seller account and get access to UAE-ready stock,
-                wholesale pricing and fulfillment support.
+              <p className="mt-5 max-w-2xl text-lg leading-8 text-emerald-50">
+                Browse available products and contact BloomPath for sourcing,
+                stock availability and fulfillment information.
               </p>
             </div>
 
-            <button className="shrink-0 rounded-xl bg-white px-7 py-4 font-black text-emerald-700 transition hover:bg-slate-950 hover:text-white">
-              Register as Seller
-            </button>
+            <div className="flex flex-wrap gap-4 lg:justify-end">
+              <Link
+                href="/products"
+                className="rounded-xl bg-white px-8 py-4 text-lg font-bold text-emerald-700 transition hover:bg-slate-900 hover:text-white"
+              >
+                Browse Products
+              </Link>
+
+              <Link
+                href="/contact"
+                className="rounded-xl border border-white px-8 py-4 text-lg font-bold transition hover:bg-white hover:text-emerald-700"
+              >
+                Contact BloomPath
+              </Link>
+            </div>
           </div>
         </div>
       </div>
