@@ -1,45 +1,27 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { ReactNode } from "react";
+
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "BloomPath Dropshipping | UAE Dropshipping & Fulfillment",
+  title: {
+    default: "BloomPath",
+    template: "%s | BloomPath",
+  },
   description:
-    "BloomPath connects online sellers with trusted dropshipping and fulfillment services across the UAE. Source products, manage inventory, and grow your eCommerce business.",
-  keywords: [
-    "BloomPath",
-    "Dropshipping UAE",
-    "UAE Fulfillment",
-    "Online Sellers",
-    "Wholesale UAE",
-    "eCommerce",
-    "Inventory",
-  ],
+    "BloomPath helps online sellers source products and manage UAE-based fulfillment.",
+};
+
+type RootLayoutProps = {
+  children: ReactNode;
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: RootLayoutProps) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col bg-white text-gray-900">
-        {children}
-      </body>
+    <html lang="en">
+      <body>{children}</body>
     </html>
   );
 }

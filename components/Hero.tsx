@@ -1,118 +1,99 @@
-import Link from "next/link";
+import {
+  BadgeCheck,
+  Banknote,
+  ShieldCheck,
+  Truck,
+  Warehouse,
+} from "lucide-react";
 
-const highlights = [
-  "Quality Products",
-  "UAE-Based Support",
-  "Fast Fulfillment",
-  "Dedicated Assistance",
-];
-
-const features = [
+const benefits = [
   {
-    title: "Quality Products",
-    description:
-      "Browse carefully selected products suitable for online sellers and growing eCommerce businesses.",
+    icon: Warehouse,
+    title: "UAE Warehouse",
+    description: "Local stock for faster order processing",
   },
   {
-    title: "No Inventory Hassle",
-    description:
-      "Source products without managing large quantities of stock or making heavy upfront investments.",
+    icon: Banknote,
+    title: "COD Support",
+    description: "Cash on Delivery support where available",
   },
   {
-    title: "UAE Fulfillment Support",
-    description:
-      "Get reliable support for product sourcing, storage, packing and order fulfillment.",
-  },
-  {
-    title: "Simple Seller Onboarding",
-    description:
-      "Choose products, contact our team and start selling through your preferred online channels.",
+    icon: Truck,
+    title: "Middle East Delivery",
+    description: "Reliable last-mile delivery across key markets",
   },
 ];
 
 export default function Hero() {
   return (
-    <section className="overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950 text-white">
-      <div className="mx-auto grid max-w-7xl gap-14 px-6 py-20 lg:grid-cols-2 lg:items-center lg:py-28">
-        <div>
-          <span className="inline-flex rounded-full border border-emerald-400/30 bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-300">
-            Product sourcing and dropshipping support in the UAE
-          </span>
+    <section className="relative overflow-hidden border-b border-slate-200 bg-white">
+      <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-emerald-100/70 blur-3xl" />
 
-          <h1 className="mt-7 max-w-3xl text-4xl font-black leading-tight sm:text-5xl lg:text-6xl">
-            Start Your
-            <span className="text-emerald-400"> Dropshipping Business </span>
-            with BloomPath
+      <div className="pointer-events-none absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-slate-100 blur-3xl" />
+
+      <div className="relative mx-auto max-w-7xl px-5 py-10 sm:py-12 lg:px-8 lg:py-14">
+        <div className="max-w-6xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-700 sm:text-sm">
+            <BadgeCheck size={17} />
+            Your Complete eCommerce Growth Partner
+          </div>
+
+          <h1 className="mt-5 max-w-6xl text-4xl font-black leading-[1.08] tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
+            Launch, Scale & Fulfill Your eCommerce Business Across the{" "}
+            <span className="text-emerald-600">Middle East</span>
           </h1>
 
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-            Discover products for your online store and contact BloomPath for
-            sourcing and fulfillment support. We help sellers start simply and
-            grow step by step.
+          <p className="mt-5 max-w-5xl text-base leading-8 text-slate-600 sm:text-lg">
+            BloomPath helps Amazon, Noon, Shopify, TikTok Shop, Facebook and
+            Instagram sellers source products faster, store inventory in our
+            UAE warehouse, reduce operational costs, improve profit margins and
+            deliver orders through reliable COD and last-mile fulfillment
+            solutions across the UAE and GCC.
           </p>
 
-          <div className="mt-9 flex flex-wrap gap-4">
-            <Link
-              href="/products"
-              className="rounded-xl bg-emerald-500 px-7 py-4 text-base font-bold text-white transition hover:bg-emerald-400"
-            >
-              Browse Products
-            </Link>
+          <div className="mt-8 grid max-w-4xl gap-3 sm:grid-cols-3">
+            {benefits.map((benefit) => {
+              const Icon = benefit.icon;
 
-            <Link
-              href="/contact"
-              className="rounded-xl border border-white/30 px-7 py-4 text-base font-bold text-white transition hover:bg-white hover:text-slate-950"
-            >
-              Contact Us
-            </Link>
-          </div>
-
-          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {highlights.map((highlight) => (
-              <div
-                key={highlight}
-                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4"
-              >
-                <div className="text-lg font-black text-emerald-400">✓</div>
-                <p className="mt-1 text-sm font-semibold text-slate-200">
-                  {highlight}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="relative">
-          <div className="absolute -left-10 top-10 h-48 w-48 rounded-full bg-emerald-500/20 blur-3xl" />
-          <div className="absolute bottom-0 right-0 h-48 w-48 rounded-full bg-emerald-500/20 blur-3xl" />
-
-          <div className="relative rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur sm:p-8">
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-300">
-              Why BloomPath
-            </p>
-
-            <h2 className="mt-3 text-3xl font-black">
-              A simpler way to start selling online
-            </h2>
-
-            <div className="mt-7 grid gap-4 sm:grid-cols-2">
-              {features.map((feature) => (
+              return (
                 <div
-                  key={feature.title}
-                  className="rounded-2xl bg-white p-5 text-slate-900 shadow-lg"
+                  key={benefit.title}
+                  className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm transition duration-200 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-md"
                 >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-xl">
-                    ✓
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+                    <Icon size={21} />
                   </div>
 
-                  <h3 className="mt-4 text-lg font-bold">{feature.title}</h3>
+                  <div>
+                    <p className="text-sm font-black text-slate-950">
+                      {benefit.title}
+                    </p>
 
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    {feature.description}
-                  </p>
+                    <p className="mt-1 text-xs leading-5 text-slate-500">
+                      {benefit.description}
+                    </p>
+                  </div>
                 </div>
-              ))}
-            </div>
+              );
+            })}
+          </div>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+            {[
+              "Fast Sourcing",
+              "Amazon & Noon Ready",
+              "TikTok Shop Support",
+              "Facebook & Instagram Selling",
+              "Lower Costs",
+              "Higher Margins",
+            ].map((item) => (
+              <span
+                key={item}
+                className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 shadow-sm"
+              >
+                {item}
+              </span>
+            ))}
           </div>
         </div>
       </div>
