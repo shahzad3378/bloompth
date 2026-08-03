@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { ArrowLeft, BadgeCheck, Headphones, ShieldCheck } from "lucide-react";
 import RequestProductForm from "@/components/RequestProductForm";
 
@@ -28,7 +29,9 @@ export default function RequestProductPage() {
       </section>
 
       <section className="mx-auto grid max-w-7xl gap-8 px-6 py-10 sm:py-12 lg:grid-cols-[1fr_360px] lg:items-start">
-        <RequestProductForm />
+        <Suspense fallback={<div>Loading...</div>}>
+          <RequestProductForm />
+        </Suspense>
 
         <aside className="space-y-4 lg:sticky lg:top-24">
           <div className="rounded-3xl bg-slate-950 p-6 text-white">

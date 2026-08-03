@@ -267,12 +267,11 @@ export default async function AdminProductsPage() {
                           </Link>
 
                           <DeleteProductButton
-                            productId={product.id}
+                            productId={String(product.id)}
                             productTitle={
                               product.title || "Untitled Product"
                             }
-                            imageUrl={product.image}
-                          />
+                                        />
                         </div>
                       </td>
                     </tr>
