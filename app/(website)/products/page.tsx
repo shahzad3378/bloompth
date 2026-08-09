@@ -34,7 +34,7 @@ export default async function ProductsPage() {
         <div className="absolute -left-32 top-0 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl" />
         <div className="absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-blue-500/10 blur-3xl" />
 
-        <div className="relative mx-auto max-w-7xl px-6 py-12 sm:py-16">
+        <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-16">
           <Link
             href="/"
             className="inline-flex items-center gap-2 text-sm font-bold text-emerald-400 transition hover:text-emerald-300"
@@ -50,11 +50,11 @@ export default async function ProductsPage() {
                 BloomPath Product Catalog
               </div>
 
-              <h1 className="mt-5 max-w-3xl text-4xl font-black tracking-tight sm:text-5xl">
+              <h1 className="mt-5 max-w-3xl text-[34px] font-black leading-[1.08] tracking-tight sm:text-5xl">
                 Products for Online Sellers
               </h1>
 
-              <p className="mt-5 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
+              <p className="mt-4 max-w-2xl text-[15px] leading-6 sm:mt-5 sm:text-lg sm:leading-8 text-slate-300 sm:text-lg">
                 Explore wholesale products, dropshipping opportunities and
                 sourcing options selected for e-commerce sellers in the UAE.
               </p>
@@ -62,7 +62,7 @@ export default async function ProductsPage() {
 
             <Link
               href="/request-product"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-6 py-3.5 font-black text-slate-950 transition hover:bg-emerald-400"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 sm:w-auto px-6 py-3.5 font-black text-slate-950 transition hover:bg-emerald-400"
             >
               Request a Product
               <ArrowRight size={18} />
@@ -102,7 +102,7 @@ export default async function ProductsPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-10 sm:py-12">
+      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
         {error ? (
           <div className="rounded-3xl border border-red-200 bg-red-50 p-8 text-center shadow-sm">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-100 text-red-700">
@@ -165,7 +165,7 @@ export default async function ProductsPage() {
       </section>
 
       <section className="border-t border-slate-200 bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-10">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
           <div className="flex flex-col gap-6 rounded-3xl bg-slate-950 p-7 text-white sm:p-10 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <p className="text-sm font-black uppercase tracking-widest text-emerald-400">

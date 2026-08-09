@@ -102,7 +102,7 @@ export default function ProductCatalog({
 
   return (
     <div>
-      <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <div className="rounded-2xl border border-slate-200 sm:rounded-3xl bg-white p-4 shadow-sm sm:p-5">
         <div className="grid gap-3 lg:grid-cols-[1fr_230px]">
           <label className="relative block">
             <span className="sr-only">Search products</span>
@@ -197,7 +197,7 @@ export default function ProductCatalog({
       </div>
 
       {filteredProducts.length === 0 ? (
-        <div className="mt-6 rounded-3xl border border-slate-200 bg-white px-6 py-16 text-center shadow-sm">
+        <div className="mt-6 rounded-2xl border border-slate-200 sm:rounded-3xl bg-white px-6 py-16 text-center shadow-sm">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 text-slate-500">
             <PackageSearch size={30} />
           </div>
@@ -231,7 +231,7 @@ export default function ProductCatalog({
           </div>
         </div>
       ) : (
-        <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="mt-6 grid grid-cols-2 gap-3 sm:mt-7 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
           {filteredProducts.map((product) => {
             const displayPrice = product.sale_price ?? product.price;
             const stock = Number(product.stock ?? 0);
@@ -253,7 +253,7 @@ export default function ProductCatalog({
             return (
               <article
                 key={product.id}
-                className="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white transition duration-300 hover:-translate-y-1 hover:border-emerald-300 hover:shadow-xl"
+                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 sm:rounded-3xl bg-white transition duration-300 hover:-translate-y-1 hover:border-emerald-300 hover:shadow-xl"
               >
                 <Link
                   href={`/products/${product.slug}`}
@@ -280,7 +280,7 @@ export default function ProductCatalog({
 
                   <div className="absolute left-3 top-3 flex flex-col items-start gap-2">
                     <span
-                      className={`rounded-full px-3 py-1.5 text-xs font-black shadow-sm ${
+                      className={`rounded-full px-2 py-1 text-[10px] sm:px-3 sm:py-1.5 sm:text-xs font-black shadow-sm ${
                         stock > 0
                           ? "bg-white text-emerald-700"
                           : "bg-red-600 text-white"
@@ -304,7 +304,7 @@ export default function ProductCatalog({
                   )}
                 </Link>
 
-                <div className="flex flex-1 flex-col p-5">
+                <div className="flex flex-1 flex-col p-3 sm:p-5">
                   <div className="flex items-center justify-between gap-3">
                     <p className="line-clamp-1 text-xs font-black uppercase tracking-wider text-emerald-600">
                       {product.category || "General"}
@@ -319,12 +319,12 @@ export default function ProductCatalog({
                   </div>
 
                   <Link href={`/products/${product.slug}`}>
-                    <h2 className="mt-2 line-clamp-2 text-lg font-black leading-6 text-slate-950 transition group-hover:text-emerald-600">
+                    <h2 className="mt-2 line-clamp-2 text-sm font-black leading-5 sm:text-lg sm:leading-6 text-slate-950 transition group-hover:text-emerald-600">
                       {product.title}
                     </h2>
                   </Link>
 
-                  <p className="mt-3 line-clamp-2 text-sm leading-6 text-slate-600">
+                  <p className="mt-3 hidden line-clamp-2 text-sm leading-6 text-slate-600 sm:block">
                     {product.description ||
                       "Product details and sourcing information are available on request."}
                   </p>
@@ -336,7 +336,7 @@ export default function ProductCatalog({
                       </p>
 
                       <div className="mt-1 flex flex-wrap items-end gap-2">
-                        <span className="text-xl font-black text-slate-950">
+                        <span className="text-base font-black text-slate-950 sm:text-xl">
                           {displayPrice !== null
                             ? `AED ${Number(displayPrice).toFixed(2)}`
                             : "Contact for Price"}
@@ -353,7 +353,7 @@ export default function ProductCatalog({
                     <div className="mt-4 grid grid-cols-2 gap-2">
                       <Link
                         href={`/products/${product.slug}`}
-                        className="inline-flex items-center justify-center rounded-xl border border-slate-200 px-3 py-3 text-center text-sm font-black text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+                        className="inline-flex items-center justify-center rounded-xl border border-slate-200 px-2 py-2.5 text-center text-xs sm:px-3 sm:py-3 sm:text-sm font-black text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
                       >
                         View Details
                       </Link>
@@ -362,7 +362,7 @@ export default function ProductCatalog({
                         href={`/request-product?product=${encodeURIComponent(
                           product.title
                         )}&productId=${product.id}`}
-                        className="inline-flex items-center justify-center gap-1 rounded-xl bg-slate-950 px-3 py-3 text-center text-sm font-black text-white transition hover:bg-emerald-600"
+                        className="inline-flex items-center justify-center gap-1 rounded-xl bg-slate-950 px-2 py-2.5 text-center text-xs sm:px-3 sm:py-3 sm:text-sm font-black text-white transition hover:bg-emerald-600"
                       >
                         Request
                         <ArrowRight size={15} />
