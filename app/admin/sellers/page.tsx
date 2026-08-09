@@ -16,7 +16,7 @@ export default async function AdminSellersPage() {
   const { data: sellers, error } = await supabaseAdmin
     .from("profiles")
     .select(
-      "id, full_name, business_name, phone, email, role, status, created_at"
+      "id, full_name, business_name, phone, email, role, status, source_platform, utm_source, utm_medium, utm_campaign, fbclid, created_at"
     )
     .eq("role", "seller")
     .order("created_at", { ascending: false });
@@ -134,6 +134,22 @@ export default async function AdminSellersPage() {
                     <div className="mt-3 space-y-1 text-sm text-slate-500">
                       <p>{seller.email || "No email"}</p>
                       <p>{seller.phone || "No phone"}</p>
+
+                      <p>
+                        <span className="font-bold text-slate-600">
+                          Source:
+                        </span>{" "}
+                        <span className="capitalize">
+                          {seller.source_platform || seller.utm_source || "direct"}
+                        </span>
+                      </p>
+
+                      <p>
+                        <span className="font-bold text-slate-600">
+                          Campaign:
+                        </span>{" "}
+                        {seller.utm_campaign || "—"}
+                      </p>
                     </div>
                   </div>
                 </div>
