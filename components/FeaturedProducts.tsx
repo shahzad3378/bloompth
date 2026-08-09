@@ -97,7 +97,7 @@ export default async function FeaturedProducts() {
           </Link>
         </div>
 
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-6 grid grid-cols-2 gap-3 sm:mt-8 sm:gap-5 lg:grid-cols-4">
           {products.map((product) => {
             const price =
               product.price !== null ? Number(product.price) : null;
@@ -124,7 +124,7 @@ export default async function FeaturedProducts() {
                   href={`/products/${product.slug}`}
                   className="relative block overflow-hidden bg-slate-50"
                 >
-                  <div className="flex aspect-square items-center justify-center p-5">
+                  <div className="flex aspect-square items-center justify-center p-2 sm:p-5">
                     {product.image ? (
                       <img
                         src={product.image}
@@ -162,19 +162,19 @@ export default async function FeaturedProducts() {
                   )}
                 </Link>
 
-                <div className="flex flex-1 flex-col border-t border-slate-100 p-4">
+                <div className="flex flex-1 flex-col border-t border-slate-100 p-3 sm:p-4">
                   <p className="truncate text-[11px] font-black uppercase tracking-[0.14em] text-emerald-600">
                     {product.category || "General"}
                   </p>
 
                   <Link href={`/products/${product.slug}`}>
-                    <h3 className="mt-2 line-clamp-2 min-h-[48px] text-base font-black leading-6 text-slate-950 transition group-hover:text-emerald-600">
+                    <h3 className="mt-2 line-clamp-2 min-h-[40px] text-sm font-black leading-5 sm:min-h-[48px] sm:text-base sm:leading-6 text-slate-950 transition group-hover:text-emerald-600">
                       {product.title}
                     </h3>
                   </Link>
 
                   <div className="mt-3 flex flex-wrap items-center gap-2">
-                    <span className="text-lg font-black text-slate-950">
+                    <span className="text-base font-black text-slate-950 sm:text-lg">
                       {displayPrice !== null
                         ? `AED ${displayPrice.toFixed(2)}`
                         : "Contact for Price"}
@@ -189,7 +189,7 @@ export default async function FeaturedProducts() {
 
                   <Link
                     href={`/products/${product.slug}`}
-                    className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-sm font-black text-white transition hover:bg-emerald-600"
+                    className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-950 px-2 py-2.5 text-xs sm:px-4 sm:py-3 sm:text-sm font-black text-white transition hover:bg-emerald-600"
                   >
                     View Product
                     <ArrowRight size={16} />
