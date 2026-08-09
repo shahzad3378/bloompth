@@ -33,6 +33,7 @@ export default async function EditProductPage({
         price,
         sale_price,
         stock,
+        min_order_qty,
         image,
         featured,
         status,

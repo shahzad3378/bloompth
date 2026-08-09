@@ -13,6 +13,7 @@ type Product = {
   price: number | string | null;
   sale_price: number | string | null;
   stock: number | null;
+  min_order_qty: number | null;
   image: string | null;
   featured: boolean | null;
   status: string | null;
