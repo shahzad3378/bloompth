@@ -47,8 +47,8 @@ export default async function Header() {
               width={420}
               height={140}
               priority
-              sizes="(max-width: 640px) 165px, 225px"
-              className="h-auto w-[160px] object-contain sm:w-[195px] lg:w-[220px]"
+              sizes="(max-width: 640px) 220px, 300px"
+              className="h-auto w-[220px] object-contain sm:w-[260px] lg:w-[300px]"
             />
           </Link>
 
