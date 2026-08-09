@@ -34,7 +34,7 @@ export default async function Header() {
         {tagline}
       </div>
 
-      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
+      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-5 px-5 py-3">
           <Link
             href="/"
@@ -47,8 +47,8 @@ export default async function Header() {
               width={420}
               height={140}
               priority
-              sizes="(max-width: 640px) 220px, 300px"
-              className="h-auto w-[220px] object-contain sm:w-[260px] lg:w-[300px]"
+              sizes="(max-width: 640px) 150px, 300px"
+              className="h-auto w-[150px] object-contain sm:w-[210px] lg:w-[300px]"
             />
           </Link>
 

@@ -31,19 +31,19 @@ export default function Hero() {
 
       <div className="pointer-events-none absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-slate-100 blur-3xl" />
 
-      <div className="relative mx-auto max-w-7xl px-5 py-10 sm:py-12 lg:px-8 lg:py-14">
+      <div className="relative mx-auto max-w-7xl px-5 py-8 sm:py-12 lg:px-8 lg:py-14">
         <div className="max-w-6xl">
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-700 sm:text-sm">
             <BadgeCheck size={17} />
             Your Complete eCommerce Growth Partner
           </div>
 
-          <h1 className="mt-5 max-w-6xl text-4xl font-black leading-[1.08] tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
+          <h1 className="mt-4 max-w-6xl text-[32px] font-black leading-[1.08] tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
             Launch, Scale & Fulfill Your eCommerce Business Across the{" "}
             <span className="text-emerald-600">Middle East</span>
           </h1>
 
-          <p className="mt-5 max-w-5xl text-base leading-8 text-slate-600 sm:text-lg">
+          <p className="mt-4 max-w-5xl text-[15px] leading-6 sm:text-lg sm:leading-8 text-slate-600 sm:text-lg">
             BloomPath helps Amazon, Noon, Shopify, TikTok Shop, Facebook and
             Instagram sellers source products faster, store inventory in our
             UAE warehouse, reduce operational costs, improve profit margins and
@@ -51,7 +51,7 @@ export default function Hero() {
             solutions across the UAE and GCC.
           </p>
 
-          <div className="mt-8 grid max-w-4xl gap-3 sm:grid-cols-3">
+          <div className="mt-7 grid max-w-4xl gap-2.5 sm:gap-3 sm:grid-cols-3">
             {benefits.map((benefit) => {
               const Icon = benefit.icon;
 
