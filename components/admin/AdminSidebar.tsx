@@ -104,7 +104,7 @@ export default function AdminSidebar({
           >
             <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white p-1">
               <Image
-                src="/images/logo.png"
+                src="/images/logo-full.png"
                 alt="BloomPath logo"
                 width={56}
                 height={56}
