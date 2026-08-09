@@ -173,19 +173,18 @@ export default async function FeaturedProducts() {
                     </h3>
                   </Link>
 
-                  <div className="mt-3 flex flex-wrap items-center gap-2">
-                    <span className="text-base font-black text-slate-950 sm:text-lg">
-                      {displayPrice !== null
-                        ? `AED ${displayPrice.toFixed(2)}`
-                        : "Contact for Price"}
-                    </span>
+                  <div className="mt-3">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  Wholesale Price
+                </p>
 
-                    {hasSale && price !== null && (
-                      <span className="text-xs font-bold text-slate-400 line-through">
-                        AED {price.toFixed(2)}
-                      </span>
-                    )}
-                  </div>
+                <Link
+                  href="/seller/login"
+                  className="mt-2 inline-flex items-center rounded-lg bg-emerald-50 px-3 py-2 text-xs font-black text-emerald-700 transition hover:bg-emerald-100"
+                >
+                  🔒 Login to View Price
+                </Link>
+              </div>
 
                   <Link
                     href={`/products/${product.slug}`}

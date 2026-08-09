@@ -331,26 +331,21 @@ export default function ProductCatalog({
 
                   <div className="mt-auto pt-5">
                     <div className="border-t border-slate-100 pt-4">
-                      <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                        Starting price
-                      </p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                    Wholesale Price
+                  </p>
 
-                      <div className="mt-1 flex flex-wrap items-end gap-2">
-                        <span className="text-base font-black text-slate-950 sm:text-xl">
-                          {displayPrice !== null
-                            ? `AED ${Number(displayPrice).toFixed(2)}`
-                            : "Contact for Price"}
-                        </span>
+                  <div className="mt-2">
+                    <Link
+                      href="/seller/login"
+                      className="inline-flex items-center rounded-lg bg-emerald-50 px-3 py-2 text-xs font-black text-emerald-700 transition hover:bg-emerald-100 sm:text-sm"
+                    >
+                      🔒 Login to View Price
+                    </Link>
+                  </div>
+                </div>
 
-                        {hasSale && (
-                          <span className="pb-0.5 text-sm font-semibold text-slate-400 line-through">
-                            AED {Number(product.price).toFixed(2)}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="mt-4 grid grid-cols-2 gap-2">
+                <div className="mt-4 grid grid-cols-2 gap-2">
                       <Link
                         href={`/products/${product.slug}`}
                         className="inline-flex items-center justify-center rounded-xl border border-slate-200 px-2 py-2.5 text-center text-xs sm:px-3 sm:py-3 sm:text-sm font-black text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"

@@ -205,7 +205,7 @@ export default function SignupPage() {
 
           <p className="mt-6 text-center text-sm text-slate-600">
             Already registered?{" "}
-            <Link href="/login" className="font-bold text-emerald-600">
+            <Link href="/seller/login" className="font-bold text-emerald-600">
               Login here
             </Link>
           </p>

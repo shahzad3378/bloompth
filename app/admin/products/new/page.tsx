@@ -14,6 +14,7 @@ export default function NewProductPage() {
   const [price, setPrice] = useState("");
   const [salePrice, setSalePrice] = useState("");
   const [stock, setStock] = useState("0");
+const [minOrderQty, setMinOrderQty] = useState("1");
   const [featured, setFeatured] = useState(false);
   const [status, setStatus] = useState("active");
 
@@ -86,6 +87,7 @@ export default function NewProductPage() {
     const parsedPrice = price ? Number(price) : null;
     const parsedSalePrice = salePrice ? Number(salePrice) : null;
     const parsedStock = Number(stock);
+const parsedMinOrderQty = Number(minOrderQty);
 
     if (!title.trim()) {
       setErrorMessage("Product name required hai.");
@@ -123,6 +125,16 @@ export default function NewProductPage() {
 
     if (!Number.isFinite(parsedStock) || parsedStock < 0) {
       setErrorMessage("Stock valid aur zero ya us se zyada hona chahiye.");
+      setLoading(false);
+      return;
+    }
+
+    if (
+      !Number.isFinite(parsedMinOrderQty) ||
+      parsedMinOrderQty < 1 ||
+      !Number.isInteger(parsedMinOrderQty)
+    ) {
+      setErrorMessage("Minimum order quantity kam az kam 1 honi chahiye.");
       setLoading(false);
       return;
     }
@@ -171,6 +183,7 @@ export default function NewProductPage() {
       price: parsedPrice,
       sale_price: parsedSalePrice,
       stock: parsedStock,
+  min_order_qty: parsedMinOrderQty,
       image: imageUrl,
       featured,
       status,
@@ -297,6 +310,26 @@ export default function NewProductPage() {
               step="1"
               value={stock}
               onChange={(event) => setStock(event.target.value)}
+              className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-950 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="minOrderQty"
+              className="text-sm font-bold text-slate-700"
+            >
+              Minimum Order Quantity
+            </label>
+
+            <input
+              id="minOrderQty"
+              type="number"
+              min="1"
+              step="1"
+              value={minOrderQty}
+              onChange={(event) => setMinOrderQty(event.target.value)}
+              placeholder="1"
               className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-950 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
             />
           </div>

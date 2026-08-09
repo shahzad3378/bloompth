@@ -10,9 +10,11 @@ import {
   Menu,
   MessageSquareText,
   Package,
+ShoppingCart,
   Settings,
   Tags,
   Users,
+UserCheck,
   X,
 } from "lucide-react";
 
@@ -41,11 +43,21 @@ const adminLinks = [
     href: "/admin/requests",
     icon: MessageSquareText,
   },
+{
+name: "Orders",
+href: "/admin/orders",
+icon: ShoppingCart,
+},
   {
     name: "Users",
     href: "/admin/users",
     icon: Users,
   },
+{
+name: "Sellers",
+href: "/admin/sellers",
+icon: UserCheck,
+},
   {
     name: "Settings",
     href: "/admin/settings",

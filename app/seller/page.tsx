@@ -5,14 +5,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   LayoutDashboard,
-  Package,
-  PlusCircle,
+  PackageSearch,
   ShoppingCart,
-  Settings,
   LogOut,
   Menu,
   X,
+  ShieldCheck,
 } from "lucide-react";
+
 import { supabase } from "@/lib/supabase";
 
 type SellerProfile = {
@@ -36,7 +36,7 @@ export default function SellerDashboard() {
       } = await supabase.auth.getUser();
 
       if (!user) {
-        router.push("/login");
+        router.push("/seller/login");
         return;
       }
 
@@ -46,19 +46,13 @@ export default function SellerDashboard() {
         .eq("id", user.id)
         .single();
 
-      if (error) {
-        console.error("Profile error:", error.message);
+      if (error || !data) {
+        await supabase.auth.signOut();
+        router.push("/seller/login");
+        return;
       }
 
-      setProfile(
-        data || {
-          full_name: user.user_metadata?.full_name || "Seller",
-          business_name: user.user_metadata?.business_name || "",
-          email: user.email || "",
-          status: "pending",
-        }
-      );
-
+      setProfile(data);
       setLoading(false);
     }
 
@@ -67,7 +61,7 @@ export default function SellerDashboard() {
 
   async function handleLogout() {
     await supabase.auth.signOut();
-    router.push("/login");
+    router.push("/seller/login");
     router.refresh();
   }
 
@@ -78,24 +72,14 @@ export default function SellerDashboard() {
       icon: LayoutDashboard,
     },
     {
-      name: "Products",
+      name: "Browse Products",
       href: "/seller/products",
-      icon: Package,
+      icon: PackageSearch,
     },
     {
-      name: "Add Product",
-      href: "/seller/products/add",
-      icon: PlusCircle,
-    },
-    {
-      name: "Orders",
+      name: "My Orders",
       href: "/seller/orders",
       icon: ShoppingCart,
-    },
-    {
-      name: "Settings",
-      href: "/seller/settings",
-      icon: Settings,
     },
   ];
 
@@ -108,6 +92,8 @@ export default function SellerDashboard() {
       </main>
     );
   }
+
+  const isApproved = profile?.status === "active";
 
   return (
     <main className="min-h-screen bg-slate-100">
@@ -196,7 +182,7 @@ export default function SellerDashboard() {
               </h2>
 
               <p className="hidden text-sm text-slate-500 sm:block">
-                Manage your BloomPath seller account
+                Access products and seller-only wholesale services
               </p>
             </div>
           </div>
@@ -213,25 +199,32 @@ export default function SellerDashboard() {
         </header>
 
         <div className="mx-auto max-w-7xl p-5 sm:p-8">
-          <section className="rounded-3xl bg-gradient-to-r from-emerald-600 to-emerald-800 p-7 text-white shadow-lg sm:p-10">
+          <section
+            className={`rounded-3xl p-7 text-white shadow-lg sm:p-10 ${
+              isApproved
+                ? "bg-gradient-to-r from-emerald-600 to-emerald-800"
+                : "bg-gradient-to-r from-amber-500 to-orange-600"
+            }`}
+          >
             <div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
               <div>
-                <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-100">
-                  Welcome back
+                <p className="text-sm font-bold uppercase tracking-[0.2em] text-white/80">
+                  Seller Account
                 </p>
 
                 <h3 className="mt-3 text-3xl font-black sm:text-4xl">
                   {profile?.full_name || "BloomPath Seller"}
                 </h3>
 
-                <p className="mt-3 max-w-2xl text-emerald-50">
-                  Manage your products, orders and seller account from one
-                  dashboard.
+                <p className="mt-3 max-w-2xl text-white/90">
+                  {isApproved
+                    ? "Your seller account is approved. You can now view wholesale pricing and place seller orders."
+                    : "Your seller account is under verification. Wholesale pricing and ordering will unlock after approval."}
                 </p>
               </div>
 
               <div className="rounded-2xl bg-white/15 px-5 py-4 backdrop-blur">
-                <p className="text-sm text-emerald-100">Account Status</p>
+                <p className="text-sm text-white/80">Account Status</p>
 
                 <p className="mt-1 text-xl font-black capitalize">
                   {profile?.status || "pending"}
@@ -240,106 +233,59 @@ export default function SellerDashboard() {
             </div>
           </section>
 
-          <section className="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-            <DashboardCard title="Total Products" value="0" label="Products" />
-            <DashboardCard title="Total Orders" value="0" label="Orders" />
-            <DashboardCard title="Pending Orders" value="0" label="Pending" />
-            <DashboardCard title="Total Revenue" value="AED 0" label="Revenue" />
-          </section>
+          <div className="mt-8 grid gap-5 md:grid-cols-2">
+            <Link
+              href="/seller/products"
+              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-emerald-300 hover:shadow-md"
+            >
+              <PackageSearch className="text-emerald-600" size={28} />
 
-          <section className="mt-8 grid gap-6 xl:grid-cols-3">
-            <div className="rounded-2xl bg-white p-6 shadow-sm xl:col-span-2">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-xl font-black text-slate-950">
-                    Recent Orders
-                  </h3>
+              <h3 className="mt-4 text-xl font-black text-slate-950">
+                Browse Products
+              </h3>
 
-                  <p className="mt-1 text-sm text-slate-500">
-                    Your latest customer orders will appear here.
-                  </p>
-                </div>
+              <p className="mt-2 text-slate-600">
+                Explore products available for wholesale sourcing and fulfillment.
+              </p>
+            </Link>
 
-                <Link
-                  href="/seller/orders"
-                  className="text-sm font-bold text-emerald-600"
-                >
-                  View all
-                </Link>
+            <Link
+              href="/seller/orders"
+              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-emerald-300 hover:shadow-md"
+            >
+              <ShoppingCart className="text-emerald-600" size={28} />
+
+              <h3 className="mt-4 text-xl font-black text-slate-950">
+                My Orders
+              </h3>
+
+              <p className="mt-2 text-slate-600">
+                Review your submitted wholesale orders and their status.
+              </p>
+            </Link>
+          </div>
+
+          <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+                <ShieldCheck size={24} />
               </div>
 
-              <div className="mt-8 rounded-2xl border border-dashed border-slate-300 px-5 py-14 text-center">
-                <ShoppingCart
-                  size={38}
-                  className="mx-auto text-slate-400"
-                />
+              <div>
+                <h3 className="text-lg font-black text-slate-950">
+                  Wholesale Access
+                </h3>
 
-                <p className="mt-4 font-bold text-slate-700">No orders yet</p>
-
-                <p className="mt-1 text-sm text-slate-500">
-                  Customer orders will appear after products go live.
+                <p className="mt-2 text-slate-600">
+                  {isApproved
+                    ? "Your account is verified and eligible for wholesale pricing and order placement."
+                    : "Wholesale pricing and order placement remain locked until your seller account is approved."}
                 </p>
               </div>
             </div>
-
-            <div className="rounded-2xl bg-white p-6 shadow-sm">
-              <h3 className="text-xl font-black text-slate-950">
-                Quick Actions
-              </h3>
-
-              <p className="mt-1 text-sm text-slate-500">
-                Start managing your seller account.
-              </p>
-
-              <div className="mt-6 space-y-3">
-                <Link
-                  href="/seller/products/add"
-                  className="flex items-center gap-3 rounded-xl bg-emerald-600 px-4 py-3 font-bold text-white transition hover:bg-emerald-500"
-                >
-                  <PlusCircle size={20} />
-                  Add New Product
-                </Link>
-
-                <Link
-                  href="/seller/products"
-                  className="flex items-center gap-3 rounded-xl bg-slate-100 px-4 py-3 font-bold text-slate-700 transition hover:bg-slate-200"
-                >
-                  <Package size={20} />
-                  Manage Products
-                </Link>
-
-                <Link
-                  href="/seller/settings"
-                  className="flex items-center gap-3 rounded-xl bg-slate-100 px-4 py-3 font-bold text-slate-700 transition hover:bg-slate-200"
-                >
-                  <Settings size={20} />
-                  Account Settings
-                </Link>
-              </div>
-            </div>
-          </section>
+          </div>
         </div>
       </section>
     </main>
-  );
-}
-
-function DashboardCard({
-  title,
-  value,
-  label,
-}: {
-  title: string;
-  value: string;
-  label: string;
-}) {
-  return (
-    <div className="rounded-2xl bg-white p-6 shadow-sm">
-      <p className="text-sm font-semibold text-slate-500">{title}</p>
-
-      <p className="mt-4 text-3xl font-black text-slate-950">{value}</p>
-
-      <p className="mt-2 text-sm text-emerald-600">{label}</p>
-    </div>
   );
 }

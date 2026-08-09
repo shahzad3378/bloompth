@@ -48,6 +48,10 @@ export default function EditProductForm({
   const [stock, setStock] = useState(
     String(product.stock ?? 0)
   );
+
+  const [minOrderQty, setMinOrderQty] = useState(
+    String(product.min_order_qty ?? 1)
+  );
   const [featured, setFeatured] = useState(
     Boolean(product.featured)
   );
@@ -157,6 +161,7 @@ export default function EditProductForm({
     const parsedSalePrice =
       salePrice === "" ? null : Number(salePrice);
     const parsedStock = Number(stock);
+    const parsedMinOrderQty = Number(minOrderQty);
 
     if (!cleanTitle) {
       setErrorMessage("Product name required hai.");
@@ -208,6 +213,18 @@ export default function EditProductForm({
     ) {
       setErrorMessage(
         "Stock zero ya us se zyada whole number hona chahiye."
+      );
+      setLoading(false);
+      return;
+    }
+
+    if (
+      !Number.isFinite(parsedMinOrderQty) ||
+      parsedMinOrderQty < 1 ||
+      !Number.isInteger(parsedMinOrderQty)
+    ) {
+      setErrorMessage(
+        "Minimum order quantity kam az kam 1 whole number honi chahiye."
       );
       setLoading(false);
       return;
@@ -272,6 +289,7 @@ export default function EditProductForm({
         price: parsedPrice,
         sale_price: parsedSalePrice,
         stock: parsedStock,
+        min_order_qty: parsedMinOrderQty,
         image: updatedImageUrl,
         featured,
         status,
@@ -478,6 +496,27 @@ export default function EditProductForm({
             value={stock}
             onChange={(event) =>
               setStock(event.target.value)
+            }
+            className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-950 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="minOrderQty"
+            className="text-sm font-bold text-slate-700"
+          >
+            Minimum Order Quantity
+          </label>
+
+          <input
+            id="minOrderQty"
+            type="number"
+            min="1"
+            step="1"
+            value={minOrderQty}
+            onChange={(event) =>
+              setMinOrderQty(event.target.value)
             }
             className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-950 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
           />
