@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { requireAdmin } from "@/lib/auth";
 
 export type DeleteProductResult = {
   success: boolean;
@@ -11,6 +12,8 @@ export type DeleteProductResult = {
 export async function deleteProduct(
   productId: string
 ): Promise<DeleteProductResult> {
+  await requireAdmin();
+
   if (!productId) {
     return {
       success: false,

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 import EditProductForm from "./EditProductForm";
 
 export const dynamic = "force-dynamic";
@@ -16,6 +16,7 @@ export default async function EditProductPage({
   params,
 }: EditProductPageProps) {
   const { id } = await params;
+  const supabase = await createClient();
 
   if (!id) {
     notFound();

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentAccount, isActiveAdmin } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +40,15 @@ function escapeCsvValue(value: unknown): string {
 
 export async function GET() {
   try {
+    const account = await getCurrentAccount();
+
+    if (!isActiveAdmin(account)) {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized." },
+        { status: 403 }
+      );
+    }
+
     const supabaseAdmin = createAdminClient();
 
     const { data, error } = await supabaseAdmin

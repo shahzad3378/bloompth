@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdmin } from "@/lib/auth";
 
 const allowedStatuses = [
   "pending",
@@ -13,6 +14,8 @@ const allowedStatuses = [
 ] as const;
 
 export async function updateOrderStatus(formData: FormData) {
+  await requireAdmin();
+
   const orderId = String(formData.get("orderId") || "");
   const status = String(formData.get("status") || "");
 

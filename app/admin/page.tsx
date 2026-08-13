@@ -12,7 +12,7 @@ import {
   Tags,
   Users,
 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -52,6 +52,8 @@ function getStatusClasses(status: string | null) {
 }
 
 export default async function AdminDashboardPage() {
+  const supabase = await createClient();
+
   const [
     productsResult,
     categoriesResult,

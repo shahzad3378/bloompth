@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireActiveSellerPage } from "@/lib/auth";
 import SellerOrderBox from "@/components/SellerOrderBox";
 
 export const dynamic = "force-dynamic";
@@ -22,6 +23,8 @@ type PageProps = {
 export default async function SellerProductDetailPage({
   params,
 }: PageProps) {
+  await requireActiveSellerPage();
+
   const { slug } = await params;
   const supabaseAdmin = createAdminClient();
 

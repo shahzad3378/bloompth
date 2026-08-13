@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
 
 const allowedRoles = ["admin", "manager", "staff"] as const;
 const allowedStatuses = ["active", "inactive"] as const;
@@ -37,6 +37,8 @@ function isValidStatus(status: string): status is UserStatus {
 }
 
 export async function createUserAction(formData: FormData) {
+  await requireAdmin();
+
   const name = getFormValue(formData, "name");
   const email = getFormValue(formData, "email").toLowerCase();
   const password = getFormValue(formData, "password");
@@ -72,7 +74,10 @@ export async function createUserAction(formData: FormData) {
 
   const supabaseAdmin = createAdminClient();
 
-  const { error } = await supabaseAdmin.auth.admin.createUser({
+  const {
+    data: { user: createdUser },
+    error,
+  } = await supabaseAdmin.auth.admin.createUser({
     email,
     password,
     email_confirm: true,
@@ -81,6 +86,7 @@ export async function createUserAction(formData: FormData) {
     },
     user_metadata: {
       name,
+      full_name: name,
       status,
     },
   });
@@ -89,12 +95,33 @@ export async function createUserAction(formData: FormData) {
     redirectWithMessage("error", error.message);
   }
 
+  if (!createdUser) {
+    redirectWithMessage("error", "User could not be created.");
+  }
+
+  const { error: profileError } = await supabaseAdmin
+    .from("profiles")
+    .update({
+      full_name: name,
+      email,
+      role,
+      status,
+    })
+    .eq("id", createdUser.id);
+
+  if (profileError) {
+    await supabaseAdmin.auth.admin.deleteUser(createdUser.id);
+    redirectWithMessage("error", profileError.message);
+  }
+
   revalidatePath("/admin/users");
 
   redirectWithMessage("success", "User created successfully.");
 }
 
 export async function updateUserAction(formData: FormData) {
+  await requireAdmin();
+
   const userId = getFormValue(formData, "user_id");
   const name = getFormValue(formData, "name");
   const role = getFormValue(formData, "role");
@@ -140,6 +167,7 @@ export async function updateUserAction(formData: FormData) {
       user_metadata: {
         ...user.user_metadata,
         name,
+        full_name: name,
         status,
       },
       ban_duration: status === "inactive" ? "876000h" : "none",
@@ -150,12 +178,27 @@ export async function updateUserAction(formData: FormData) {
     redirectWithMessage("error", error.message);
   }
 
+  const { error: profileError } = await supabaseAdmin
+    .from("profiles")
+    .update({
+      full_name: name,
+      role,
+      status,
+    })
+    .eq("id", userId);
+
+  if (profileError) {
+    redirectWithMessage("error", profileError.message);
+  }
+
   revalidatePath("/admin/users");
 
   redirectWithMessage("success", "User updated successfully.");
 }
 
 export async function resetPasswordAction(formData: FormData) {
+  await requireAdmin();
+
   const userId = getFormValue(formData, "user_id");
   const password = getFormValue(formData, "password");
 
@@ -189,23 +232,15 @@ export async function resetPasswordAction(formData: FormData) {
 }
 
 export async function deleteUserAction(formData: FormData) {
+  const currentAccount = await requireAdmin();
+
   const userId = getFormValue(formData, "user_id");
 
   if (!userId) {
     redirectWithMessage("error", "User ID is missing.");
   }
 
-  const supabase = await createClient();
-
-  const {
-    data: { user: currentUser },
-  } = await supabase.auth.getUser();
-
-  if (!currentUser) {
-    redirect("/login");
-  }
-
-  if (currentUser.id === userId) {
+  if (currentAccount.userId === userId) {
     redirectWithMessage(
       "error",
       "You cannot delete your currently logged-in account."

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
 
 export type SettingsActionResult = {
   success: boolean;
@@ -23,18 +24,9 @@ function getOptionalText(formData: FormData, field: string) {
 export async function updateWebsiteSettings(
   formData: FormData
 ): Promise<SettingsActionResult> {
+  await requireAdmin();
+
   const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return {
-      success: false,
-      message: "You must be logged in to update settings.",
-    };
-  }
 
   const companyName = getOptionalText(formData, "company_name");
 

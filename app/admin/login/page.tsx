@@ -2,7 +2,9 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { isAdminRole } from "@/lib/auth-roles";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -42,15 +44,7 @@ export default function AdminLoginPage() {
       return;
     }
 
-    const allowedRoles = [
-      "super_admin",
-      "admin",
-      "product_manager",
-      "operations",
-      "viewer",
-    ];
-
-    if (profile.status !== "active" || !allowedRoles.includes(profile.role)) {
+    if (profile.status !== "active" || !isAdminRole(profile.role)) {
       await supabase.auth.signOut();
       setErrorMessage("You do not have permission to access the admin area.");
       setLoading(false);
@@ -136,12 +130,12 @@ export default function AdminLoginPage() {
           </button>
         </form>
 
-        <a
+        <Link
           href="/"
           className="mt-6 block text-center text-sm font-bold text-emerald-600 hover:text-emerald-700"
         >
           ← Back to Website
-        </a>
+        </Link>
       </div>
     </main>
   );

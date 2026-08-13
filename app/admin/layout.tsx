@@ -1,11 +1,10 @@
 import type { ReactNode } from "react";
-import { redirect } from "next/navigation";
 import { Search } from "lucide-react";
 
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminHeaderActions from "@/components/admin/AdminHeaderActions";
 
-import { createClient } from "@/lib/supabase/server";
+import { requireAdminPage } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -16,17 +15,9 @@ type AdminLayoutProps = {
 export default async function AdminLayout({
   children,
 }: AdminLayoutProps) {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  const userEmail = user.email || "admin@bloompath.com";
+  const account = await requireAdminPage();
+  const userEmail =
+    account.profile.email || "admin@bloompath.com";
 
   return (
     <div className="min-h-screen bg-slate-100 lg:flex">

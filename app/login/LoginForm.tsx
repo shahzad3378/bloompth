@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { isAdminRole } from "@/lib/auth-roles";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -27,7 +28,7 @@ export default function LoginForm() {
     try {
       const supabase = createClient();
 
-      const { error } =
+      const { data: signInData, error } =
         await supabase.auth.signInWithPassword({
           email: email.trim(),
           password,
@@ -44,8 +45,34 @@ export default function LoginForm() {
         return;
       }
 
+      const { data: profile, error: profileError } =
+        await supabase
+          .from("profiles")
+          .select("role, status")
+          .eq("id", signInData.user.id)
+          .maybeSingle();
+
+      if (
+        profileError ||
+        !profile ||
+        profile.status !== "active" ||
+        !isAdminRole(profile.role)
+      ) {
+        await supabase.auth.signOut();
+        setErrorMessage(
+          "Is account ko admin panel access ki permission nahi hai."
+        );
+        setLoading(false);
+        return;
+      }
+
+      const requestedRedirect = searchParams.get("redirect");
       const redirectPath =
-        searchParams.get("redirect") || "/admin";
+        requestedRedirect &&
+        requestedRedirect.startsWith("/admin") &&
+        !requestedRedirect.startsWith("//")
+          ? requestedRedirect
+          : "/admin";
 
       router.replace(redirectPath);
       router.refresh();

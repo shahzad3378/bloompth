@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Download, Plus, Upload } from "lucide-react";
 
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 import DeleteProductButton from "./DeleteProductButton";
 
 export const dynamic = "force-dynamic";
@@ -22,6 +22,8 @@ type Product = {
 };
 
 export default async function AdminProductsPage() {
+  const supabase = await createClient();
+
   const { data, error } = await supabase
     .from("products")
     .select(

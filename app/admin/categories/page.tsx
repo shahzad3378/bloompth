@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -15,6 +15,8 @@ type RecentProduct = {
 };
 
 export default async function AdminDashboardPage() {
+  const supabase = await createClient();
+
   const [
     productsCountResult,
     featuredCountResult,

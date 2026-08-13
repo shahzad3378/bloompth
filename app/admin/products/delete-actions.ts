@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdmin } from "@/lib/auth";
 
 export type DeleteProductResult = {
   success: boolean;
@@ -13,6 +14,8 @@ export async function deleteProduct(
   productId: string
 ): Promise<DeleteProductResult> {
   try {
+    await requireAdmin();
+
     const id = Number(productId);
 
     if (!Number.isInteger(id) || id <= 0) {

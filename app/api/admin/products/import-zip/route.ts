@@ -3,6 +3,7 @@ import JSZip from "jszip";
 import * as XLSX from "xlsx";
 
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentAccount, isActiveAdmin } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -123,6 +124,15 @@ function createStorageFileName(
 }
 
 export async function POST(request: Request) {
+  const account = await getCurrentAccount();
+
+  if (!isActiveAdmin(account)) {
+    return NextResponse.json(
+      { success: false, message: "Unauthorized." },
+      { status: 403 }
+    );
+  }
+
   const errors: string[] = [];
   const uploadedStoragePaths: string[] = [];
 

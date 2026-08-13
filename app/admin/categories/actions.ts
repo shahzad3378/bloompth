@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { requireAdmin } from "@/lib/auth";
 
 export type CreateCategoryInput = {
   name: string;
@@ -19,6 +20,8 @@ export type CategoryActionResult = {
 export async function createCategory(
   input: CreateCategoryInput
 ): Promise<CategoryActionResult> {
+  await requireAdmin();
+
   const name = input.name.trim();
   const slug = input.slug.trim().toLowerCase();
 

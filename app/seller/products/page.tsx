@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { ArrowLeft, PackageSearch } from "lucide-react";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireActiveSellerPage } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function SellerProductsPage() {
+  await requireActiveSellerPage();
+
   const supabaseAdmin = createAdminClient();
 
   const { data: products, error } = await supabaseAdmin
