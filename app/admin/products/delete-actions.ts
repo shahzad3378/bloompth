@@ -1,8 +1,6 @@
-"use server";
-
 import { revalidatePath } from "next/cache";
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 import { requireAdmin } from "@/lib/auth";
 
 export type DeleteProductResult = {
@@ -13,86 +11,92 @@ export type DeleteProductResult = {
 export async function deleteProduct(
   productId: string
 ): Promise<DeleteProductResult> {
-  try {
-    await requireAdmin();
+  await requireAdmin();
 
-    const id = Number(productId);
+  if (!productId) {
+    return {
+      success: false,
+      message: "Product ID is missing.",
+    };
+  }
 
-    if (!Number.isInteger(id) || id <= 0) {
-      return {
-        success: false,
-        message: "Invalid product ID.",
-      };
-    }
+  // Check whether this product has already been used in an order.
+  const { count, error: orderCheckError } = await supabaseAdmin
+    .from("orders")
+    .select("id", { count: "exact", head: true })
+    .eq("product_id", productId);
 
-    const supabaseAdmin = createAdminClient();
+  if (orderCheckError) {
+    console.error("Product order check error:", orderCheckError);
 
-    const { data: product, error: productLoadError } =
-      await supabaseAdmin
-        .from("products")
-        .select("id, image")
-        .eq("id", id)
-        .maybeSingle();
+    return {
+      success: false,
+      message: "Could not verify product order history.",
+    };
+  }
 
-    if (productLoadError) {
-      return {
-        success: false,
-        message: productLoadError.message,
-      };
-    }
-
-    if (!product) {
-      return {
-        success: false,
-        message: "Product nahi mila.",
-      };
-    }
-
-    const { error: deleteError } = await supabaseAdmin
+  // Preserve historical orders by archiving used products.
+  if ((count ?? 0) > 0) {
+    const { data, error: archiveError } = await supabaseAdmin
       .from("products")
-      .delete()
-      .eq("id", id);
+      .update({ status: "inactive" })
+      .eq("id", productId)
+      .select("id");
 
-    if (deleteError) {
+    if (archiveError) {
+      console.error("Product archive error:", archiveError);
+
       return {
         success: false,
-        message: deleteError.message,
+        message: archiveError.message || "Product could not be archived.",
       };
     }
 
-    if (
-      product.image &&
-      typeof product.image === "string" &&
-      product.image.includes(
-        "/storage/v1/object/public/products/"
-      )
-    ) {
-      const storagePath = product.image
-        .split("/storage/v1/object/public/products/")[1]
-        ?.split("?")[0];
-
-      if (storagePath) {
-        await supabaseAdmin.storage
-          .from("products")
-          .remove([decodeURIComponent(storagePath)]);
-      }
+    if (!data || data.length === 0) {
+      return {
+        success: false,
+        message: "Product was not found or could not be archived.",
+      };
     }
 
-    revalidatePath("/");
-    revalidatePath("/products");
     revalidatePath("/admin/products");
+    revalidatePath("/");
 
     return {
       success: true,
-      message: "Product successfully delete ho gaya.",
-    };
-  } catch (error) {
-    return {
-      success: false,
       message:
-        error instanceof Error
-          ? error.message
-          : "Product delete nahi ho saka.",
+        "Product has order history, so it was archived instead of permanently deleted.",
     };
   }
+
+  // Products with no order history can be permanently deleted.
+  const { data, error } = await supabaseAdmin
+    .from("products")
+    .delete()
+    .eq("id", productId)
+    .select("id");
+
+  if (error) {
+    console.error("Product delete error:", error);
+
+    return {
+      success: false,
+      message: error.message || "Product could not be deleted.",
+    };
+  }
+
+  if (!data || data.length === 0) {
+    return {
+      success: false,
+      message: "Product was not found or could not be deleted.",
+    };
+  }
+
+  revalidatePath("/admin/products");
+  revalidatePath("/");
+
+  return {
+    success: true,
+    message: "Product deleted permanently.",
+  };
 }
