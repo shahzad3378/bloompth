@@ -40,10 +40,10 @@ export default async function ContactPage() {
     settings?.tagline?.trim() ||
     "Helping online sellers source quality products and grow their eCommerce business.";
 
-  const phone = settings?.phone?.trim() || "";
-  const email = settings?.email?.trim() || "";
-  const whatsapp = settings?.whatsapp?.trim() || "";
-  const address = settings?.address?.trim() || "";
+  const phone = settings?.phone?.trim() || "+971 50 729 7900";
+  const email = settings?.email?.trim() || "bloompathsms@gmail.com";
+  const whatsapp = settings?.whatsapp?.trim() || "971507297900";
+  const address = settings?.address?.trim() || "Dubai, United Arab Emirates";
 
   const whatsappNumber = cleanWhatsAppNumber(whatsapp);
 
@@ -54,18 +54,17 @@ export default async function ContactPage() {
     : "";
 
   return (
-    <main className="min-h-screen bg-slate-50">
-      <section className="bg-slate-950 px-5 py-20 text-white sm:py-24">
-        <div className="mx-auto max-w-7xl text-center">
-          <span className="inline-flex rounded-full bg-emerald-500/15 px-5 py-2 text-sm font-bold uppercase tracking-[0.2em] text-emerald-400">
-            Contact Us
-          </span>
+    <main className="min-h-screen bg-sand-100">
+      <section className="relative overflow-hidden bg-brand-950 px-5 py-20 text-white sm:py-24">
+        <div className="bp-grid-pattern pointer-events-none absolute inset-0 opacity-75" />
+        <div className="relative mx-auto max-w-7xl text-center">
+          <span className="bp-eyebrow text-brand-500">Contact BloomPath</span>
 
           <h1 className="mt-6 text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl">
-            We&apos;d Love to Hear From You
+            Let&apos;s map your UAE fulfillment setup.
           </h1>
 
-          <p className="mx-auto mt-6 max-w-3xl text-base leading-8 text-slate-300 sm:text-lg">
+          <p className="mx-auto mt-6 max-w-3xl text-base leading-8 text-white/68 sm:text-lg">
             {tagline}
           </p>
         </div>
@@ -73,16 +72,16 @@ export default async function ContactPage() {
 
       <section className="px-5 py-16 sm:py-20">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2">
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
+          <div className="rounded-[1.75rem] border border-line bg-white p-6 shadow-sm sm:p-10">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-100 text-brand-900">
               <Building2 size={28} />
             </div>
 
-            <h2 className="mt-6 text-3xl font-black text-slate-950">
+            <h2 className="mt-6 text-3xl font-black text-ink">
               Contact Information
             </h2>
 
-            <p className="mt-4 leading-7 text-slate-600">
+            <p className="mt-4 leading-7 text-muted">
               Speak with the {companyName} team about product
               sourcing, wholesale supply, dropshipping, fulfillment
               or seller partnership opportunities.
@@ -90,8 +89,8 @@ export default async function ContactPage() {
 
             <div className="mt-8 space-y-4">
               {address && (
-                <div className="flex items-start gap-4 rounded-2xl bg-slate-50 p-5">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+                <div className="flex items-start gap-4 rounded-2xl bg-sand-100 p-5">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-900">
                     <MapPin size={21} />
                   </span>
 
@@ -110,9 +109,9 @@ export default async function ContactPage() {
               {phone && (
                 <a
                   href={`tel:${phone}`}
-                  className="flex items-start gap-4 rounded-2xl bg-slate-50 p-5 transition hover:bg-emerald-50"
+                  className="flex items-start gap-4 rounded-2xl bg-sand-100 p-5 transition hover:bg-brand-100"
                 >
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-900">
                     <Phone size={21} />
                   </span>
 
@@ -131,9 +130,9 @@ export default async function ContactPage() {
               {email && (
                 <a
                   href={`mailto:${email}`}
-                  className="flex items-start gap-4 rounded-2xl bg-slate-50 p-5 transition hover:bg-emerald-50"
+                  className="flex items-start gap-4 rounded-2xl bg-sand-100 p-5 transition hover:bg-brand-100"
                 >
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-900">
                     <Mail size={21} />
                   </span>
 
@@ -154,9 +153,9 @@ export default async function ContactPage() {
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-start gap-4 rounded-2xl bg-slate-50 p-5 transition hover:bg-emerald-50"
+                  className="flex items-start gap-4 rounded-2xl bg-sand-100 p-5 transition hover:bg-brand-100"
                 >
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-900">
                     <MessageCircle size={21} />
                   </span>
 
@@ -165,7 +164,7 @@ export default async function ContactPage() {
                       WhatsApp
                     </p>
 
-                    <p className="mt-1 font-bold text-emerald-700">
+                    <p className="mt-1 font-bold text-brand-900">
                       Chat with us
                     </p>
                   </div>
@@ -181,8 +180,8 @@ export default async function ContactPage() {
             </div>
           </div>
 
-          <div className="rounded-3xl bg-slate-950 p-6 text-white shadow-xl sm:p-10">
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-400">
+          <div className="rounded-[1.75rem] bg-brand-950 p-6 text-white shadow-xl sm:p-10">
+            <p className="bp-eyebrow text-brand-500">
               Quick Actions
             </p>
 
@@ -191,14 +190,14 @@ export default async function ContactPage() {
             </h2>
 
             <p className="mt-4 leading-7 text-slate-300">
-              Browse available products or contact our team directly
-              for pricing, sourcing and fulfillment support.
+              Share your product, expected order flow and sales channel. We&apos;ll
+              help identify the next operational step.
             </p>
 
             <div className="mt-8 space-y-4">
               <Link
                 href="/products"
-                className="flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-6 py-4 font-bold text-white transition hover:bg-emerald-400"
+                className="flex items-center justify-center gap-2 rounded-xl bg-brand-500 px-6 py-4 font-bold text-brand-950 transition hover:bg-white"
               >
                 <ShoppingBag size={20} />
                 Browse Products

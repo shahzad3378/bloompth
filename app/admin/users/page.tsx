@@ -230,6 +230,7 @@ export default async function AdminUsersPage({
         </div>
 
         <form
+          noValidate
           action={createUserAction}
           className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-5"
         >
@@ -452,6 +453,7 @@ export default async function AdminUsersPage({
 
                         <div className="mt-3 w-full rounded-2xl border border-slate-200 bg-slate-50 p-4 xl:absolute xl:right-0 xl:z-20 xl:w-[520px] xl:shadow-xl">
                           <form
+                            noValidate
                             action={updateUserAction}
                             className="grid gap-4 sm:grid-cols-3"
                           >
@@ -547,6 +549,7 @@ export default async function AdminUsersPage({
 
                         <div className="mt-3 w-full rounded-2xl border border-slate-200 bg-slate-50 p-4 xl:absolute xl:right-0 xl:z-20 xl:w-80 xl:shadow-xl">
                           <form
+                            noValidate
                             action={resetPasswordAction}
                             className="space-y-4"
                           >
@@ -585,7 +588,7 @@ export default async function AdminUsersPage({
                         </div>
                       </details>
 
-                      <form action={deleteUserAction}>
+                      <form noValidate action={deleteUserAction}>
                         <input
                           type="hidden"
                           name="user_id"

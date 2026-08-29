@@ -89,6 +89,7 @@ export default function LoginForm() {
 
   return (
     <form
+      noValidate
       onSubmit={handleSubmit}
       className="space-y-5"
     >

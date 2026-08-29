@@ -1,107 +1,87 @@
 import {
   BadgeDollarSign,
-  Banknote,
-  Building2,
   Headset,
+  MapPinned,
   PackageSearch,
-  ShoppingBag,
-  Truck,
-  Warehouse,
+  ShieldCheck,
+  Workflow,
 } from "lucide-react";
 
 const benefits = [
   {
-    icon: PackageSearch,
-    title: "Fast Product Sourcing",
+    icon: MapPinned,
+    title: "UAE-first operation",
     description:
-      "No need to wait for weeks. Source products faster and launch new listings without long delays.",
+      "Local stock and order handling make it easier to build a workflow around UAE customer expectations.",
+  },
+  {
+    icon: PackageSearch,
+    title: "Sourcing with an operational check",
+    description:
+      "Review product availability, parcel fit and fulfillment needs before committing to a selling plan.",
+  },
+  {
+    icon: Workflow,
+    title: "One connected order journey",
+    description:
+      "Coordinate order receipt, packing, dispatch, delivery status and COD information through an agreed process.",
   },
   {
     icon: BadgeDollarSign,
-    title: "Lower Cost, Higher Margins",
+    title: "Models for different cash flows",
     description:
-      "Competitive wholesale pricing and efficient operations help reduce costs and improve profit margins.",
+      "Discuss dropshipping, wholesale or stored-inventory options according to your product and growth stage.",
   },
   {
-    icon: Banknote,
-    title: "Cash on Delivery Support",
+    icon: ShieldCheck,
+    title: "Clear terms before launch",
     description:
-      "Offer COD through available fulfillment partners and reach more customers across supported markets.",
-  },
-  {
-    icon: Truck,
-    title: "Middle East Delivery",
-    description:
-      "Reliable last-mile delivery across the UAE and selected GCC and Middle East destinations.",
-  },
-  {
-    icon: Warehouse,
-    title: "UAE Warehousing",
-    description:
-      "Store inventory locally for quicker processing, faster dispatch and a better customer experience.",
-  },
-  {
-    icon: ShoppingBag,
-    title: "Marketplace & Social Selling",
-    description:
-      "Fulfillment support for Amazon, Noon, Shopify, TikTok Shop, Facebook and Instagram sellers.",
-  },
-  {
-    icon: Building2,
-    title: "New Seller Support",
-    description:
-      "Do not have a trade license yet? Contact us to discuss available product-listing and seller-support options.",
+      "Confirm product, stock, delivery area, rates and return treatment before accepting customer orders.",
   },
   {
     icon: Headset,
-    title: "High-Value Business Support",
+    title: "Direct seller support",
     description:
-      "Get practical support for product selection, inventory planning, fulfillment and business growth.",
+      "Speak with the BloomPath team about products, inventory planning and the right operational next step.",
   },
 ];
 
 export default function WhyChoose() {
   return (
-    <section id="about" className="bg-white py-14 sm:py-16">
-      <div className="mx-auto max-w-7xl px-5 lg:px-8">
-        <div className="mx-auto max-w-4xl text-center">
-          <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-600 sm:text-sm">
-            Why Sellers Choose BloomPath
-          </p>
-
-          <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
-            More Than a Supplier — Your Complete eCommerce Growth Partner
-          </h2>
-
-          <p className="mt-4 text-sm leading-7 text-slate-600 sm:text-base">
-            Whether you are launching your first online store or scaling an
-            established brand, BloomPath provides fast sourcing, UAE
-            warehousing, COD support, marketplace fulfillment and reliable
-            last-mile delivery to help you grow across the Middle East.
+    <section id="about" className="bg-white py-16 sm:py-24">
+      <div className="bp-container">
+        <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
+          <div>
+            <p className="bp-eyebrow text-brand-900">Why BloomPath</p>
+            <h2 className="bp-display mt-4 text-4xl text-ink sm:text-5xl">
+              Built for sellers who need clarity behind the sale.
+            </h2>
+          </div>
+          <p className="max-w-2xl text-base leading-8 text-muted lg:justify-self-end">
+            We focus on the parts that turn a product idea into a repeatable UAE
+            order operation—stock, handover, packing, dispatch and status
+            visibility.
           </p>
         </div>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid overflow-hidden rounded-[1.5rem] border border-line sm:grid-cols-2 lg:grid-cols-3">
           {benefits.map((benefit) => {
             const Icon = benefit.icon;
-
             return (
-              <div
+              <article
                 key={benefit.title}
-                className="group rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-2 hover:border-emerald-300 hover:shadow-xl"
+                className="group border-b border-line p-6 transition hover:bg-sand-100 sm:border-r sm:p-7 [&:nth-last-child(-n+1)]:border-b-0 sm:[&:nth-last-child(-n+2)]:border-b-0 lg:[&:nth-last-child(-n+3)]:border-b-0 lg:[&:nth-child(3n)]:border-r-0"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700 transition duration-300 group-hover:bg-emerald-600 group-hover:text-white">
-                  <Icon size={27} strokeWidth={2.2} />
-                </div>
-
-                <h3 className="mt-5 text-lg font-black leading-6 text-slate-950">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-100 text-brand-900 transition group-hover:bg-brand-900 group-hover:text-white">
+                  <Icon size={21} />
+                </span>
+                <h3 className="mt-5 text-lg font-black leading-6 text-ink">
                   {benefit.title}
                 </h3>
-
-                <p className="mt-3 text-sm leading-7 text-slate-600">
+                <p className="mt-3 text-sm leading-7 text-muted">
                   {benefit.description}
                 </p>
-              </div>
+              </article>
             );
           })}
         </div>

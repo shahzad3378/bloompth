@@ -92,7 +92,7 @@ export default function SignupPage() {
             Enter your details to register with BloomPath.
           </p>
 
-          <form onSubmit={handleSignup} className="mt-8 space-y-5">
+          <form noValidate onSubmit={handleSignup} className="mt-8 space-y-5">
             <div>
               <label
                 htmlFor="fullName"

@@ -64,7 +64,7 @@ export default function SettingsForm({
   }
 
   return (
-    <form action={handleSubmit} className="space-y-6">
+    <form noValidate action={handleSubmit} className="space-y-6">
       {result && (
         <div
           className={`rounded-2xl border px-5 py-4 text-sm font-bold ${
@@ -214,7 +214,7 @@ export default function SettingsForm({
               rows={3}
               defaultValue={settings.address ?? ""}
               placeholder="Dubai, United Arab Emirates"
-              className={inputClassName}
+              className={`${inputClassName} resize-none`}
             />
           </label>
 

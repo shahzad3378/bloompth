@@ -1,0 +1,10 @@
+{
+  "profile": "marketing-and-commerce",
+  "sourceRoots": ["app", "components"],
+  "locale": "en-AE",
+  "canonicalMap": "DESIGN.md",
+  "requiredCapabilities": ["Select/Listbox", "Form", "Scrollbar"],
+  "ownership": {
+    "Select/Listbox": "native"
+  }
+}

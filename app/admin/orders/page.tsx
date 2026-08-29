@@ -261,6 +261,7 @@ export default async function AdminOrdersPage() {
                     </div>
 
                     <form
+                      noValidate
                       action={updateOrderStatus}
                       className="flex flex-col gap-2 sm:flex-row xl:w-[300px]"
                     >

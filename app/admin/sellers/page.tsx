@@ -169,6 +169,7 @@ export default async function AdminSellersPage() {
 
                   {seller.status !== "active" && (
                     <form
+                      noValidate
                       action={async () => {
                         "use server";
                         await updateSellerStatus(
@@ -189,6 +190,7 @@ export default async function AdminSellersPage() {
 
                   {seller.status !== "rejected" && (
                     <form
+                      noValidate
                       action={async () => {
                         "use server";
                         await updateSellerStatus(
@@ -209,6 +211,7 @@ export default async function AdminSellersPage() {
 
                   {seller.status !== "pending" && (
                     <form
+                      noValidate
                       action={async () => {
                         "use server";
                         await updateSellerStatus(

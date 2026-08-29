@@ -50,34 +50,34 @@ const categories = [
 
 export default function Categories() {
   return (
-    <section className="border-b border-slate-200 bg-slate-50 py-12 sm:py-14">
-      <div className="mx-auto max-w-7xl px-5 lg:px-8">
+    <section className="border-y border-line bg-sand-100 py-16 sm:py-20">
+      <div className="bp-container">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-2xl">
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-600 sm:text-sm">
-              Product Categories
+            <p className="bp-eyebrow text-brand-900">
+              Browse product categories
             </p>
 
-            <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
-              Shop by Category
+            <h2 className="bp-display mt-4 text-4xl text-ink sm:text-5xl">
+              Find your next UAE product test.
             </h2>
 
-            <p className="mt-3 max-w-xl text-sm leading-7 text-slate-600 sm:text-base">
-              Find products for your online store across BloomPath&apos;s main
-              wholesale categories.
+            <p className="mt-4 max-w-xl text-sm leading-7 text-muted sm:text-base">
+              Explore BloomPath&apos;s product catalogue by category, then
+              confirm stock, wholesale pricing and fulfillment options.
             </p>
           </div>
 
           <Link
             href="/products"
-            className="inline-flex w-fit items-center gap-2 text-sm font-black text-emerald-700 transition hover:text-emerald-600"
+            className="inline-flex w-fit cursor-pointer items-center gap-2 text-sm font-black text-brand-900 transition hover:gap-3"
           >
             View all products
             <ArrowUpRight size={17} />
           </Link>
         </div>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((category) => {
             const Icon = category.icon;
 
@@ -85,26 +85,24 @@ export default function Categories() {
               <Link
                 key={category.name}
                 href={category.href}
-                className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-emerald-300 hover:shadow-lg"
+                className="group relative cursor-pointer overflow-hidden rounded-[1.25rem] border border-line bg-white p-5 transition duration-300 hover:-translate-y-1 hover:border-brand-500/50 hover:shadow-lg"
               >
-                <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-emerald-50 transition duration-300 group-hover:scale-125 group-hover:bg-emerald-100" />
-
                 <div className="relative flex items-center gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 transition duration-300 group-hover:bg-emerald-600 group-hover:text-white">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-900 transition duration-300 group-hover:bg-brand-900 group-hover:text-white">
                     <Icon size={23} strokeWidth={2.2} />
                   </div>
 
                   <div className="min-w-0 flex-1">
-                    <h3 className="text-base font-black text-slate-950 transition group-hover:text-emerald-700 sm:text-lg">
+                    <h3 className="text-base font-black text-ink transition group-hover:text-brand-900 sm:text-lg">
                       {category.name}
                     </h3>
 
-                    <p className="mt-1 text-sm leading-6 text-slate-500">
+                    <p className="mt-1 text-sm leading-6 text-muted">
                       {category.description}
                     </p>
                   </div>
 
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-400 transition duration-300 group-hover:border-emerald-600 group-hover:bg-emerald-600 group-hover:text-white">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line text-muted transition duration-300 group-hover:border-brand-900 group-hover:bg-brand-900 group-hover:text-white">
                     <ArrowUpRight size={17} />
                   </div>
                 </div>

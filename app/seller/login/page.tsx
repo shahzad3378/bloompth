@@ -103,7 +103,7 @@ export default function SellerLoginPage() {
             Login with your registered seller account.
           </p>
 
-          <form onSubmit={handleLogin} className="mt-8 space-y-5">
+          <form noValidate onSubmit={handleLogin} className="mt-8 space-y-5">
             <div>
               <label
                 htmlFor="email"

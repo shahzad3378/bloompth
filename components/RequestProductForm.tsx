@@ -150,6 +150,7 @@ export default function RequestProductForm() {
 
   return (
     <form
+      noValidate
       onSubmit={handleSubmit}
       className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
     >

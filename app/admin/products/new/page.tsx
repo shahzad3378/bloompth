@@ -229,6 +229,7 @@ const parsedMinOrderQty = Number(minOrderQty);
       </div>
 
       <form
+        noValidate
         onSubmit={handleSubmit}
         className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
       >
