@@ -185,10 +185,6 @@ export async function updateSession(request: NextRequest) {
   }
 
   if (isSellerLoginRoute && isLoggedIn) {
-    if (isAdmin) {
-      return redirectTo("/admin");
-    }
-
     if (isSeller && profile?.status !== "rejected") {
       return redirectTo("/seller");
     }
