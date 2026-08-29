@@ -1,12 +1,12 @@
-import { Facebook, Instagram, ShoppingBag, Store } from "lucide-react";
+import { MessageCircle, ShoppingBag, Smartphone, Store } from "lucide-react";
 
 const platforms = [
   { name: "Amazon UAE", icon: ShoppingBag },
   { name: "Noon", icon: Store },
   { name: "Shopify", icon: ShoppingBag },
   { name: "TikTok Shop", icon: Store },
-  { name: "Facebook", icon: Facebook },
-  { name: "Instagram", icon: Instagram },
+  { name: "Facebook", icon: MessageCircle },
+  { name: "Instagram", icon: Smartphone },
 ];
 
 export default function SellerPlatforms() {
