@@ -8,8 +8,6 @@ import {
   Warehouse,
 } from "lucide-react";
 
-import { formatMoney } from "@/lib/currency";
-import { getTenantCurrency } from "@/lib/tenant-currency";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireActiveSellerPage } from "@/lib/auth";
 import SellerOrderBox from "@/components/SellerOrderBox";
@@ -27,7 +25,6 @@ export default async function SellerProductDetailPage({
 }: PageProps) {
   await requireActiveSellerPage();
 
-  const currency = await getTenantCurrency();
   const { slug } = await params;
   const supabaseAdmin = createAdminClient();
 
@@ -132,17 +129,13 @@ export default async function SellerProductDetailPage({
               <div className="mt-2 flex flex-wrap items-end gap-3">
                 <p className="text-3xl font-black">
                   {displayPrice !== null
-                    ? formatMoney(
-                        displayPrice,
-                        currency.code,
-                        currency.locale
-                      )
+                    ? `AED ${displayPrice.toFixed(2)}`
                     : "Contact for Price"}
                 </p>
 
                 {hasSale && price !== null && (
                   <p className="pb-1 text-sm font-bold text-slate-400 line-through">
-                    {formatMoney(price, currency.code, currency.locale)}
+                    AED {price.toFixed(2)}
                   </p>
                 )}
               </div>
@@ -200,7 +193,6 @@ export default async function SellerProductDetailPage({
               unitPrice={displayPrice}
               stock={stock}
               minimumOrderQty={minimumOrderQty}
-              currencyCode={currency.code}
             />
           </section>
         </div>

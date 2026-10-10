@@ -3,7 +3,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { currencyInputStep } from "@/lib/currency";
 
 type Product = {
   id: string | number;
@@ -23,15 +22,12 @@ type Product = {
 
 type EditProductFormProps = {
   product: Product;
-  currencyCode: string;
 };
 
 export default function EditProductForm({
   product,
-  currencyCode,
 }: EditProductFormProps) {
   const router = useRouter();
-  const priceStep = currencyInputStep(currencyCode);
 
   const [title, setTitle] = useState(product.title ?? "");
   const [slug, setSlug] = useState(product.slug ?? "");
@@ -533,14 +529,14 @@ export default function EditProductForm({
             htmlFor="price"
             className="text-sm font-bold text-slate-700"
           >
-            Price ({currencyCode})
+            Price (AED)
           </label>
 
           <input
             id="price"
             type="number"
             min="0"
-            step={priceStep}
+            step="0.01"
             value={price}
             onChange={(event) =>
               setPrice(event.target.value)
@@ -554,14 +550,14 @@ export default function EditProductForm({
             htmlFor="salePrice"
             className="text-sm font-bold text-slate-700"
           >
-            Sale Price ({currencyCode})
+            Sale Price (AED)
           </label>
 
           <input
             id="salePrice"
             type="number"
             min="0"
-            step={priceStep}
+            step="0.01"
             value={salePrice}
             onChange={(event) =>
               setSalePrice(event.target.value)

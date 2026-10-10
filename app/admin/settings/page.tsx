@@ -26,8 +26,6 @@ const defaultSettings: WebsiteSettings = {
   youtube_url: null,
   maps_url: null,
   footer_text: "© 2026 BloomPath. All rights reserved.",
-  currency_code: "AED",
-  locale: "en-AE",
   updated_at: new Date().toISOString(),
 };
 
@@ -36,17 +34,31 @@ export default async function AdminSettingsPage() {
 
   const { data, error } = await supabase
     .from("website_settings")
-    .select("*")
+    .select(
+      `
+        id,
+        company_name,
+        tagline,
+        phone,
+        whatsapp,
+        email,
+        address,
+        business_hours,
+        facebook_url,
+        instagram_url,
+        linkedin_url,
+        tiktok_url,
+        youtube_url,
+        maps_url,
+        footer_text,
+        updated_at
+      `
+    )
     .eq("id", "main")
     .maybeSingle();
 
-  const settings: WebsiteSettings = data
-    ? {
-        ...defaultSettings,
-        ...(data as Partial<WebsiteSettings>),
-        company_name:
-          data.company_name || defaultSettings.company_name,
-      }
+  const settings = data
+    ? (data as WebsiteSettings)
     : defaultSettings;
 
   return (

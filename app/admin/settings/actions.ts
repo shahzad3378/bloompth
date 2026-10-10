@@ -3,10 +3,6 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
-import {
-  isMissingColumnError,
-  SUPPORTED_CURRENCIES,
-} from "@/lib/currency";
 
 export type SettingsActionResult = {
   success: boolean;
@@ -41,20 +37,6 @@ export async function updateWebsiteSettings(
     };
   }
 
-  const requestedCurrency = (
-    getOptionalText(formData, "currency_code") || "AED"
-  ).toUpperCase();
-  const currency = SUPPORTED_CURRENCIES.find(
-    (item) => item.code === requestedCurrency
-  );
-
-  if (!currency) {
-    return {
-      success: false,
-      message: "Choose a supported reporting currency.",
-    };
-  }
-
   const settings = {
     id: "main",
     company_name: companyName,
@@ -74,34 +56,11 @@ export async function updateWebsiteSettings(
     updated_at: new Date().toISOString(),
   };
 
-  const settingsWithCurrency = {
-    ...settings,
-    currency_code: currency.code,
-    locale: currency.locale,
-  };
-
-  let { error } = await supabase
+  const { error } = await supabase
     .from("website_settings")
-    .upsert(settingsWithCurrency, {
+    .upsert(settings, {
       onConflict: "id",
     });
-
-  let currencyStored = true;
-
-  if (
-    error &&
-    (isMissingColumnError(error, "currency_code") ||
-      isMissingColumnError(error, "locale"))
-  ) {
-    const retry = await supabase
-      .from("website_settings")
-      .upsert(settings, {
-        onConflict: "id",
-      });
-
-    error = retry.error;
-    currencyStored = false;
-  }
 
   if (error) {
     console.error("Settings update error:", error);
@@ -115,18 +74,6 @@ export async function updateWebsiteSettings(
   revalidatePath("/");
   revalidatePath("/admin");
   revalidatePath("/admin/settings");
-  revalidatePath("/admin/reports");
-  revalidatePath("/admin/orders");
-  revalidatePath("/admin/products");
-  revalidatePath("/products");
-
-  if (!currencyStored) {
-    return {
-      success: true,
-      message:
-        "Website settings saved. Currency is still using the default until currency_code and locale exist on website_settings.",
-    };
-  }
 
   return {
     success: true,

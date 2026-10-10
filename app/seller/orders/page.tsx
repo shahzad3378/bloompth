@@ -10,12 +10,6 @@ import {
 } from "lucide-react";
 
 import { supabase } from "@/lib/supabase";
-import {
-  formatOrderMoney,
-  formatReportDate,
-  isMissingColumnError,
-} from "@/lib/currency";
-import { useTenantCurrency } from "@/lib/use-tenant-currency";
 
 type Order = {
   id: string;
@@ -25,13 +19,11 @@ type Order = {
   total_amount: number;
   status: string;
   created_at: string;
-  currency_code?: string | null;
 };
 
 export default function SellerOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const currency = useTenantCurrency();
 
   useEffect(() => {
     async function loadOrders() {
@@ -44,28 +36,13 @@ export default function SellerOrdersPage() {
         return;
       }
 
-      const columns =
-        "id, product_title, quantity, unit_price, total_amount, status, created_at";
-
-      let { data, error } = await supabase
+      const { data, error } = await supabase
         .from("orders")
-        .select(`${columns}, currency_code`)
+        .select(
+          "id, product_title, quantity, unit_price, total_amount, status, created_at"
+        )
         .eq("seller_id", user.id)
         .order("created_at", { ascending: false });
-
-      if (isMissingColumnError(error, "currency_code")) {
-        const fallback = await supabase
-          .from("orders")
-          .select(columns)
-          .eq("seller_id", user.id)
-          .order("created_at", { ascending: false });
-
-        data = (fallback.data ?? []).map((order) => ({
-          ...order,
-          currency_code: null,
-        }));
-        error = fallback.error;
-      }
 
       if (error) {
         console.error("Orders load error:", error.message);
@@ -212,10 +189,7 @@ export default function SellerOrdersPage() {
                   </p>
 
                   <p className="mt-1 text-sm text-slate-500">
-                    {formatReportDate(
-                      order.created_at,
-                      currency.locale
-                    )}
+                    {new Date(order.created_at).toLocaleString("en-AE")}
                   </p>
                 </div>
 
@@ -236,11 +210,7 @@ export default function SellerOrdersPage() {
                     </p>
 
                     <p className="mt-1 font-black text-slate-950">
-                      {formatOrderMoney(
-                        order.unit_price,
-                        order.currency_code,
-                        currency
-                      )}
+                      AED {Number(order.unit_price).toFixed(2)}
                     </p>
                   </div>
 
@@ -250,11 +220,7 @@ export default function SellerOrdersPage() {
                     </p>
 
                     <p className="mt-1 font-black text-slate-950">
-                      {formatOrderMoney(
-                        order.total_amount,
-                        order.currency_code,
-                        currency
-                      )}
+                      AED {Number(order.total_amount).toFixed(2)}
                     </p>
                   </div>
 

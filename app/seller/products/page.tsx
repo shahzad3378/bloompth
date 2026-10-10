@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { ArrowLeft, PackageSearch } from "lucide-react";
-import { formatMoney } from "@/lib/currency";
-import { getTenantCurrency } from "@/lib/tenant-currency";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireActiveSellerPage } from "@/lib/auth";
 
@@ -10,7 +8,6 @@ export const dynamic = "force-dynamic";
 export default async function SellerProductsPage() {
   await requireActiveSellerPage();
 
-  const currency = await getTenantCurrency();
   const supabaseAdmin = createAdminClient();
 
   const { data: products, error } = await supabaseAdmin
@@ -94,11 +91,7 @@ export default async function SellerProductsPage() {
 
                     <p className="mt-1 text-base font-black text-slate-950 sm:text-xl">
                       {displayPrice !== null
-                        ? formatMoney(
-                            displayPrice,
-                            currency.code,
-                            currency.locale
-                          )
+                        ? `AED ${Number(displayPrice).toFixed(2)}`
                         : "Contact for Price"}
                     </p>
 

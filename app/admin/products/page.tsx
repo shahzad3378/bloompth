@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { Download, Plus, Upload } from "lucide-react";
 
-import { formatMoney } from "@/lib/currency";
-import { getTenantCurrency } from "@/lib/tenant-currency";
 import { createClient } from "@/lib/supabase/server";
 import DeleteProductButton from "./DeleteProductButton";
 
@@ -25,7 +23,6 @@ type Product = {
 
 export default async function AdminProductsPage() {
   const supabase = await createClient();
-  const currency = await getTenantCurrency();
 
   const { data, error } = await supabase
     .from("products")
@@ -230,28 +227,16 @@ export default async function AdminProductsPage() {
                         {salePrice !== null && salePrice > 0 ? (
                           <div>
                             <p className="font-bold text-emerald-600">
-                              {formatMoney(
-                                salePrice,
-                                currency.code,
-                                currency.locale
-                              )}
+                              AED {salePrice.toFixed(2)}
                             </p>
 
                             <p className="text-xs text-slate-400 line-through">
-                              {formatMoney(
-                                regularPrice,
-                                currency.code,
-                                currency.locale
-                              )}
+                              AED {regularPrice.toFixed(2)}
                             </p>
                           </div>
                         ) : (
                           <p className="font-bold text-slate-900">
-                            {formatMoney(
-                              regularPrice,
-                              currency.code,
-                              currency.locale
-                            )}
+                            AED {regularPrice.toFixed(2)}
                           </p>
                         )}
                       </td>

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getTenantCurrency } from "@/lib/tenant-currency";
 import { createClient } from "@/lib/supabase/server";
 import EditProductForm from "./EditProductForm";
 
@@ -18,7 +17,6 @@ export default async function EditProductPage({
 }: EditProductPageProps) {
   const { id } = await params;
   const supabase = await createClient();
-  const currency = await getTenantCurrency();
 
   if (!id) {
     notFound();
@@ -113,10 +111,7 @@ export default async function EditProductPage({
         </Link>
       </div>
 
-      <EditProductForm
-        product={product}
-        currencyCode={currency.code}
-      />
+      <EditProductForm product={product} />
     </div>
   );
 }
