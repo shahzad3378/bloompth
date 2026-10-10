@@ -8,6 +8,7 @@ import {
   Loader2,
   PackageSearch,
 } from "lucide-react";
+import { COUNTRIES, currencyForCountry } from "@/lib/countries";
 import { supabase } from "@/lib/supabase";
 
 type FormState = {
@@ -35,7 +36,7 @@ export default function RequestProductForm() {
     phone: "",
     productName: productFromUrl,
     quantity: "1",
-    country: "United Arab Emirates",
+    country: "",
     city: "",
     message: "",
   });
@@ -115,7 +116,7 @@ export default function RequestProductForm() {
       phone: "",
       productName: productFromUrl,
       quantity: "1",
-      country: "United Arab Emirates",
+      country: "",
       city: "",
       message: "",
     });
@@ -272,14 +273,25 @@ export default function RequestProductForm() {
             Country
           </span>
 
-          <input
-            type="text"
+          <select
             value={form.country}
             onChange={(event) =>
               updateField("country", event.target.value)
             }
-            className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
-          />
+            className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+          >
+            <option value="">Select your country</option>
+            {COUNTRIES.map((country) => (
+              <option key={country.code} value={country.name}>
+                {country.name}
+              </option>
+            ))}
+          </select>
+          <span className="mt-2 block text-xs font-semibold text-slate-500">
+            {currencyForCountry(form.country)
+              ? `Your quote will use ${currencyForCountry(form.country)}.`
+              : "Choose a country and the quote uses that currency."}
+          </span>
         </label>
 
         <label>

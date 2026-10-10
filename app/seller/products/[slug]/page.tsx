@@ -8,11 +8,18 @@ import {
   Warehouse,
 } from "lucide-react";
 
+import CustomerCountrySelect from "@/components/CustomerCountrySelect";
+import SellerOrderBox from "@/components/SellerOrderBox";
 import { formatMoney } from "@/lib/currency";
+import {
+  customerPriceNote,
+  quoteAmount,
+  quoteForCountry,
+  resolveCustomerCountry,
+} from "@/lib/customer-currency";
 import { getTenantCurrency } from "@/lib/tenant-currency";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireActiveSellerPage } from "@/lib/auth";
-import SellerOrderBox from "@/components/SellerOrderBox";
 
 export const dynamic = "force-dynamic";
 
@@ -25,9 +32,11 @@ type PageProps = {
 export default async function SellerProductDetailPage({
   params,
 }: PageProps) {
-  await requireActiveSellerPage();
+  const account = await requireActiveSellerPage();
 
   const currency = await getTenantCurrency();
+  const country = await resolveCustomerCountry(account.userId);
+  const quote = await quoteForCountry(country, currency);
   const { slug } = await params;
   const supabaseAdmin = createAdminClient();
 
@@ -133,22 +142,26 @@ export default async function SellerProductDetailPage({
                 <p className="text-3xl font-black">
                   {displayPrice !== null
                     ? formatMoney(
-                        displayPrice,
-                        currency.code,
-                        currency.locale
+                        quoteAmount(displayPrice, quote),
+                        quote.currency.code,
+                        quote.currency.locale
                       )
                     : "Contact for Price"}
                 </p>
 
                 {hasSale && price !== null && (
                   <p className="pb-1 text-sm font-bold text-slate-400 line-through">
-                    {formatMoney(price, currency.code, currency.locale)}
+                    {formatMoney(
+                      quoteAmount(price, quote),
+                      quote.currency.code,
+                      quote.currency.locale
+                    )}
                   </p>
                 )}
               </div>
 
               <p className="mt-2 text-xs text-slate-400">
-                Price per unit
+                {customerPriceNote(quote)}
               </p>
             </div>
 
@@ -194,13 +207,17 @@ export default async function SellerProductDetailPage({
               </div>
             )}
 
+            <CustomerCountrySelect country={country} />
             <SellerOrderBox
               productId={String(product.id)}
               productTitle={product.title}
               unitPrice={displayPrice}
               stock={stock}
               minimumOrderQty={minimumOrderQty}
-              currencyCode={currency.code}
+              currencyCode={quote.currency.code}
+              catalogCurrencyCode={quote.catalog.code}
+              exchangeRate={quote.converted ? quote.rate : 1}
+              customerCountry={quote.country}
             />
           </section>
         </div>

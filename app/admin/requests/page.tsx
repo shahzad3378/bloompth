@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MessageCircle, PackageSearch } from "lucide-react";
+import { currencyForCountry } from "@/lib/countries";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -152,7 +153,15 @@ export default async function AdminRequestsPage() {
 
                       <td className="px-5 py-5 align-top text-sm text-slate-600">
                         <p>{request.city || "—"}</p>
-                        <p className="mt-1">{request.country || "—"}</p>
+                        <p className="mt-1">
+                          {request.country || "—"}
+                          {request.country
+                            ? ` · ${
+                                currencyForCountry(request.country) ||
+                                "Currency not mapped"
+                              }`
+                            : ""}
+                        </p>
                       </td>
 
                       <td className="px-5 py-5 align-top">

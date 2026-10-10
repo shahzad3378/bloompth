@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { ArrowLeft, PackageSearch } from "lucide-react";
+import CustomerCountrySelect from "@/components/CustomerCountrySelect";
 import { formatMoney } from "@/lib/currency";
+import {
+  customerPriceNote,
+  quoteAmount,
+  quoteForCountry,
+  resolveCustomerCountry,
+} from "@/lib/customer-currency";
 import { getTenantCurrency } from "@/lib/tenant-currency";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireActiveSellerPage } from "@/lib/auth";
@@ -8,9 +15,11 @@ import { requireActiveSellerPage } from "@/lib/auth";
 export const dynamic = "force-dynamic";
 
 export default async function SellerProductsPage() {
-  await requireActiveSellerPage();
+  const account = await requireActiveSellerPage();
 
   const currency = await getTenantCurrency();
+  const country = await resolveCustomerCountry(account.userId);
+  const quote = await quoteForCountry(country, currency);
   const supabaseAdmin = createAdminClient();
 
   const { data: products, error } = await supabaseAdmin
@@ -42,6 +51,13 @@ export default async function SellerProductsPage() {
           View products available for wholesale ordering.
         </p>
       </div>
+
+      <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <CustomerCountrySelect country={country} compact />
+        <p className="mt-3 text-sm font-semibold text-slate-600">
+          {customerPriceNote(quote)}
+        </p>
+      </section>
 
       {error ? (
         <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-red-700">
@@ -95,9 +111,9 @@ export default async function SellerProductsPage() {
                     <p className="mt-1 text-base font-black text-slate-950 sm:text-xl">
                       {displayPrice !== null
                         ? formatMoney(
-                            displayPrice,
-                            currency.code,
-                            currency.locale
+                            quoteAmount(displayPrice, quote),
+                            quote.currency.code,
+                            quote.currency.locale
                           )
                         : "Contact for Price"}
                     </p>

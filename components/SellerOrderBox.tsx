@@ -11,6 +11,7 @@ import {
 
 import { supabase } from "@/lib/supabase";
 import {
+  convertMoney,
   formatMoney,
   isMissingColumnError,
   resolveCurrency,
@@ -23,6 +24,9 @@ type SellerOrderBoxProps = {
   stock: number;
   minimumOrderQty: number;
   currencyCode?: string | null;
+  catalogCurrencyCode?: string | null;
+  exchangeRate?: number | null;
+  customerCountry?: string | null;
 };
 
 export default function SellerOrderBox({
@@ -32,6 +36,9 @@ export default function SellerOrderBox({
   stock,
   minimumOrderQty,
   currencyCode,
+  catalogCurrencyCode,
+  exchangeRate,
+  customerCountry,
 }: SellerOrderBoxProps) {
   const router = useRouter();
 
@@ -42,10 +49,18 @@ export default function SellerOrderBox({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState("");
 
+  const chargeCurrency = resolveCurrency(
+    currencyCode || catalogCurrencyCode
+  );
+  const rate =
+    typeof exchangeRate === "number" && exchangeRate > 0
+      ? exchangeRate
+      : 1;
+
   const total = useMemo(() => {
     if (unitPrice === null) return null;
-    return quantity * unitPrice;
-  }, [quantity, unitPrice]);
+    return convertMoney(quantity * unitPrice, rate, chargeCurrency.code);
+  }, [quantity, unitPrice, rate, chargeCurrency.code]);
 
   function decreaseQuantity() {
     setQuantity((current) =>
@@ -120,25 +135,69 @@ export default function SellerOrderBox({
       return;
     }
 
-    const currency = resolveCurrency(currencyCode);
-    const order = {
+    const catalog = resolveCurrency(catalogCurrencyCode || currencyCode);
+    const convertedUnit = convertMoney(
+      unitPrice,
+      rate,
+      chargeCurrency.code
+    );
+    const catalogTotal = quantity * unitPrice;
+    const baseOrder = {
       seller_id: user.id,
       product_id: Number(productId),
       product_title: productTitle,
       quantity,
-      unit_price: unitPrice,
-      total_amount: total,
       status: "pending",
     };
+    const customerOrder = {
+      ...baseOrder,
+      unit_price: convertedUnit,
+      total_amount: total,
+      currency_code: chargeCurrency.code,
+      base_currency: catalog.code,
+      exchange_rate: rate,
+      customer_country: customerCountry || null,
+    };
+    const catalogOrder = {
+      ...baseOrder,
+      unit_price: unitPrice,
+      total_amount: catalogTotal,
+    };
 
-    let { error: orderError } = await supabase.from("orders").insert({
-      ...order,
-      currency_code: currency.code,
-    });
+    let payload: Record<string, unknown> = customerOrder;
+    let orderError: { message: string } | null = null;
 
-    if (isMissingColumnError(orderError, "currency_code")) {
-      const fallback = await supabase.from("orders").insert(order);
-      orderError = fallback.error;
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      const result = await supabase.from("orders").insert(payload);
+      orderError = result.error;
+
+      if (!orderError) {
+        break;
+      }
+
+      if (isMissingColumnError(orderError, "currency_code")) {
+        const fallback = await supabase.from("orders").insert(catalogOrder);
+        orderError = fallback.error;
+        break;
+      }
+
+      const optionalColumn = [
+        "customer_country",
+        "exchange_rate",
+        "base_currency",
+      ].find(
+        (column) =>
+          isMissingColumnError(orderError, column) &&
+          column in payload
+      );
+
+      if (!optionalColumn) {
+        break;
+      }
+
+      const nextPayload = { ...payload };
+      delete nextPayload[optionalColumn];
+      payload = nextPayload;
     }
 
     if (orderError) {
@@ -209,7 +268,11 @@ export default function SellerOrderBox({
 
             <p className="mt-1 text-2xl font-black text-slate-950">
               {total !== null
-                ? formatMoney(total, currencyCode)
+                ? formatMoney(
+                    total,
+                    chargeCurrency.code,
+                    chargeCurrency.locale
+                  )
                 : "Contact for Price"}
             </p>
           </div>

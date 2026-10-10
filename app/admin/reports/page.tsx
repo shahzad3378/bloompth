@@ -136,9 +136,9 @@ export default async function CurrencyReportsPage() {
           </h1>
 
           <p className="mt-2 max-w-2xl text-slate-500">
-            Order value, completed revenue and inventory are reported in
-            the workspace currency. Orders keep the currency that was
-            active when they were placed.
+            Catalog prices stay in {currency.code}. Each customer order
+            is stored in the currency of that customer&apos;s country, and
+            totals are kept separate when more than one currency appears.
           </p>
         </div>
 

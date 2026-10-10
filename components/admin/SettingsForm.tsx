@@ -19,9 +19,10 @@ import {
   updateWebsiteSettings,
   type SettingsActionResult,
 } from "@/app/admin/settings/actions";
+import { catalogCurrencyCodes } from "@/lib/countries";
 import {
   formatMoney,
-  SUPPORTED_CURRENCIES,
+  resolveCurrency,
 } from "@/lib/currency";
 
 export type WebsiteSettings = {
@@ -63,6 +64,11 @@ export default function SettingsForm({
   const [currencyCode, setCurrencyCode] = useState(
     settings.currency_code || "AED"
   );
+  const currencyCodes = catalogCurrencyCodes();
+
+  if (!currencyCodes.includes(currencyCode)) {
+    currencyCodes.unshift(currencyCode);
+  }
 
   function handleSubmit(formData: FormData) {
     setResult(null);
@@ -138,31 +144,34 @@ export default function SettingsForm({
 
           <div>
             <h2 className="text-xl font-black text-slate-950">
-              Workspace Currency
+              Catalog Currency
             </h2>
 
             <p className="mt-1 text-sm leading-6 text-slate-500">
-              Catalog prices, order totals and currency reports use this
-              currency. New orders keep the currency that was active when
-              they were placed.
+              Enter product prices in this currency. A customer then sees
+              those prices in the currency of their own country.
             </p>
           </div>
         </div>
 
         <div className="mt-7 grid gap-5 sm:grid-cols-2">
           <label className="text-sm font-black text-slate-700">
-            Reporting Currency
+            Catalog Currency
             <select
               name="currency_code"
               value={currencyCode}
               onChange={(event) => setCurrencyCode(event.target.value)}
               className={inputClassName}
             >
-              {SUPPORTED_CURRENCIES.map((currency) => (
-                <option key={currency.code} value={currency.code}>
-                  {currency.label}
-                </option>
-              ))}
+              {currencyCodes.map((code) => {
+                const currency = resolveCurrency(code);
+
+                return (
+                  <option key={currency.code} value={currency.code}>
+                    {currency.label}
+                  </option>
+                );
+              })}
             </select>
           </label>
 
@@ -174,7 +183,7 @@ export default function SettingsForm({
               {formatMoney(1250, currencyCode)}
             </p>
             <p className="mt-1 text-xs font-semibold text-slate-500">
-              Sample amount shown in the selected currency.
+              Sample catalog amount. Customers see a converted price in their country currency.
             </p>
           </div>
         </div>

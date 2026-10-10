@@ -2,12 +2,14 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
+import { COUNTRIES } from "@/lib/countries";
 import { supabase } from "@/lib/supabase";
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState("");
   const [businessName, setBusinessName] = useState("");
   const [phone, setPhone] = useState("");
+  const [country, setCountry] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -18,7 +20,13 @@ export default function SignupPage() {
     setMessage("");
     setIsLoading(true);
 
-    const { error } = await supabase.auth.signUp({
+    if (!country) {
+      setMessage("Select the country where you sell.");
+      setIsLoading(false);
+      return;
+    }
+
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -26,6 +34,7 @@ export default function SignupPage() {
           full_name: fullName,
           business_name: businessName,
           phone,
+          country,
           role: "seller",
         },
       },
@@ -37,6 +46,13 @@ export default function SignupPage() {
       return;
     }
 
+    if (data.user) {
+      await supabase
+        .from("profiles")
+        .update({ country })
+        .eq("id", data.user.id);
+    }
+
     setMessage(
       "Account created successfully. Please check your email and confirm your account."
     );
@@ -44,6 +60,7 @@ export default function SignupPage() {
     setFullName("");
     setBusinessName("");
     setPhone("");
+    setCountry("");
     setEmail("");
     setPassword("");
     setIsLoading(false);
@@ -147,6 +164,34 @@ export default function SignupPage() {
                 placeholder="+971 50 123 4567"
                 className="w-full rounded-xl border border-slate-300 px-4 py-3.5 text-slate-950 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
               />
+            </div>
+
+            <div>
+              <label
+                htmlFor="country"
+                className="mb-2 block text-sm font-bold text-slate-700"
+              >
+                Country
+              </label>
+
+              <select
+                id="country"
+                required
+                value={country}
+                onChange={(event) => setCountry(event.target.value)}
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-slate-950 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+              >
+                <option value="">Select your country</option>
+                {COUNTRIES.map((item) => (
+                  <option key={item.code} value={item.name}>
+                    {item.name} · {item.currency}
+                  </option>
+                ))}
+              </select>
+
+              <p className="mt-2 text-xs font-semibold text-slate-500">
+                Wholesale prices are shown in this country&apos;s currency.
+              </p>
             </div>
 
             <div>

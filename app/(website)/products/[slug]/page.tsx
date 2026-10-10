@@ -14,8 +14,16 @@ import {
   Truck,
 } from "lucide-react";
 
+import CustomerCountrySelect from "@/components/CustomerCountrySelect";
 import { formatMoney } from "@/lib/currency";
+import {
+  customerPriceNote,
+  quoteAmount,
+  quoteForCountry,
+  resolveCustomerCountry,
+} from "@/lib/customer-currency";
 import { getTenantCurrency } from "@/lib/tenant-currency";
+import { getCurrentAccount } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 
 type Product = {
@@ -40,7 +48,10 @@ export default async function ProductDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const account = await getCurrentAccount();
   const currency = await getTenantCurrency();
+  const country = await resolveCustomerCountry(account?.userId);
+  const quote = await quoteForCountry(country, currency);
 
   const { data: product, error } = await supabase
     .from("products")
@@ -279,9 +290,9 @@ Please share wholesale pricing, minimum order quantity and dropshipping details.
               <span className="text-3xl font-black text-slate-950">
                 {displayPrice !== null
                   ? formatMoney(
-                      displayPrice,
-                      currency.code,
-                      currency.locale
+                      quoteAmount(displayPrice, quote),
+                      quote.currency.code,
+                      quote.currency.locale
                     )
                   : "Contact for Price"}
               </span>
@@ -289,18 +300,20 @@ Please share wholesale pricing, minimum order quantity and dropshipping details.
               {hasSale && (
                 <span className="pb-1 text-lg font-bold text-slate-400 line-through">
                   {formatMoney(
-                    typedProduct.price,
-                    currency.code,
-                    currency.locale
+                    quoteAmount(typedProduct.price, quote),
+                    quote.currency.code,
+                    quote.currency.locale
                   )}
                 </span>
               )}
             </div>
 
             <p className="mt-2 text-xs text-slate-500">
-              Final wholesale pricing may depend on quantity
-              and sourcing requirements.
+              {customerPriceNote(quote)} Final wholesale pricing may
+              depend on quantity and sourcing requirements.
             </p>
+
+            <CustomerCountrySelect country={country} />
           </div>
 
           {/* Availability */}

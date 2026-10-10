@@ -4,8 +4,9 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
 import {
+  isIsoCurrency,
   isMissingColumnError,
-  SUPPORTED_CURRENCIES,
+  resolveCurrency,
 } from "@/lib/currency";
 
 export type SettingsActionResult = {
@@ -44,16 +45,15 @@ export async function updateWebsiteSettings(
   const requestedCurrency = (
     getOptionalText(formData, "currency_code") || "AED"
   ).toUpperCase();
-  const currency = SUPPORTED_CURRENCIES.find(
-    (item) => item.code === requestedCurrency
-  );
 
-  if (!currency) {
+  if (!isIsoCurrency(requestedCurrency)) {
     return {
       success: false,
-      message: "Choose a supported reporting currency.",
+      message: "Enter a valid catalog currency code.",
     };
   }
+
+  const currency = resolveCurrency(requestedCurrency);
 
   const settings = {
     id: "main",

@@ -1,3 +1,7 @@
+import { catalogCurrencyCodes } from "@/lib/countries";
+
+const OPEN_CURRENCIES = new Set(catalogCurrencyCodes());
+
 export type CurrencyOption = {
   code: string;
   locale: string;
@@ -51,22 +55,74 @@ type ReportOrder = {
   currency_code?: string | null;
 };
 
+const currencyNames = new Intl.DisplayNames(["en"], {
+  type: "currency",
+});
+
+export function isIsoCurrency(code: string) {
+  return OPEN_CURRENCIES.has(code.trim().toUpperCase());
+}
+
 export function resolveCurrency(
   code?: string | null,
   locale?: string | null
 ): CurrencyOption {
   const normalized = (code ?? "").trim().toUpperCase();
-  const match =
-    SUPPORTED_CURRENCIES.find((item) => item.code === normalized) ??
-    SUPPORTED_CURRENCIES[0];
-
+  const known = SUPPORTED_CURRENCIES.find(
+    (item) => item.code === normalized
+  );
   const customLocale = locale?.trim() ?? "";
+  const safeLocale = /^[a-z]{2}-[A-Z]{2}$/.test(customLocale)
+    ? customLocale
+    : null;
 
-  if (/^[a-z]{2}-[A-Z]{2}$/.test(customLocale)) {
-    return { ...match, locale: customLocale };
+  if (known) {
+    return safeLocale ? { ...known, locale: safeLocale } : known;
   }
 
-  return match;
+  if (isIsoCurrency(normalized)) {
+    let label = normalized;
+
+    try {
+      const name = currencyNames.of(normalized);
+
+      if (name) {
+        label = `${name} (${normalized})`;
+      }
+    } catch {
+      label = normalized;
+    }
+
+    return {
+      code: normalized,
+      locale: safeLocale || "en",
+      label,
+    };
+  }
+
+  return SUPPORTED_CURRENCIES[0];
+}
+
+export function convertMoney(
+  amount: number | string | null | undefined,
+  rate: number,
+  currencyCode?: string | null
+) {
+  const currency = resolveCurrency(currencyCode);
+  const value = Number(amount ?? 0) * rate;
+
+  if (!Number.isFinite(value)) {
+    return 0;
+  }
+
+  const digits =
+    new Intl.NumberFormat(currency.locale, {
+      style: "currency",
+      currency: currency.code,
+    }).resolvedOptions().maximumFractionDigits ?? 2;
+  const factor = 10 ** digits;
+
+  return Math.round(value * factor) / factor;
 }
 
 export function formatMoney(

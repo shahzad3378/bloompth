@@ -5,6 +5,8 @@ import {
   XCircle,
 } from "lucide-react";
 
+import { currencyForCountry } from "@/lib/countries";
+import { isMissingColumnError } from "@/lib/currency";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { updateSellerStatus } from "./actions";
 
@@ -13,13 +15,28 @@ export const dynamic = "force-dynamic";
 export default async function AdminSellersPage() {
   const supabaseAdmin = createAdminClient();
 
-  const { data: sellers, error } = await supabaseAdmin
+  const sellerColumns =
+    "id, full_name, business_name, phone, email, role, status, source_platform, utm_source, utm_medium, utm_campaign, fbclid, created_at";
+
+  let { data: sellers, error } = await supabaseAdmin
     .from("profiles")
-    .select(
-      "id, full_name, business_name, phone, email, role, status, source_platform, utm_source, utm_medium, utm_campaign, fbclid, created_at"
-    )
+    .select(`${sellerColumns}, country`)
     .eq("role", "seller")
     .order("created_at", { ascending: false });
+
+  if (isMissingColumnError(error, "country")) {
+    const fallback = await supabaseAdmin
+      .from("profiles")
+      .select(sellerColumns)
+      .eq("role", "seller")
+      .order("created_at", { ascending: false });
+
+    sellers = (fallback.data ?? []).map((seller) => ({
+      ...seller,
+      country: null,
+    }));
+    error = fallback.error;
+  }
 
   const sellerList = sellers || [];
 
@@ -134,6 +151,15 @@ export default async function AdminSellersPage() {
                     <div className="mt-3 space-y-1 text-sm text-slate-500">
                       <p>{seller.email || "No email"}</p>
                       <p>{seller.phone || "No phone"}</p>
+                      <p>
+                        {seller.country || "Country not set"}
+                        {seller.country
+                          ? ` · ${
+                              currencyForCountry(seller.country) ||
+                              "currency unavailable"
+                            }`
+                          : ""}
+                      </p>
 
                       <p>
                         <span className="font-bold text-slate-600">
