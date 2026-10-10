@@ -10,6 +10,11 @@ import {
 } from "lucide-react";
 
 import { supabase } from "@/lib/supabase";
+import {
+  formatMoney,
+  isMissingColumnError,
+  resolveCurrency,
+} from "@/lib/currency";
 
 type SellerOrderBoxProps = {
   productId: string;
@@ -17,6 +22,7 @@ type SellerOrderBoxProps = {
   unitPrice: number | null;
   stock: number;
   minimumOrderQty: number;
+  currencyCode?: string | null;
 };
 
 export default function SellerOrderBox({
@@ -25,6 +31,7 @@ export default function SellerOrderBox({
   unitPrice,
   stock,
   minimumOrderQty,
+  currencyCode,
 }: SellerOrderBoxProps) {
   const router = useRouter();
 
@@ -113,17 +120,26 @@ export default function SellerOrderBox({
       return;
     }
 
-    const { error: orderError } = await supabase
-      .from("orders")
-      .insert({
-        seller_id: user.id,
-        product_id: Number(productId),
-        product_title: productTitle,
-        quantity,
-        unit_price: unitPrice,
-        total_amount: total,
-        status: "pending",
-      });
+    const currency = resolveCurrency(currencyCode);
+    const order = {
+      seller_id: user.id,
+      product_id: Number(productId),
+      product_title: productTitle,
+      quantity,
+      unit_price: unitPrice,
+      total_amount: total,
+      status: "pending",
+    };
+
+    let { error: orderError } = await supabase.from("orders").insert({
+      ...order,
+      currency_code: currency.code,
+    });
+
+    if (isMissingColumnError(orderError, "currency_code")) {
+      const fallback = await supabase.from("orders").insert(order);
+      orderError = fallback.error;
+    }
 
     if (orderError) {
       setMessage(orderError.message);
@@ -193,7 +209,7 @@ export default function SellerOrderBox({
 
             <p className="mt-1 text-2xl font-black text-slate-950">
               {total !== null
-                ? `AED ${total.toFixed(2)}`
+                ? formatMoney(total, currencyCode)
                 : "Contact for Price"}
             </p>
           </div>

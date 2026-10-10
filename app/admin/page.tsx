@@ -12,6 +12,8 @@ import {
   Tags,
   Users,
 } from "lucide-react";
+import { formatMoney } from "@/lib/currency";
+import { getTenantCurrency } from "@/lib/tenant-currency";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -29,14 +31,6 @@ type RecentProduct = {
   created_at: string | null;
 };
 
-function formatCurrency(value: number) {
-  return new Intl.NumberFormat("en-AE", {
-    style: "currency",
-    currency: "AED",
-    minimumFractionDigits: 2,
-  }).format(value);
-}
-
 function getStatusClasses(status: string | null) {
   const normalizedStatus = status?.toLowerCase();
 
@@ -53,6 +47,7 @@ function getStatusClasses(status: string | null) {
 
 export default async function AdminDashboardPage() {
   const supabase = await createClient();
+  const currency = await getTenantCurrency();
 
   const [
     productsResult,
@@ -146,7 +141,7 @@ export default async function AdminDashboardPage() {
     },
     {
       title: "Inventory Value",
-      value: formatCurrency(inventoryValue),
+      value: formatMoney(inventoryValue, currency.code, currency.locale),
       description: `${totalStock.toLocaleString()} total stock units`,
       href: "/admin/products",
       icon: CircleDollarSign,
@@ -361,12 +356,20 @@ export default async function AdminDashboardPage() {
 
                         <td className="whitespace-nowrap px-6 py-5">
                           <p className="text-sm font-black text-slate-900">
-                            {formatCurrency(finalPrice)}
+                            {formatMoney(
+                              finalPrice,
+                              currency.code,
+                              currency.locale
+                            )}
                           </p>
 
                           {salePrice > 0 && salePrice < regularPrice && (
                             <p className="mt-1 text-xs text-slate-400 line-through">
-                              {formatCurrency(regularPrice)}
+                              {formatMoney(
+                                regularPrice,
+                                currency.code,
+                                currency.locale
+                              )}
                             </p>
                           )}
                         </td>

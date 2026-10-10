@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { formatMoney } from "@/lib/currency";
+import { getTenantCurrency } from "@/lib/tenant-currency";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -16,6 +18,7 @@ type RecentProduct = {
 
 export default async function AdminDashboardPage() {
   const supabase = await createClient();
+  const currency = await getTenantCurrency();
 
   const [
     productsCountResult,
@@ -201,10 +204,13 @@ export default async function AdminDashboardPage() {
 
                     <div className="shrink-0 text-right">
                       <p className="font-bold text-slate-900">
-                        AED{" "}
-                        {salePrice !== null && salePrice > 0
-                          ? salePrice.toFixed(2)
-                          : regularPrice.toFixed(2)}
+                        {formatMoney(
+                          salePrice !== null && salePrice > 0
+                            ? salePrice
+                            : regularPrice,
+                          currency.code,
+                          currency.locale
+                        )}
                       </p>
 
                       <span

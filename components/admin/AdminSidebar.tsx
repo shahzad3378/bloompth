@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  BarChart3,
   ChevronRight,
   LayoutDashboard,
   Menu,
@@ -48,6 +49,11 @@ name: "Orders",
 href: "/admin/orders",
 icon: ShoppingCart,
 },
+  {
+    name: "Reports",
+    href: "/admin/reports",
+    icon: BarChart3,
+  },
   {
     name: "Users",
     href: "/admin/users",

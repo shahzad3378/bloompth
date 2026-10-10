@@ -14,6 +14,8 @@ import {
   Truck,
 } from "lucide-react";
 
+import { formatMoney } from "@/lib/currency";
+import { getTenantCurrency } from "@/lib/tenant-currency";
 import { supabase } from "@/lib/supabase";
 
 type Product = {
@@ -38,6 +40,7 @@ export default async function ProductDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const currency = await getTenantCurrency();
 
   const { data: product, error } = await supabase
     .from("products")
@@ -275,18 +278,21 @@ Please share wholesale pricing, minimum order quantity and dropshipping details.
             <div className="mt-2 flex flex-wrap items-end gap-3">
               <span className="text-3xl font-black text-slate-950">
                 {displayPrice !== null
-                  ? `AED ${Number(
-                      displayPrice
-                    ).toFixed(2)}`
+                  ? formatMoney(
+                      displayPrice,
+                      currency.code,
+                      currency.locale
+                    )
                   : "Contact for Price"}
               </span>
 
               {hasSale && (
                 <span className="pb-1 text-lg font-bold text-slate-400 line-through">
-                  AED{" "}
-                  {Number(
-                    typedProduct.price
-                  ).toFixed(2)}
+                  {formatMoney(
+                    typedProduct.price,
+                    currency.code,
+                    currency.locale
+                  )}
                 </span>
               )}
             </div>

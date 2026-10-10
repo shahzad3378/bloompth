@@ -3,6 +3,8 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { currencyInputStep } from "@/lib/currency";
+import { useTenantCurrency } from "@/lib/use-tenant-currency";
 
 export default function NewProductPage() {
   const router = useRouter();
@@ -23,6 +25,8 @@ const [minOrderQty, setMinOrderQty] = useState("1");
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const currency = useTenantCurrency();
+  const priceStep = currencyInputStep(currency.code);
 
   useEffect(() => {
     return () => {
@@ -340,14 +344,14 @@ const parsedMinOrderQty = Number(minOrderQty);
               htmlFor="price"
               className="text-sm font-bold text-slate-700"
             >
-              Price (AED)
+              Price ({currency.code})
             </label>
 
             <input
               id="price"
               type="number"
               min="0"
-              step="0.01"
+              step={priceStep}
               value={price}
               onChange={(event) => setPrice(event.target.value)}
               placeholder="79.00"
@@ -360,14 +364,14 @@ const parsedMinOrderQty = Number(minOrderQty);
               htmlFor="salePrice"
               className="text-sm font-bold text-slate-700"
             >
-              Sale Price (AED)
+              Sale Price ({currency.code})
             </label>
 
             <input
               id="salePrice"
               type="number"
               min="0"
-              step="0.01"
+              step={priceStep}
               value={salePrice}
               onChange={(event) => setSalePrice(event.target.value)}
               placeholder="69.00"

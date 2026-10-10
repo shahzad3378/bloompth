@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import {
   Building2,
+  CircleDollarSign,
   Clock3,
   ExternalLink,
   Globe2,
@@ -18,6 +19,10 @@ import {
   updateWebsiteSettings,
   type SettingsActionResult,
 } from "@/app/admin/settings/actions";
+import {
+  formatMoney,
+  SUPPORTED_CURRENCIES,
+} from "@/lib/currency";
 
 export type WebsiteSettings = {
   id: string;
@@ -35,6 +40,8 @@ export type WebsiteSettings = {
   youtube_url: string | null;
   maps_url: string | null;
   footer_text: string | null;
+  currency_code?: string | null;
+  locale?: string | null;
   updated_at: string;
 };
 
@@ -52,6 +59,9 @@ export default function SettingsForm({
 
   const [result, setResult] = useState<SettingsActionResult | null>(
     null
+  );
+  const [currencyCode, setCurrencyCode] = useState(
+    settings.currency_code || "AED"
   );
 
   function handleSubmit(formData: FormData) {
@@ -117,6 +127,56 @@ export default function SettingsForm({
               className={inputClassName}
             />
           </label>
+        </div>
+      </section>
+
+      <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+        <div className="flex items-start gap-4">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-violet-100 text-violet-700">
+            <CircleDollarSign size={23} />
+          </div>
+
+          <div>
+            <h2 className="text-xl font-black text-slate-950">
+              Workspace Currency
+            </h2>
+
+            <p className="mt-1 text-sm leading-6 text-slate-500">
+              Catalog prices, order totals and currency reports use this
+              currency. New orders keep the currency that was active when
+              they were placed.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-7 grid gap-5 sm:grid-cols-2">
+          <label className="text-sm font-black text-slate-700">
+            Reporting Currency
+            <select
+              name="currency_code"
+              value={currencyCode}
+              onChange={(event) => setCurrencyCode(event.target.value)}
+              className={inputClassName}
+            >
+              {SUPPORTED_CURRENCIES.map((currency) => (
+                <option key={currency.code} value={currency.code}>
+                  {currency.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
+            <p className="text-xs font-black uppercase tracking-wider text-slate-400">
+              Preview
+            </p>
+            <p className="mt-2 text-2xl font-black text-slate-950">
+              {formatMoney(1250, currencyCode)}
+            </p>
+            <p className="mt-1 text-xs font-semibold text-slate-500">
+              Sample amount shown in the selected currency.
+            </p>
+          </div>
         </div>
       </section>
 

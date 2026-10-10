@@ -7,6 +7,15 @@ import {
   XCircle,
 } from "lucide-react";
 
+import {
+  formatMoney,
+  formatOrderMoney,
+  formatReportDate,
+  isMissingColumnError,
+  resolveCurrency,
+  summarizeOrders,
+} from "@/lib/currency";
+import { getTenantCurrency } from "@/lib/tenant-currency";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { updateOrderStatus } from "./actions";
 
@@ -14,13 +23,27 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminOrdersPage() {
   const supabaseAdmin = createAdminClient();
+  const currency = await getTenantCurrency();
+  const orderColumns =
+    "id, seller_id, product_id, product_title, quantity, unit_price, total_amount, status, created_at";
 
-  const { data: orders, error } = await supabaseAdmin
+  let { data: orders, error } = await supabaseAdmin
     .from("orders")
-    .select(
-      "id, seller_id, product_id, product_title, quantity, unit_price, total_amount, status, created_at"
-    )
+    .select(`${orderColumns}, currency_code`)
     .order("created_at", { ascending: false });
+
+  if (isMissingColumnError(error, "currency_code")) {
+    const fallback = await supabaseAdmin
+      .from("orders")
+      .select(orderColumns)
+      .order("created_at", { ascending: false });
+
+    orders = (fallback.data ?? []).map((order) => ({
+      ...order,
+      currency_code: null,
+    }));
+    error = fallback.error;
+  }
 
   const orderList = orders || [];
 
@@ -58,13 +81,7 @@ export default async function AdminOrdersPage() {
     (order) => order.status === "completed"
   ).length;
 
-  const totalValue = orderList
-    .filter((order) => order.status !== "cancelled")
-    .reduce(
-      (sum, order) =>
-        sum + Number(order.total_amount || 0),
-      0
-    );
+  const report = summarizeOrders(orderList, currency);
 
   return (
     <div className="mx-auto max-w-7xl space-y-8">
@@ -134,9 +151,22 @@ export default async function AdminOrdersPage() {
             <PackageCheck size={22} className="text-emerald-500" />
           </div>
 
-          <p className="mt-3 text-2xl font-black text-slate-950">
-            AED {totalValue.toFixed(2)}
-          </p>
+          <div className="mt-3 space-y-1">
+            {report.buckets.length === 0 ? (
+              <p className="text-2xl font-black text-slate-950">
+                {formatOrderMoney(0, null, currency)}
+              </p>
+            ) : (
+              report.buckets.map((bucket) => (
+                <p
+                  key={bucket.code}
+                  className="text-2xl font-black text-slate-950"
+                >
+                  {formatMoney(bucket.gross, bucket.code, bucket.locale)}
+                </p>
+              ))
+            )}
+          </div>
         </div>
       </div>
 
@@ -221,8 +251,11 @@ export default async function AdminOrdersPage() {
 
                         <p>
                           <span className="font-bold">Date:</span>{" "}
-                          {new Date(order.created_at).toLocaleString(
-                            "en-AE"
+                          {formatReportDate(
+                            order.created_at,
+                            order.currency_code
+                              ? resolveCurrency(order.currency_code).locale
+                              : currency.locale
                           )}
                         </p>
                       </div>
@@ -245,7 +278,11 @@ export default async function AdminOrdersPage() {
                         </p>
 
                         <p className="mt-1 font-black text-slate-950">
-                          AED {Number(order.unit_price).toFixed(2)}
+                          {formatOrderMoney(
+                            order.unit_price,
+                            order.currency_code,
+                            currency
+                          )}
                         </p>
                       </div>
 
@@ -255,7 +292,11 @@ export default async function AdminOrdersPage() {
                         </p>
 
                         <p className="mt-1 font-black text-slate-950">
-                          AED {Number(order.total_amount).toFixed(2)}
+                          {formatOrderMoney(
+                            order.total_amount,
+                            order.currency_code,
+                            currency
+                          )}
                         </p>
                       </div>
                     </div>
