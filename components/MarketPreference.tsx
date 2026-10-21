@@ -5,7 +5,6 @@ import { countries } from "@/lib/countries";
 export { countries, currencyForCountryName, flagForCountryName } from "@/lib/countries";
 const currs = (()=>{try{return ["AED",...Intl.supportedValuesOf("currency")].filter((x,i,a)=>a.indexOf(x)===i).sort()}catch{return ["AED","AUD","BDT","CAD","CHF","CNY","EUR","GBP","HKD","INR","JPY","KRW","MYR","NZD","PKR","SAR","SGD","TRY","USD","ZAR"]}})();
 const codeForName=(n:string)=>countries.find(c=>c.name.toLowerCase()===n.toLowerCase())?.code;
-export const flagForCountryName=(n:string)=>countries.find(c=>c.name.toLowerCase()===n.toLowerCase()||c.code.toLowerCase()===n.toLowerCase())?.flag||"🌐";
 export default function MarketPreference({initialCountryCode="AE"}:{initialCountryCode?:string}) {
  const [country,setCountry]=useState("AE"),[currency,setCurrency]=useState("AED"),[postal,setPostal]=useState(""),[q,setQ]=useState(""),[countryOpen,setCountryOpen]=useState(false),[currencyOpen,setCurrencyOpen]=useState(false);
  const info=countries.find(c=>c.code===country)||countries[0];

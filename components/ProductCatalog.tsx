@@ -140,8 +140,7 @@ export default function ProductCatalog({
     Boolean(search) ||
     selectedCategory !== "All" ||
     sortBy !== "newest" ||
-    originFilter !== "All" ||
-    false;
+    originFilter !== "All";
 
   return (
     <div>
