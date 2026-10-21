@@ -2,18 +2,18 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #10231b;
-  --forest: #073e2a;
-  --forest-deep: #052c20;
-  --leaf: #39b54a;
-  --mint: #ddf5e7;
-  --sand: #f5f1e8;
-  --gold: #d7a62d;
-  --muted: #617169;
-  --line: #dde5e0;
-  --scrollbar-thumb: #9fb7aa;
-  --scrollbar-thumb-hover: #668a76;
-  --scrollbar-track: #eef2ef;
+  --foreground: #102b42;
+  --forest: #123b57;
+  --forest-deep: #0b273b;
+  --leaf: #e21d2f;
+  --mint: #dff5fb;
+  --sand: #eefaff;
+  --gold: #f2b632;
+  --muted: #617487;
+  --line: #dce6ed;
+  --scrollbar-thumb: #93a9bb;
+  --scrollbar-thumb-hover: #557aa1;
+  --scrollbar-track: #eef3f6;
 }
 
 @theme inline {
@@ -28,6 +28,16 @@
   --color-muted: var(--muted);
   --color-line: var(--line);
   --color-gold: var(--gold);
+  --color-emerald-50: #fff2f2;
+  --color-emerald-100: #ffe1e3;
+  --color-emerald-200: #ffc5c9;
+  --color-emerald-300: #ff9ca4;
+  --color-emerald-400: #f75e6a;
+  --color-emerald-500: #e21d2f;
+  --color-emerald-600: #c81929;
+  --color-emerald-700: #a91624;
+  --color-emerald-800: #85131e;
+  --color-emerald-900: #123b57;
   --font-sans: Arial, Helvetica, sans-serif;
 }
 

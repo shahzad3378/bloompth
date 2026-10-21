@@ -3,7 +3,7 @@ import { ArrowRight, MessageCircle } from "lucide-react";
 
 export default function ConversionCta() {
   const whatsappUrl =
-    "https://wa.me/971507297900?text=Hello%20BloomPath%2C%20I%20want%20a%20UAE%20sourcing%20and%20fulfillment%20consultation.";
+    "https://wa.me/971507297900?text=Hello%20BloomPath%2C%20I%20want%20a%20global%20sourcing%20and%20fulfillment%20consultation.";
 
   return (
     <section className="bg-white py-16 sm:py-24">
@@ -12,7 +12,7 @@ export default function ConversionCta() {
           <div className="bp-grid-pattern pointer-events-none absolute inset-0 opacity-55" />
           <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
             <div className="max-w-3xl">
-              <p className="bp-eyebrow text-brand-500">Build your UAE operation</p>
+              <p className="bp-eyebrow text-brand-500">Build your global sourcing workflow</p>
               <h2 className="bp-display mt-4 text-3xl sm:text-5xl">
                 Tell us what you sell. We&apos;ll map the next operational step.
               </h2>

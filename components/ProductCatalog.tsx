@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import CurrencyPrice from "@/components/CurrencyPrice";
+import { flagForCountryName } from "@/components/MarketPreference";
+import { useEffect, useMemo, useState } from "react";
 import {
   ArrowRight,
   BadgeCheck,
@@ -23,11 +25,27 @@ type Product = {
   stock: number;
   image: string | null;
   featured: boolean;
+  origin_country?: string | null;
+  currency_code?: string | null;
 };
 
 type ProductCatalogProps = {
   products: Product[];
 };
+
+function isLocalProduct(origin: string | null | undefined, destination: string) {
+  const normalize = (value: string) => value.toLowerCase().replace(/[^a-z]/g, "");
+  const aliases: Record<string, string[]> = {
+    "unitedarabemirates": ["uae", "emirates"],
+    "unitedstates": ["usa", "us", "america"],
+    "canada": ["ca"],
+    "pakistan": ["pk"],
+    "china": ["cn"],
+  };
+  if (!origin) return false;
+  const o = normalize(origin), d = normalize(destination);
+  return o === d || (aliases[d] || []).includes(o) || (aliases[o] || []).includes(d);
+}
 
 export default function ProductCatalog({
   products,
@@ -35,6 +53,21 @@ export default function ProductCatalog({
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState("newest");
+  const [originFilter, setOriginFilter] = useState("All");
+  const [displayCurrency, setDisplayCurrency] = useState("AED");
+  const [deliveryCountry, setDeliveryCountry] = useState("United Arab Emirates");
+
+  useEffect(() => {
+    const readMarket = (event?: Event) => {
+      const detail = (event as CustomEvent<{ country?: string; currency?: string }> | undefined)?.detail;
+      const country = detail?.country || localStorage.getItem("bp-deliver-country") || "United Arab Emirates";
+      const currency = detail?.currency || localStorage.getItem("bp-currency") || "AED";
+      setDeliveryCountry(country); setDisplayCurrency(currency);
+    };
+    readMarket();
+    window.addEventListener("bp-market-change", readMarket);
+    return () => window.removeEventListener("bp-market-change", readMarket);
+  }, []);
 
   const categories = useMemo(() => {
     const productCategories = products
@@ -43,6 +76,8 @@ export default function ProductCatalog({
 
     return ["All", ...Array.from(new Set(productCategories)).sort()];
   }, [products]);
+
+  const origins = useMemo(() => ["All", ...Array.from(new Set(products.map((p) => p.origin_country?.trim()).filter((v): v is string => Boolean(v)))).sort()], [products]);
 
   const filteredProducts = useMemo(() => {
     const searchTerm = search.trim().toLowerCase();
@@ -62,10 +97,16 @@ export default function ProductCatalog({
         selectedCategory === "All" ||
         product.category === selectedCategory;
 
-      return matchesSearch && matchesCategory;
+      const matchesOrigin = originFilter === "All" || product.origin_country === originFilter;
+      return matchesSearch && matchesCategory && matchesOrigin;
     });
 
     return [...filtered].sort((a, b) => {
+      if (sortBy === "newest") {
+        const localA = isLocalProduct(a.origin_country, deliveryCountry) && Number(a.stock) > 0;
+        const localB = isLocalProduct(b.origin_country, deliveryCountry) && Number(b.stock) > 0;
+        if (localA !== localB) return localA ? -1 : 1;
+      }
       const priceA = Number(a.sale_price ?? a.price ?? 0);
       const priceB = Number(b.sale_price ?? b.price ?? 0);
 
@@ -87,18 +128,22 @@ export default function ProductCatalog({
 
       return Number(b.featured) - Number(a.featured);
     });
-  }, [products, search, selectedCategory, sortBy]);
+  }, [products, search, selectedCategory, sortBy, originFilter, deliveryCountry]);
 
   const clearFilters = () => {
     setSearch("");
     setSelectedCategory("All");
     setSortBy("newest");
+    setOriginFilter("All");
+    setDisplayCurrency("AED");
   };
 
   const hasActiveFilters =
     Boolean(search) ||
     selectedCategory !== "All" ||
-    sortBy !== "newest";
+    sortBy !== "newest" ||
+    originFilter !== "All" ||
+    displayCurrency !== "AED";
 
   return (
     <div>
@@ -117,7 +162,7 @@ export default function ProductCatalog({
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Search by product name, category or keyword..."
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-4 text-sm font-medium text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
+              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-4 text-sm font-medium text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
             />
           </label>
 
@@ -132,7 +177,7 @@ export default function ProductCatalog({
             <select
               value={sortBy}
               onChange={(event) => setSortBy(event.target.value)}
-              className="w-full appearance-none rounded-xl border border-slate-200 bg-white py-3.5 pl-11 pr-10 text-sm font-bold text-slate-700 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+              className="w-full appearance-none rounded-xl border border-slate-200 bg-white py-3.5 pl-11 pr-10 text-sm font-bold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
             >
               <option value="newest">Featured First</option>
               <option value="price-low">Price: Low to High</option>
@@ -155,8 +200,8 @@ export default function ProductCatalog({
                   onClick={() => setSelectedCategory(category)}
                   className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm font-bold transition ${
                     isActive
-                      ? "border-emerald-600 bg-emerald-600 text-white shadow-sm"
-                      : "border-slate-200 bg-white text-slate-600 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
+                      ? "border-blue-600 bg-blue-600 text-white shadow-sm"
+                      : "border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
                   }`}
                 >
                   {category}
@@ -167,11 +212,22 @@ export default function ProductCatalog({
         </div>
       </div>
 
+        <div className="mt-4 grid gap-3 border-t border-slate-100 pt-4 sm:grid-cols-2">
+          <label className="text-xs font-black uppercase tracking-wider text-slate-500">
+            Available in country
+            <select value={originFilter} onChange={(event) => setOriginFilter(event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold normal-case tracking-normal text-slate-800">
+              <option value="All">All countries</option>
+              {origins.slice(1).map((origin) => <option key={origin} value={origin}>{flagForCountryName(origin)}  {origin}</option>)}
+              <option value="Not listed" disabled>Origin not listed</option>
+            </select>
+          </label>
+        </div>
+
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-sm font-bold text-slate-700">
             Showing{" "}
-            <span className="text-emerald-600">
+            <span className="text-blue-600">
               {filteredProducts.length}
             </span>{" "}
             {filteredProducts.length === 1 ? "product" : "products"}
@@ -188,7 +244,7 @@ export default function ProductCatalog({
           <button
             type="button"
             onClick={clearFilters}
-            className="inline-flex items-center gap-2 text-sm font-black text-emerald-600 transition hover:text-emerald-700"
+            className="inline-flex items-center gap-2 text-sm font-black text-blue-600 transition hover:text-blue-700"
           >
             <RotateCcw size={16} />
             Clear filters
@@ -203,12 +259,11 @@ export default function ProductCatalog({
           </div>
 
           <h2 className="mt-6 text-2xl font-black text-slate-950">
-            No matching products found
+            {products.length === 0 ? "Catalogue is being prepared" : "No matching products found"}
           </h2>
 
           <p className="mx-auto mt-3 max-w-lg leading-7 text-slate-600">
-            Try changing your search keyword or selecting another category.
-            You can also send BloomPath your product requirement.
+            {products.length === 0 ? "No active products are publicly listed yet. Product photos, stock origins and prices will appear here once the real inventory is added and published. You can request any product in the meantime." : "Try changing your search keyword or selecting another category. You can also send BloomPath your product requirement."}
           </p>
 
           <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
@@ -220,14 +275,6 @@ export default function ProductCatalog({
               <RotateCcw size={17} />
               Reset Search
             </button>
-
-            <Link
-              href="/request-product"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 font-bold text-white transition hover:bg-emerald-700"
-            >
-              Request a Product
-              <ArrowRight size={17} />
-            </Link>
           </div>
         </div>
       ) : (
@@ -253,7 +300,7 @@ export default function ProductCatalog({
             return (
               <article
                 key={product.id}
-                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 sm:rounded-3xl bg-white transition duration-300 hover:-translate-y-1 hover:border-emerald-300 hover:shadow-xl"
+                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 sm:rounded-3xl bg-white transition duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-xl"
               >
                 <Link
                   href={`/products/${product.slug}`}
@@ -282,13 +329,16 @@ export default function ProductCatalog({
                     <span
                       className={`rounded-full px-2 py-1 text-[10px] sm:px-3 sm:py-1.5 sm:text-xs font-black shadow-sm ${
                         stock > 0
-                          ? "bg-white text-emerald-700"
+                          ? "bg-white text-blue-700"
                           : "bg-red-600 text-white"
                       }`}
                     >
                       {stock > 0 ? "Available" : "Out of Stock"}
                     </span>
 
+                    <span className="rounded-full bg-white/95 px-3 py-1.5 text-xs font-black text-slate-800 shadow-sm">
+                      {isLocalProduct(product.origin_country, deliveryCountry) && stock > 0 ? "📍 Available in local market · " + product.origin_country : product.origin_country ? "🌐 Origin · " + product.origin_country : "🌐 Global sourcing"}
+                    </span>
                     {hasSale && (
                       <span className="rounded-full bg-red-600 px-3 py-1.5 text-xs font-black text-white shadow-sm">
                         {discountPercentage}% Off
@@ -306,7 +356,7 @@ export default function ProductCatalog({
 
                 <div className="flex flex-1 flex-col p-3 sm:p-5">
                   <div className="flex items-center justify-between gap-3">
-                    <p className="line-clamp-1 text-xs font-black uppercase tracking-wider text-emerald-600">
+                    <p className="line-clamp-1 text-xs font-black uppercase tracking-wider text-blue-600">
                       {product.category || "General"}
                     </p>
 
@@ -319,7 +369,7 @@ export default function ProductCatalog({
                   </div>
 
                   <Link href={`/products/${product.slug}`}>
-                    <h2 className="mt-2 line-clamp-2 text-sm font-black leading-5 sm:text-lg sm:leading-6 text-slate-950 transition group-hover:text-emerald-600">
+                    <h2 className="mt-2 line-clamp-2 text-sm font-black leading-5 sm:text-lg sm:leading-6 text-slate-950 transition group-hover:text-blue-600">
                       {product.title}
                     </h2>
                   </Link>
@@ -331,18 +381,11 @@ export default function ProductCatalog({
 
                   <div className="mt-auto pt-5">
                     <div className="border-t border-slate-100 pt-4">
-                  <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    Wholesale Price
-                  </p>
-
-                  <div className="mt-2">
-                    <Link
-                      href="/seller/login"
-                      className="inline-flex items-center rounded-lg bg-emerald-50 px-3 py-2 text-xs font-black text-emerald-700 transition hover:bg-emerald-100 sm:text-sm"
-                    >
-                      🔒 Login to View Price
-                    </Link>
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Wholesale price</p>
+                  <div className="mt-2 text-2xl font-black text-slate-950">
+                    <CurrencyPrice amount={displayPrice ?? 0} baseCurrency={product.currency_code || "AED"} targetCurrency={displayCurrency} />
                   </div>
+                  {hasSale && product.price ? <p className="mt-1 text-xs text-slate-500">Regular price: <CurrencyPrice amount={product.price} baseCurrency={product.currency_code || "AED"} targetCurrency={displayCurrency} /></p> : null}
                 </div>
 
                 <div className="mt-4 grid grid-cols-2 gap-2">
@@ -357,7 +400,7 @@ export default function ProductCatalog({
                         href={`/request-product?product=${encodeURIComponent(
                           product.title
                         )}&productId=${product.id}`}
-                        className="inline-flex items-center justify-center gap-1 rounded-xl bg-slate-950 px-2 py-2.5 text-center text-xs sm:px-3 sm:py-3 sm:text-sm font-black text-white transition hover:bg-emerald-600"
+                        className="inline-flex items-center justify-center gap-1 rounded-xl bg-slate-950 px-2 py-2.5 text-center text-xs sm:px-3 sm:py-3 sm:text-sm font-black text-white transition hover:bg-blue-600"
                       >
                         Request
                         <ArrowRight size={15} />

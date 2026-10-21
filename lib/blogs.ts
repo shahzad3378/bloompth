@@ -19,9 +19,9 @@ export type BlogPost = {
 export const blogPosts: BlogPost[] = [
   {
     slug: "how-to-start-dropshipping-in-uae",
-    title: "How to Start Dropshipping in the UAE: An Operations-First Guide",
+    title: "How to Start Dropshipping: An Operations-First Guide",
     excerpt:
-      "A practical framework for choosing products, setting up your order flow and preparing UAE fulfillment before spending heavily on ads.",
+      "A practical framework for choosing products, setting up your order flow and planning fulfillment for your market before spending heavily on ads.",
     category: "Starting a Business",
     publishedAt: "2026-08-28",
     readTime: "7 min read",
@@ -36,7 +36,7 @@ export const blogPosts: BlogPost[] = [
         ],
       },
       {
-        heading: "Build a UAE product shortlist",
+        heading: "Build a product shortlist for your market",
         paragraphs: [
           "Look for products that are easy to explain in a short video, solve a visible problem and can survive normal parcel handling. Confirm the landed product cost, packaging dimensions, stock availability and any restrictions before building an advertisement around it.",
         ],
@@ -44,7 +44,7 @@ export const blogPosts: BlogPost[] = [
           "Clear customer problem and simple demonstration",
           "Enough selling-price room for ads, fulfillment and returns",
           "Practical size, weight and packaging",
-          "Reliable UAE stock or replenishment plan",
+          "Reliable stock or replenishment or replenishment plan",
           "No unverified medical, performance or compliance claims",
         ],
       },
@@ -59,14 +59,14 @@ export const blogPosts: BlogPost[] = [
         heading: "Launch with a small learning budget",
         paragraphs: [
           "Treat the first orders as a controlled test. Review confirmation rate, dispatch time, delivered rate, return reasons and customer questions. Improve the offer and operations together before increasing ad spend.",
-          "Business licensing, product approvals, tax and marketplace requirements depend on what you sell and how your company is structured. Verify the current rules with the relevant UAE authority or a qualified adviser before launch.",
+          "Business licensing, product approvals, tax and marketplace requirements depend on what you sell and how your company is structured. Verify the current rules with the relevant relevant local authority or a qualified adviser before launch.",
         ],
       },
     ],
   },
   {
     slug: "uae-cod-fulfillment-guide",
-    title: "UAE COD Fulfillment: What Sellers Should Set Up Before Launch",
+    title: "Cash-on-Delivery Fulfillment: What Sellers Should Set Up Before Launch",
     excerpt:
       "Understand the operational controls behind cash-on-delivery orders, from confirmation and packing to status reconciliation.",
     category: "COD Operations",
@@ -112,7 +112,7 @@ export const blogPosts: BlogPost[] = [
   },
   {
     slug: "choose-products-for-uae-online-store",
-    title: "A 7-Point Scorecard for Choosing Products to Sell in the UAE",
+    title: "A 7-Point Scorecard for Choosing Products for Your Market",
     excerpt:
       "Use a repeatable product-selection scorecard instead of choosing stock only because a competitor is advertising it.",
     category: "Product Sourcing",
@@ -158,7 +158,7 @@ export const blogPosts: BlogPost[] = [
   },
   {
     slug: "uae-warehouse-vs-overseas-shipping",
-    title: "UAE Warehousing vs Overseas Shipping: Which Model Fits Your Store?",
+    title: "Local Warehousing vs Cross-Border Fulfillment: Which Model Fits Your Store?",
     excerpt:
       "Compare local inventory and cross-border dispatch through the lenses of speed, cash flow, control and customer experience.",
     category: "Fulfillment",
@@ -170,7 +170,7 @@ export const blogPosts: BlogPost[] = [
       {
         heading: "The cheapest unit is not always the cheapest delivered order",
         paragraphs: [
-          "Overseas sourcing can reduce product cost at volume, but cross-border dispatch adds lead time, customs uncertainty and a more difficult return path. Local UAE stock uses working capital earlier, but it makes order processing and exception handling easier to control.",
+          "Overseas sourcing can reduce product cost at volume, but cross-border dispatch adds lead time, customs uncertainty and a more difficult return path. Local your market stock uses working capital earlier, but it makes order processing and exception handling easier to control.",
         ],
       },
       {
@@ -195,14 +195,14 @@ export const blogPosts: BlogPost[] = [
       {
         heading: "Use a hybrid decision",
         paragraphs: [
-          "Many sellers test with a low-inventory model, hold proven products in the UAE and source the next replenishment in planned batches. The best model can change by product rather than applying one rule to the whole store.",
+          "Many sellers test with a low-inventory model, hold proven products in your market and source the next replenishment in planned batches. The best model can change by product rather than applying one rule to the whole store.",
         ],
       },
     ],
   },
   {
     slug: "one-fulfillment-workflow-multiple-sales-channels",
-    title: "One UAE Fulfillment Workflow for Amazon, Noon, Shopify and Social Orders",
+    title: "One your market Fulfillment Workflow for Amazon, Noon, Shopify and Social Orders",
     excerpt:
       "Create one operational source of truth even when orders arrive from multiple marketplaces, stores and social channels.",
     category: "Store Operations",
@@ -226,7 +226,7 @@ export const blogPosts: BlogPost[] = [
           "Sales channel and channel order number",
           "Internal order or shipment reference",
           "Product SKU and quantity",
-          "Complete UAE delivery address",
+          "Complete your market delivery address",
           "Payment and COD amount",
           "Current operational status",
         ],

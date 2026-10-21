@@ -19,9 +19,9 @@ import FulfillmentProcess from "@/components/FulfillmentProcess";
 import UaeFaq from "@/components/UaeFaq";
 
 export const metadata: Metadata = {
-  title: "UAE Dropshipping & Fulfillment",
+  title: "Global Sourcing & Fulfillment",
   description:
-    "Start and scale a UAE dropshipping business with local product sourcing, warehousing, order processing, COD coordination and last-mile fulfillment support.",
+    "Source products across markets and coordinate inventory, order processing and delivery for your selected destination.",
   alternates: {
     canonical: "/dropshipping-uae",
   },
@@ -32,13 +32,13 @@ const supportAreas = [
     icon: ShoppingBag,
     title: "Product access",
     description:
-      "Explore products available for UAE sellers and request sourcing support for specific requirements.",
+      "Explore products by stock location or request sourcing support for a specific product.",
   },
   {
     icon: Warehouse,
     title: "Local inventory",
     description:
-      "Use UAE-held stock or discuss storage for your own suitable products.",
+      "Choose from available stock locations or discuss storage for your own suitable products.",
   },
   {
     icon: ClipboardCheck,
@@ -56,7 +56,7 @@ const supportAreas = [
     icon: Truck,
     title: "Last-mile handover",
     description:
-      "Shipments are handed to supported UAE delivery partners for customer delivery.",
+      "Shipments are handed to an available delivery partner for the selected destination.",
   },
   {
     icon: Banknote,
@@ -76,7 +76,7 @@ const sellerResponsibilities = [
 
 const bloomPathResponsibilities = [
   "Confirm product and stock availability",
-  "Agree the UAE operating workflow",
+  "Agree the operating workflow for your route",
   "Prepare orders for dispatch",
   "Coordinate delivery-status information",
   "Support inventory and replenishment planning",
@@ -84,7 +84,7 @@ const bloomPathResponsibilities = [
 
 export default function DropshippingUaePage() {
   const whatsappUrl =
-    "https://wa.me/971507297900?text=Hello%20BloomPath%2C%20I%20want%20to%20start%20dropshipping%20in%20the%20UAE.";
+    "https://wa.me/971507297900?text=Hello%20BloomPath%2C%20I%20want%20to%20discuss%20global%20sourcing%20and%20fulfillment.";
 
   return (
     <main className="bg-white">
@@ -94,15 +94,15 @@ export default function DropshippingUaePage() {
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-brand-900/15 bg-white px-4 py-2 text-xs font-black text-brand-900 shadow-sm">
               <BadgeCheck size={16} className="text-brand-500" />
-              UAE dropshipping, built around real operations
+              Global sourcing, built around real operations
             </div>
             <h1 className="bp-display mt-6 max-w-3xl text-[2.75rem] text-ink sm:text-6xl lg:text-[4.25rem]">
-              Start selling in the UAE without building a warehouse team.
+              Source products across markets without building a sourcing and fulfillment team in every country.
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-muted sm:text-lg">
-              BloomPath helps online sellers connect product sourcing, local
+              BloomPath helps businesses and sourcing buyers connect product sourcing, local
               inventory, order processing, packing, COD coordination and
-              last-mile dispatch in one practical UAE workflow.
+              last-mile dispatch in one connected workflow.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -124,7 +124,7 @@ export default function DropshippingUaePage() {
           </div>
 
           <div className="rounded-[1.75rem] bg-brand-950 p-6 text-white shadow-[0_28px_80px_rgba(5,44,32,0.25)] sm:p-8">
-            <p className="bp-eyebrow text-brand-500">Your UAE operating stack</p>
+            <p className="bp-eyebrow text-brand-500">Your sourcing and fulfillment stack</p>
             <h2 className="mt-3 text-2xl font-black">
               Four layers your store needs behind the scenes.
             </h2>
@@ -133,7 +133,7 @@ export default function DropshippingUaePage() {
                 { icon: ShoppingBag, label: "Sell", detail: "Your store, marketplace or social channel" },
                 { icon: Boxes, label: "Stock", detail: "Available products or your local inventory" },
                 { icon: Warehouse, label: "Fulfill", detail: "Pick, pack and dispatch workflow" },
-                { icon: Truck, label: "Deliver", detail: "UAE last-mile and COD coordination" },
+                { icon: Truck, label: "Deliver", detail: "Available last-mile and COD options" },
               ].map((layer, index) => {
                 const Icon = layer.icon;
                 return (
@@ -174,7 +174,7 @@ export default function DropshippingUaePage() {
             </h2>
             <p className="mt-5 text-base leading-8 text-muted">
               Start with the services you need now and agree a workflow that can
-              grow with your UAE order volume.
+              grow with your order volume.
             </p>
           </div>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

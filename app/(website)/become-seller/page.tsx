@@ -3,8 +3,8 @@ import Link from "next/link";
 import { ArrowRight, Check, MessageCircle, PackageSearch, ShoppingBag, Truck } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Become a UAE Seller",
-  description: "Start your BloomPath seller journey with product discovery and UAE fulfillment support.",
+  title: "Become a BloomPath Seller",
+  description: "Start your BloomPath seller journey with product discovery, sourcing and fulfillment support.",
   alternates: { canonical: "/become-seller" },
 };
 
@@ -15,7 +15,7 @@ const steps = [
 ];
 
 export default function BecomeSellerPage() {
-  const whatsappUrl = "https://wa.me/971507297900?text=Hello%20BloomPath%2C%20I%20want%20to%20become%20a%20UAE%20seller.";
+  const whatsappUrl = "https://wa.me/971507297900?text=Hello%20BloomPath%2C%20I%20want%20to%20sell%20with%20BloomPath.";
   return (
     <main className="bg-white">
       <section className="relative overflow-hidden bg-sand-100 py-16 sm:py-24">
@@ -24,7 +24,7 @@ export default function BecomeSellerPage() {
           <div>
             <p className="bp-eyebrow text-brand-900">BloomPath seller onboarding</p>
             <h1 className="bp-display mt-5 max-w-3xl text-5xl text-ink sm:text-6xl lg:text-7xl">Build the storefront. We&apos;ll help organize fulfillment.</h1>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-muted sm:text-lg">A practical starting path for UAE online sellers who need product access, local stock options and a clearer order-to-delivery workflow.</p>
+            <p className="mt-6 max-w-2xl text-base leading-8 text-muted sm:text-lg">A practical starting path for businesses and sourcing buyers who need product access, stock-location choices and a clearer order-to-delivery workflow.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-13 items-center justify-center gap-2 rounded-xl bg-brand-900 px-6 py-3.5 text-sm font-black text-white transition hover:bg-brand-950">
                 Start on WhatsApp <ArrowRight size={18} />
@@ -66,7 +66,7 @@ export default function BecomeSellerPage() {
 
       <section className="bg-brand-900 py-14 text-white sm:py-18">
         <div className="bp-container flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div><p className="bp-eyebrow text-brand-500">Ready to explore?</p><h2 className="mt-3 text-3xl font-black sm:text-4xl">Tell us what you want to sell in the UAE.</h2></div>
+          <div><p className="bp-eyebrow text-brand-500">Ready to explore?</p><h2 className="mt-3 text-3xl font-black sm:text-4xl">Tell us what you want to source and where you want to sell.</h2></div>
           <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-brand-500 px-6 py-4 text-sm font-black text-brand-950 transition hover:bg-white"><MessageCircle size={18} /> Talk to the team</a>
         </div>
       </section>

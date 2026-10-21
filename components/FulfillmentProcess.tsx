@@ -11,7 +11,7 @@ const steps = [
     icon: ShoppingCart,
     title: "Choose products or send stock",
     description:
-      "Select available products or discuss storing your own inventory in our UAE operation.",
+      "Choose listed stock by its warehouse location, or send us a product request for a sourcing quote.",
   },
   {
     icon: ClipboardCheck,
@@ -23,7 +23,7 @@ const steps = [
     icon: PackageCheck,
     title: "We pick, pack and dispatch",
     description:
-      "The operations team prepares each order and hands it to the selected UAE delivery partner.",
+      "The operations team prepares each order and hands it to an available delivery partner for the destination.",
   },
   {
     icon: Banknote,
@@ -53,7 +53,7 @@ export default function FulfillmentProcess() {
             </p>
             <div className="mt-7 inline-flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-sm font-bold text-brand-100">
               <Truck size={19} className="text-brand-500" />
-              UAE delivery workflow
+              Origin-to-destination delivery workflow
             </div>
           </div>
 

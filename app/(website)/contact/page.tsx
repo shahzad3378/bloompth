@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Contact Us | BloomPath",
   description:
-    "Contact BloomPath for product sourcing, wholesale, dropshipping and fulfillment support in the UAE.",
+    "Contact BloomPath for product sourcing, wholesale, inventory and fulfillment support across supported markets.",
 };
 
 function cleanWhatsAppNumber(value: string) {
@@ -38,7 +38,7 @@ export default async function ContactPage() {
 
   const tagline =
     settings?.tagline?.trim() ||
-    "Helping online sellers source quality products and grow their eCommerce business.";
+    "Helping businesses and sourcing buyers source quality products and grow their business operations.";
 
   const phone = settings?.phone?.trim() || "+971 50 729 7900";
   const email = settings?.email?.trim() || "bloompathsms@gmail.com";
@@ -61,7 +61,7 @@ export default async function ContactPage() {
           <span className="bp-eyebrow text-brand-500">Contact BloomPath</span>
 
           <h1 className="mt-6 text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl">
-            Let&apos;s map your UAE fulfillment setup.
+            Let&apos;s map your sourcing and fulfillment route.
           </h1>
 
           <p className="mx-auto mt-6 max-w-3xl text-base leading-8 text-white/68 sm:text-lg">

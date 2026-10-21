@@ -4,9 +4,9 @@ import BlogCard from "@/components/BlogCard";
 import { blogPosts } from "@/lib/blogs";
 
 export const metadata: Metadata = {
-  title: "UAE E-commerce & Fulfillment Blog",
+  title: "Global Sourcing & Fulfillment Guides",
   description:
-    "Practical UAE seller guides covering dropshipping, product sourcing, COD operations, warehousing and e-commerce fulfillment.",
+    "Practical guides covering product sourcing, wholesale, inventory, delivery and cross-border fulfillment.",
   alternates: {
     canonical: "/blog",
   },
@@ -21,13 +21,13 @@ export default function BlogPage() {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-brand-500/30 bg-brand-500/10 px-4 py-2 text-xs font-black text-brand-100">
               <Compass size={15} className="text-brand-500" />
-              UAE seller knowledge centre
+              Sourcing and fulfillment knowledge centre
             </div>
             <h1 className="bp-display mt-6 text-5xl sm:text-6xl">
               Build the operation behind the advertisement.
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-white/65 sm:text-lg">
-              Clear, practical articles for UAE online sellers making decisions
+              Clear, practical articles for businesses and sourcing buyers making sourcing and fulfillment decisions
               about products, COD, inventory and fulfillment.
             </p>
           </div>

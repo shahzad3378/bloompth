@@ -14,7 +14,7 @@ export default function BlogPreview() {
               Better decisions before the next order.
             </h2>
             <p className="mt-4 text-base leading-8 text-muted">
-              Practical UAE guidance on products, COD, warehousing and e-commerce
+              Practical guidance on sourcing, inventory, fulfillment and cross-border e-commerce
               operations—written for sellers, not software teams.
             </p>
           </div>

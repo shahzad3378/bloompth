@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CurrencyPrice from "@/components/CurrencyPrice";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
@@ -28,6 +29,8 @@ type Product = {
   image: string | null;
   featured: boolean;
   status: "active" | "inactive";
+  origin_country?: string | null;
+  currency_code?: string | null;
 };
 
 export const revalidate = 0;
@@ -39,14 +42,18 @@ export default async function ProductDetailPage({
 }) {
   const { slug } = await params;
 
-  const { data: product, error } = await supabase
+  let { data: product, error } = await supabase
     .from("products")
-    .select(
-      "id, title, slug, description, category, price, sale_price, stock, image, featured, status"
-    )
-    .eq("slug", slug)
-    .eq("status", "active")
-    .maybeSingle();
+    .select("id, title, slug, description, category, price, sale_price, stock, image, featured, status, origin_country, currency_code")
+    .eq("slug", slug).eq("status", "active").maybeSingle();
+
+  if (error) {
+    const legacy = await supabase.from("products")
+      .select("id, title, slug, description, category, price, sale_price, stock, image, featured, status")
+      .eq("slug", slug).eq("status", "active").maybeSingle();
+    product = legacy.data ? { ...legacy.data, origin_country: null, currency_code: "AED" } : null;
+    error = legacy.error;
+  }
 
   if (error || !product) {
     notFound();
@@ -217,7 +224,7 @@ Please share wholesale pricing, minimum order quantity and dropshipping details.
               />
 
               <p className="mt-3 text-sm font-black text-slate-950">
-                UAE Fulfillment
+                Destination-based fulfillment
               </p>
 
               <p className="mt-1 text-xs leading-5 text-slate-500">
@@ -260,6 +267,10 @@ Please share wholesale pricing, minimum order quantity and dropshipping details.
           <h1 className="mt-4 text-3xl font-black leading-tight text-slate-950 sm:text-4xl lg:text-5xl">
             {typedProduct.title}
           </h1>
+          <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-sky-50 px-4 py-2 text-sm font-bold text-slate-700">
+            <span aria-hidden="true">📍</span>
+            Stock origin: {typedProduct.origin_country || "Not listed yet"}
+          </div>
 
           <p className="mt-5 text-base leading-8 text-slate-600">
             {typedProduct.description ||
@@ -272,23 +283,10 @@ Please share wholesale pricing, minimum order quantity and dropshipping details.
               Starting price
             </p>
 
-            <div className="mt-2 flex flex-wrap items-end gap-3">
-              <span className="text-3xl font-black text-slate-950">
-                {displayPrice !== null
-                  ? `AED ${Number(
-                      displayPrice
-                    ).toFixed(2)}`
-                  : "Contact for Price"}
-              </span>
-
-              {hasSale && (
-                <span className="pb-1 text-lg font-bold text-slate-400 line-through">
-                  AED{" "}
-                  {Number(
-                    typedProduct.price
-                  ).toFixed(2)}
-                </span>
-              )}
+            <div className="mt-2">
+              {displayPrice !== null
+                ? <CurrencyPrice amount={Number(displayPrice)} baseCurrency={typedProduct.currency_code ?? "AED"} />
+                : <span className="text-3xl font-black text-slate-950">Contact for Price</span>}
             </div>
 
             <p className="mt-2 text-xs text-slate-500">

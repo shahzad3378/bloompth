@@ -59,7 +59,7 @@ export default function Categories() {
             </p>
 
             <h2 className="bp-display mt-4 text-4xl text-ink sm:text-5xl">
-              Find your next UAE product test.
+              Explore products available across our sourcing network.
             </h2>
 
             <p className="mt-4 max-w-xl text-sm leading-7 text-muted sm:text-base">

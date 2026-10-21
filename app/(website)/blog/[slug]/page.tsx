@@ -73,7 +73,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     .slice(0, 3);
 
   const whatsappUrl =
-    "https://wa.me/971507297900?text=Hello%20BloomPath%2C%20I%20read%20one%20of%20your%20UAE%20seller%20guides%20and%20want%20to%20discuss%20my%20business.";
+    "https://wa.me/971507297900?text=Hello%20BloomPath%2C%20I%20read%20one%20of%20your%20seller%20guides%20and%20want%20to%20discuss%20my%20business.";
 
   return (
     <main className="bg-white">
@@ -158,7 +158,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <p>
                 This guide provides general operational information, not legal,
                 tax or product-compliance advice. Confirm requirements that
-                apply to your company and products with the relevant UAE
+                apply to your company and products with the relevant local
                 authority or a qualified adviser.
               </p>
             </div>
@@ -168,7 +168,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <div className="rounded-[1.35rem] bg-brand-950 p-6 text-white">
               <p className="bp-eyebrow text-brand-500">Need a practical answer?</p>
               <h2 className="mt-4 text-xl font-black">
-                Discuss your UAE selling model with BloomPath.
+                Discuss your sourcing and fulfillment model with BloomPath.
               </h2>
               <p className="mt-3 text-sm leading-7 text-white/58">
                 Share your product type, order volume and current sales channel.

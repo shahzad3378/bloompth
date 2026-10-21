@@ -35,7 +35,7 @@ export default function RequestProductForm() {
     phone: "",
     productName: productFromUrl,
     quantity: "1",
-    country: "United Arab Emirates",
+    country: "",
     city: "",
     message: "",
   });
@@ -115,7 +115,7 @@ export default function RequestProductForm() {
       phone: "",
       productName: productFromUrl,
       quantity: "1",
-      country: "United Arab Emirates",
+      country: "",
       city: "",
       message: "",
     });
@@ -294,7 +294,7 @@ export default function RequestProductForm() {
               updateField("city", event.target.value)
             }
             className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
-            placeholder="Dubai"
+            placeholder="City"
           />
         </label>
 

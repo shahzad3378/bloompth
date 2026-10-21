@@ -19,7 +19,7 @@ const fulfillmentSteps = [
     number: "02",
     title: "Store Inventory",
     description:
-      "Keep stock in our UAE warehouse and let us manage inventory.",
+      "Keep stock at the location that best serves your customers.",
   },
   {
     icon: PackageCheck,
@@ -33,12 +33,12 @@ const fulfillmentSteps = [
     number: "04",
     title: "Deliver to Customers",
     description:
-      "Orders are dispatched quickly for reliable delivery across the UAE.",
+      "Orders are dispatched through an available delivery partner for the selected destination.",
   },
 ];
 
 const servicePoints = [
-  "UAE-based inventory storage",
+  "Inventory storage by location",
   "Wholesale product support",
   "Order processing and packing",
   "Reliable last-mile dispatch",
@@ -64,7 +64,7 @@ export default function BloomPathFulfillment() {
 
                 <p className="mt-4 max-w-xl text-sm leading-7 text-slate-300 sm:text-base">
                   Focus on growing your online business while BloomPath handles
-                  inventory, order processing, packing and UAE fulfillment.
+                  inventory, order processing, packing and destination-based fulfillment.
                 </p>
 
                 <div className="mt-7 space-y-3">
@@ -85,7 +85,7 @@ export default function BloomPathFulfillment() {
                 <div className="mt-8 grid grid-cols-3 gap-3">
                   <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-center">
                     <p className="text-xl font-black text-emerald-400 sm:text-2xl">
-                      UAE
+                      Global
                     </p>
 
                     <p className="mt-1 text-[11px] font-bold uppercase tracking-wide text-slate-400">

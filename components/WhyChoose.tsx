@@ -10,9 +10,9 @@ import {
 const benefits = [
   {
     icon: MapPinned,
-    title: "UAE-first operation",
+    title: "A network built around your destination",
     description:
-      "Local stock and order handling make it easier to build a workflow around UAE customer expectations.",
+      "Check stock at its actual location, then choose sourcing and delivery options for the customer destination.",
   },
   {
     icon: PackageSearch,

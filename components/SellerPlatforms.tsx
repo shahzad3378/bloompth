@@ -1,7 +1,7 @@
 import { MessageCircle, ShoppingBag, Smartphone, Store } from "lucide-react";
 
 const platforms = [
-  { name: "Amazon UAE", icon: ShoppingBag },
+  { name: "Amazon marketplace", icon: ShoppingBag },
   { name: "Noon", icon: Store },
   { name: "Shopify", icon: ShoppingBag },
   { name: "TikTok Shop", icon: Store },
@@ -18,7 +18,7 @@ export default function SellerPlatforms() {
       <div className="bp-container flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         <div className="shrink-0">
           <p id="sales-channels-title" className="text-sm font-black text-ink">
-            Built around the channels UAE sellers use
+            Built for cross-border sourcing and fulfillment
           </p>
           <p className="mt-1 text-xs text-muted">
             Connect the sales flow that suits your business.

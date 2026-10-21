@@ -15,7 +15,7 @@ import {
 
 const orderSteps = [
   { label: "Order received", detail: "Store or manual upload", icon: ShoppingBag },
-  { label: "Picked & packed", detail: "Processed in UAE", icon: PackageCheck },
+  { label: "Picked & packed", detail: "Processed at the selected origin", icon: PackageCheck },
   { label: "Out for delivery", detail: "Last-mile handover", icon: Truck },
   { label: "COD reconciled", detail: "Status recorded", icon: Banknote },
 ];
@@ -28,7 +28,7 @@ const trustPoints = [
 
 export default function Hero() {
   const whatsappUrl =
-    "https://wa.me/971507297900?text=Hello%20BloomPath%2C%20I%20want%20to%20discuss%20UAE%20dropshipping%20and%20fulfillment.";
+    "https://wa.me/971507297900?text=Hello%20BloomPath%2C%20I%20want%20to%20discuss%20global sourcing%20dropshipping%20and%20fulfillment.";
 
   return (
     <section className="relative overflow-hidden bg-sand-100">
@@ -38,11 +38,11 @@ export default function Hero() {
         <div>
           <div className="inline-flex items-center gap-2 rounded-full border border-brand-900/15 bg-white px-4 py-2 text-xs font-black text-brand-900 shadow-sm">
             <MapPin size={15} className="text-brand-500" />
-            Built for UAE e-commerce sellers
+            Source across markets. Deliver to your customers.
           </div>
 
           <h1 className="bp-display mt-6 max-w-3xl text-[2.75rem] text-ink sm:text-6xl lg:text-[4.35rem]">
-            Turn UAE orders into{" "}
+            Turn product ideas into{" "}
             <span className="relative whitespace-nowrap text-brand-900">
               delivered customers.
               <span className="absolute -bottom-1 left-0 h-2 w-full -rotate-1 bg-brand-500/25" />
@@ -50,16 +50,16 @@ export default function Hero() {
           </h1>
 
           <p className="mt-6 max-w-2xl text-base leading-8 text-muted sm:text-lg">
-            Source products, keep stock locally and fulfill orders without
+            Source products across markets, keep stock near your customers and fulfill orders without
             building your own warehouse operation. BloomPath supports online
-            sellers with UAE product sourcing, dropshipping, wholesale, packing,
+            sellers with global product sourcing, dropshipping, wholesale, packing,
             COD coordination and last-mile dispatch.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/products"
-              className="inline-flex min-h-13 cursor-pointer items-center justify-center gap-2 rounded-xl bg-brand-900 px-6 py-3.5 text-sm font-black text-white shadow-[0_10px_30px_rgba(7,62,42,0.18)] transition hover:-translate-y-0.5 hover:bg-brand-950"
+              className="inline-flex min-h-13 cursor-pointer items-center justify-center gap-2 rounded-xl bg-brand-900 px-6 py-3.5 text-sm font-black text-white shadow-[0_10px_30px_rgba(30,64,175,0.14)] transition hover:-translate-y-0.5 hover:bg-brand-950"
             >
               Explore products
               <ArrowIcon />
@@ -95,21 +95,21 @@ export default function Hero() {
               </div>
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.14em] text-muted">Inventory</p>
-                <p className="text-sm font-black text-ink">Stored in UAE</p>
+                <p className="text-sm font-black text-ink">Stock at origin</p>
               </div>
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-brand-950 text-white shadow-[0_28px_80px_rgba(5,44,32,0.28)]">
+          <div className="overflow-hidden rounded-[1.75rem] border border-white/10 border-slate-200 bg-white text-slate-900 shadow-[0_24px_60px_rgba(15,48,78,0.12)]">
             <div className="bp-grid-pattern border-b border-white/10 px-5 py-5 sm:px-7">
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <p className="bp-eyebrow text-brand-500">Sample fulfillment flow</p>
                   <h2 className="mt-2 text-xl font-black sm:text-2xl">One order. One clear journey.</h2>
                 </div>
-                <span className="inline-flex shrink-0 items-center gap-2 rounded-full border border-brand-500/30 bg-brand-500/10 px-3 py-1.5 text-[11px] font-black text-brand-100">
+                <span className="inline-flex shrink-0 items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-[11px] font-black text-blue-800">
                   <CircleDot size={13} className="text-brand-500" />
-                  UAE
+                  global sourcing
                 </span>
               </div>
             </div>
@@ -121,15 +121,15 @@ export default function Hero() {
                     <Box size={19} />
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">Example order</p>
-                    <p className="mt-0.5 text-sm font-black">BP-UAE-1024</p>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">Example order</p>
+                    <p className="mt-0.5 text-sm font-black">BP-GLOBAL-1024</p>
                   </div>
                 </div>
                 <BadgeCheck className="text-brand-500" size={22} />
               </div>
 
               <div className="relative mt-6">
-                <div className="absolute bottom-6 left-[19px] top-6 w-px bg-white/10" />
+                <div className="absolute bottom-6 left-[19px] top-6 w-px bg-blue-50" />
                 <div className="bp-progress-line absolute bottom-6 left-[19px] top-6 w-px bg-brand-500" />
 
                 <ol className="relative space-y-3">
@@ -143,9 +143,9 @@ export default function Hero() {
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">
                             <span className="text-[10px] font-black tracking-[0.12em] text-brand-500">0{index + 1}</span>
-                            <p className="text-sm font-black text-white">{step.label}</p>
+                            <p className="text-sm font-black text-slate-800">{step.label}</p>
                           </div>
-                          <p className="mt-1 text-xs text-white/48">{step.detail}</p>
+                          <p className="mt-1 text-xs text-slate-800/48">{step.detail}</p>
                         </div>
                         <Check size={16} className="shrink-0 text-brand-500" />
                       </li>
@@ -154,7 +154,7 @@ export default function Hero() {
                 </ol>
               </div>
 
-              <p className="mt-5 text-center text-[11px] leading-5 text-white/42">
+              <p className="mt-5 text-center text-[11px] leading-5 text-slate-800/42">
                 Workflow shown for illustration. Service availability and
                 timelines are confirmed for each seller.
               </p>

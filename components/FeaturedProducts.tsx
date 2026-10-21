@@ -58,7 +58,7 @@ export default async function FeaturedProducts() {
             </h2>
             <p className="mt-4 max-w-xl text-sm leading-7 text-muted sm:text-base">
               Explore active products available for seller review, wholesale
-              sourcing and UAE-based fulfillment discussions.
+              sourcing and destination-based fulfillment discussions.
             </p>
           </div>
 

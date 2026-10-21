@@ -2,34 +2,34 @@ import { ChevronDown, HelpCircle } from "lucide-react";
 
 const faqs = [
   {
-    question: "Can I start UAE dropshipping without holding my own stock?",
+    question: "Can I source products without holding my own stock?",
     answer:
       "You can discuss products that are already available through BloomPath and an order-processing model that fits your sales channel. Availability, quantity and fulfillment terms are confirmed before you list a product.",
   },
   {
-    question: "Which UAE selling channels can BloomPath support?",
+    question: "Which selling channels can BloomPath support?",
     answer:
-      "BloomPath works with sellers using Amazon UAE, Noon, Shopify, TikTok Shop, Facebook, Instagram and manual order workflows. The exact handover method depends on the channel and your order volume.",
+      "BloomPath can coordinate orders from supported ecommerce and social selling channels. The exact handover method depends on the channel, destination and order volume.",
   },
   {
     question: "Does BloomPath offer Cash on Delivery support?",
     answer:
-      "COD coordination is available through supported UAE fulfillment and delivery workflows. Delivery area, charges, return treatment and COD reconciliation terms are confirmed for each seller setup.",
+      "COD availability depends on the destination and selected delivery partner. Delivery areas, charges, return handling and reconciliation terms are confirmed for each seller setup.",
   },
   {
-    question: "Can I store my own products in the UAE warehouse?",
+    question: "Can I store my own products near my customers?",
     answer:
       "Yes, warehousing and fulfillment support can be discussed for suitable products. BloomPath will review the product type, quantity, storage requirements, expected order volume and handling needs.",
   },
   {
     question: "How do I get product and delivery pricing?",
     answer:
-      "Create a seller account or contact BloomPath with the product, expected quantity and UAE delivery requirement. Product prices are protected for verified sellers, while delivery and fulfillment terms are quoted according to the operating model.",
+      "Create a seller account or contact BloomPath with the product, expected quantity, stock location and destination. Product prices are protected for verified sellers; delivery and fulfillment terms are quoted for the selected route.",
   },
   {
-    question: "Do I need a UAE trade licence?",
+    question: "Do I need a business licence to sell?",
     answer:
-      "Your licensing and product-approval requirements depend on what you sell, where you sell it and how your business is structured. BloomPath can explain the operating workflow, but you should confirm current legal, tax and compliance requirements with the relevant UAE authority or a qualified adviser.",
+      "Licensing, product-approval and tax requirements depend on the product, source country, destination market and business structure. Confirm requirements with the relevant authorities or a qualified adviser before shipping.",
   },
 ];
 

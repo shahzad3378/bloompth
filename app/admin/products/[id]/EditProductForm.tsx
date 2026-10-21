@@ -10,6 +10,8 @@ type Product = {
   slug: string | null;
   description: string | null;
   category: string | null;
+  origin_country?: string | null;
+  currency_code?: string | null;
   price: number | string | null;
   sale_price: number | string | null;
   stock: number | null;
@@ -35,6 +37,8 @@ export default function EditProductForm({
     product.description ?? ""
   );
   const [category, setCategory] = useState(product.category ?? "");
+  const [originCountry, setOriginCountry] = useState(product.origin_country ?? "");
+  const [currencyCode, setCurrencyCode] = useState(product.currency_code ?? "AED");
   const [price, setPrice] = useState(
     product.price !== null && product.price !== undefined
       ? String(product.price)
@@ -287,6 +291,8 @@ export default function EditProductForm({
         slug: cleanSlug,
         description: description.trim() || null,
         category: category.trim() || null,
+        origin_country: originCountry.trim() || null,
+        currency_code: currencyCode,
         price: parsedPrice,
         sale_price: parsedSalePrice,
         stock: parsedStock,
@@ -480,6 +486,19 @@ export default function EditProductForm({
             }
             className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-950 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
           />
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label htmlFor="originCountry" className="text-sm font-bold text-slate-700">Stock origin country</label>
+            <input id="originCountry" value={originCountry} onChange={(event) => setOriginCountry(event.target.value)} placeholder="Canada, United States, UAE..." className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-950 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100" />
+          </div>
+          <div>
+            <label htmlFor="currencyCode" className="text-sm font-bold text-slate-700">Price currency</label>
+            <select id="currencyCode" value={currencyCode} onChange={(event) => setCurrencyCode(event.target.value)} className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-950 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100">
+              <option value="AED">AED — UAE dirham</option><option value="CAD">CAD — Canadian dollar</option><option value="USD">USD — US dollar</option><option value="PKR">PKR — Pakistani rupee</option><option value="CNY">CNY — Chinese yuan</option><option value="EUR">EUR — euro</option>
+            </select>
+          </div>
         </div>
 
         <div>

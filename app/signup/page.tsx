@@ -67,12 +67,12 @@ export default function SignupPage() {
           </h2>
 
           <p className="mt-6 text-lg leading-8 text-emerald-50">
-            Create your seller account and access UAE-ready products,
+            Create your seller account and access products available across our network,
             wholesale pricing and fulfillment support.
           </p>
 
           <div className="mt-12 space-y-4 text-sm">
-            <p>✓ Ready stock in the UAE</p>
+            <p>✓ Ready stock by country of availability</p>
             <p>✓ Fast order processing</p>
             <p>✓ Competitive wholesale prices</p>
             <p>✓ Dedicated seller support</p>

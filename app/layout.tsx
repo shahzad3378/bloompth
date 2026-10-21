@@ -5,11 +5,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "BloomPath UAE | Dropshipping, Sourcing & Fulfillment",
+    default: "BloomPath | Global Sourcing & Fulfillment",
     template: "%s | BloomPath",
   },
   description:
-    "Launch and grow your UAE e-commerce business with local product sourcing, wholesale supply, dropshipping, warehousing, COD support and last-mile fulfillment.",
+    "Source products across markets and coordinate wholesale, inventory handling and delivery with one fulfillment partner.",
   metadataBase: new URL("https://www.fulfillmena.com"),
   alternates: {
     canonical: "/",
@@ -18,16 +18,16 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_AE",
     url: "https://www.fulfillmena.com",
-    siteName: "BloomPath UAE",
-    title: "BloomPath UAE | Source, Sell & Fulfill",
+    siteName: "BloomPath Global Sourcing",
+    title: "BloomPath Global Sourcing | Source, Sell & Fulfill",
     description:
-      "A practical UAE e-commerce partner for products, dropshipping, warehousing, COD and last-mile fulfillment.",
+      "A connected sourcing and fulfillment partner for products, wholesale, warehousing and delivery across markets.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "BloomPath UAE | Source, Sell & Fulfill",
+    title: "BloomPath Global Sourcing | Source, Sell & Fulfill",
     description:
-      "A practical UAE e-commerce partner for products, dropshipping, warehousing, COD and last-mile fulfillment.",
+      "A connected sourcing and fulfillment partner for products, wholesale, warehousing and delivery across markets.",
   },
 };
 

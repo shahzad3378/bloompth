@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CurrencyPrice from "@/components/CurrencyPrice";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
@@ -28,14 +29,18 @@ export default async function SellerProductDetailPage({
   const { slug } = await params;
   const supabaseAdmin = createAdminClient();
 
-  const { data: product, error } = await supabaseAdmin
+  let { data: product, error } = await supabaseAdmin
     .from("products")
-    .select(
-      "id, title, slug, description, category, price, sale_price, stock, image, status, min_order_qty"
-    )
-    .eq("slug", slug)
-    .eq("status", "active")
-    .single();
+    .select("id, title, slug, description, category, price, sale_price, stock, image, status, min_order_qty, origin_country, currency_code")
+    .eq("slug", slug).eq("status", "active").single();
+
+  if (error) {
+    const legacy = await supabaseAdmin.from("products")
+      .select("id, title, slug, description, category, price, sale_price, stock, image, status, min_order_qty")
+      .eq("slug", slug).eq("status", "active").single();
+    product = legacy.data ? { ...legacy.data, origin_country: null, currency_code: "AED" } : null;
+    error = legacy.error;
+  }
 
   if (error || !product) {
     notFound();
@@ -115,9 +120,9 @@ export default async function SellerProductDetailPage({
                 </span>
               )}
 
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-black text-slate-600">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-sky-50 px-3 py-1.5 text-xs font-black text-slate-700">
                 <Warehouse size={14} />
-                UAE Warehouse
+                Origin: {product.origin_country || "Not listed"}
               </span>
             </div>
 
@@ -126,18 +131,10 @@ export default async function SellerProductDetailPage({
                 Wholesale Price
               </p>
 
-              <div className="mt-2 flex flex-wrap items-end gap-3">
-                <p className="text-3xl font-black">
-                  {displayPrice !== null
-                    ? `AED ${displayPrice.toFixed(2)}`
-                    : "Contact for Price"}
-                </p>
-
-                {hasSale && price !== null && (
-                  <p className="pb-1 text-sm font-bold text-slate-400 line-through">
-                    AED {price.toFixed(2)}
-                  </p>
-                )}
+              <div className="mt-2">
+                {displayPrice !== null
+                  ? <CurrencyPrice amount={displayPrice} baseCurrency={product.currency_code ?? "AED"} />
+                  : <p className="text-3xl font-black">Contact for Price</p>}
               </div>
 
               <p className="mt-2 text-xs text-slate-400">

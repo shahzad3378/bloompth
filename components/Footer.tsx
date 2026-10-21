@@ -18,7 +18,7 @@ export default async function Footer() {
   const address = settings?.address?.trim() || "Dubai, United Arab Emirates";
 
   return (
-    <footer className="bg-brand-950 text-white">
+    <footer className="border-t-4 border-red-500 bg-blue-50 text-slate-900">
       <div className="bp-container py-16 sm:py-20">
         <div className="grid gap-12 lg:grid-cols-[1.35fr_0.8fr_0.9fr_1.15fr]">
           {/* Company */}
@@ -30,17 +30,17 @@ export default async function Footer() {
                 width={420}
                 height={140}
                 sizes="190px"
-                className="h-auto w-[190px]"
+                className="h-auto w-[190px]" style={{ filter: "hue-rotate(118deg) saturate(1.15)" }}
               />
             </div>
 
-            <p className="mt-5 text-sm leading-7 text-white/68">
-              Source products, store inventory and fulfill customer orders with one practical UAE e-commerce partner.
+            <p className="mt-5 text-sm leading-7 text-slate-600">
+              Source products, manage inventory and coordinate fulfillment across markets with one connected partner.
             </p>
 
-            <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.05] px-4 py-2 text-xs font-bold text-brand-100">
+            <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.05] px-4 py-2 text-xs font-bold text-blue-800">
               <span className="h-2 w-2 rounded-full bg-brand-500" />
-              UAE-focused operations
+              Global sourcing network
             </div>
           </div>
 
@@ -48,17 +48,17 @@ export default async function Footer() {
           <div>
             <h3 className="mb-5 text-sm font-black uppercase tracking-[0.14em] text-brand-500">Explore</h3>
 
-            <ul className="space-y-3 text-sm text-white/68">
+            <ul className="space-y-3 text-sm text-slate-600">
               <li>
-                <Link href="/dropshipping-uae" className="cursor-pointer transition hover:text-white">
-                  UAE Dropshipping
+                <Link href="/about" className="cursor-pointer transition hover:text-slate-900">
+                  About BloomPath
                 </Link>
               </li>
 
               <li>
                 <Link
                   href="/products"
-                  className="cursor-pointer transition hover:text-white"
+                  className="cursor-pointer transition hover:text-slate-900"
                 >
                   Products
                 </Link>
@@ -67,7 +67,7 @@ export default async function Footer() {
               <li>
                 <Link
                   href="/blog"
-                  className="cursor-pointer transition hover:text-white"
+                  className="cursor-pointer transition hover:text-slate-900"
                 >
                   Seller Guides
                 </Link>
@@ -76,7 +76,7 @@ export default async function Footer() {
               <li>
                 <Link
                   href="/contact"
-                  className="cursor-pointer transition hover:text-white"
+                  className="cursor-pointer transition hover:text-slate-900"
                 >
                   Contact
                 </Link>
@@ -88,9 +88,9 @@ export default async function Footer() {
           <div>
             <h3 className="mb-5 text-sm font-black uppercase tracking-[0.14em] text-brand-500">Services</h3>
 
-            <ul className="space-y-3 text-sm text-white/68">
+            <ul className="space-y-3 text-sm text-slate-600">
               <li>Product Sourcing</li>
-              <li>UAE Dropshipping</li>
+              <li>Global Sourcing</li>
               <li>Wholesale Supply</li>
               <li>Warehousing & Fulfillment</li>
               <li>COD & Last Mile Support</li>
@@ -101,12 +101,12 @@ export default async function Footer() {
           <div>
             <h3 className="mb-5 text-sm font-black uppercase tracking-[0.14em] text-brand-500">Contact</h3>
 
-            <div className="space-y-4 text-sm text-white/68">
+            <div className="space-y-4 text-sm text-slate-600">
               <p className="flex items-start gap-3"><MapPin className="mt-0.5 shrink-0 text-brand-500" size={17} />{address}</p>
-              <a href={`tel:${phone}`} className="flex cursor-pointer items-center gap-3 transition hover:text-white"><Phone className="shrink-0 text-brand-500" size={17} />{phone}</a>
-              <a href={`mailto:${email}`} className="flex cursor-pointer items-center gap-3 break-all transition hover:text-white"><Mail className="shrink-0 text-brand-500" size={17} />{email}</a>
+              <a href={`tel:${phone}`} className="flex cursor-pointer items-center gap-3 transition hover:text-slate-900"><Phone className="shrink-0 text-brand-500" size={17} />{phone}</a>
+              <a href={`mailto:${email}`} className="flex cursor-pointer items-center gap-3 break-all transition hover:text-slate-900"><Mail className="shrink-0 text-brand-500" size={17} />{email}</a>
               <a
-                href={`https://wa.me/${whatsapp}?text=${encodeURIComponent("Hello BloomPath, I would like to discuss UAE fulfillment.")}`}
+                href={`https://wa.me/${whatsapp}?text=${encodeURIComponent("Hello BloomPath, I would like to discuss global sourcing and fulfillment.")}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-brand-500 px-5 py-3 font-bold text-brand-950 transition hover:bg-white"
@@ -118,7 +118,7 @@ export default async function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-3 border-t border-white/10 pt-8 text-xs text-white/45 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-14 flex flex-col gap-3 border-t border-blue-200 pt-8 text-xs text-slate-900/45 sm:flex-row sm:items-center sm:justify-between">
           <p>
           {settings?.footer_text ||
             `© ${new Date().getFullYear()} BloomPath. All Rights Reserved.`}

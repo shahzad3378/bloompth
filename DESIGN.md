@@ -1,17 +1,17 @@
 ---
 version: alpha
-name: "BloomPath UAE"
-description: "A confident UAE e-commerce sourcing and fulfillment brand built around operational clarity."
+name: "BloomPath Global Sourcing"
+description: "A confident global product sourcing and fulfillment brand built around operational clarity."
 colors:
-  forest: "#073E2A"
-  forest-deep: "#052C20"
-  leaf: "#39B54A"
-  mint: "#DDF5E7"
-  sand: "#F5F1E8"
-  gold: "#D7A62D"
-  ink: "#10231B"
-  muted: "#617169"
-  line: "#DDE5E0"
+  forest: "#123D5B"
+  forest-deep: "#0B263D"
+  leaf: "#169C9A"
+  mint: "#DFF3F2"
+  sand: "#F1F6F9"
+  gold: "#D59A3C"
+  ink: "#102B42"
+  muted: "#617487"
+  line: "#DCE6ED"
   white: "#FFFFFF"
 typography:
   display:
@@ -42,29 +42,29 @@ components:
   article: {}
 ---
 
-# BloomPath UAE Design System
+# BloomPath Global Sourcing Design System
 
 ## Overview
 
 ### Creative North Star
 
-The public website should feel like a well-run UAE fulfillment control desk: calm, precise and visibly active. It combines the dependable material language of warehouse labels and dispatch boards with a warm, founder-friendly tone.
+The public website should feel like a well-run global sourcing and fulfillment control desk: calm, precise and visibly active. It combines the dependable material language of warehouse labels and dispatch boards with a warm, founder-friendly tone.
 
 ### Product context and register
 
-- **Audience and primary job:** UAE-based Amazon, Noon, Shopify, TikTok Shop, Facebook and Instagram sellers evaluating product sourcing, wholesale supply, dropshipping and local fulfillment support.
+- **Audience and primary job:** online sellers and businesses sourcing products across markets evaluating product sourcing, wholesale supply, dropshipping and local fulfillment support.
 - **Target market:** UAE first. GCC references are removed from primary conversion copy until the UAE offer is complete.
 - **Locale and language policy:** English-first public site with plain business language. Arabic can be introduced as a separate reviewed phase.
 - **Usage scene:** Mobile-first discovery from ads, WhatsApp and social media, with desktop research before contacting the team.
 - **Register:** Brand-led marketing website with a practical product catalogue and seller/admin applications.
-- **Memorable signature:** A compact order-status rail showing the movement from order confirmation to UAE delivery and COD collection.
+- **Memorable signature:** A compact order-status rail showing the movement from order confirmation to destination delivery and COD collection.
 - **Restraint:** Product cards, blog reading and contact actions remain conventional and highly legible.
 - **Anti-references:** Generic green SaaS gradients, fake live metrics, luxury-gold decoration, crowded marketplace clones and unverified operational promises.
 - **Token ownership/runtime mapping:** Tailwind v4 tokens and CSS custom properties in `app/globals.css` are the runtime source. This file mirrors approved values; shared public components consume semantic variables and utility aliases.
 
 ## Colors
 
-Forest is the primary brand/action color. Leaf green is reserved for progress, availability and compact emphasis. Sand is the warm UAE-facing editorial surface; it must not make the interface feel vintage. Gold is a sparing market accent for UAE labels, never a substitute for semantic warning. Ink, muted and line create the information hierarchy. Focus uses leaf with a white offset.
+Ocean blue is the primary brand/action color. Teal is reserved for progress, availability and compact emphasis. Cool mist is the global editorial surface. Gold is a sparing route accent, never a substitute for semantic warning. Ink, muted and line create the information hierarchy. Focus uses leaf with a white offset.
 
 ## Typography
 
