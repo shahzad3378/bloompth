@@ -28,9 +28,9 @@ type EditProductFormProps = {
 };
 
 export default function EditProductForm({
-  const supabase = createClient();
   product,
 }: EditProductFormProps) {
+  const supabase = createClient();
   const router = useRouter();
 
   const [title, setTitle] = useState(product.title ?? "");
