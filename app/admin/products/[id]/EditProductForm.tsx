@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 
 type Product = {
   id: string | number;
@@ -28,6 +28,7 @@ type EditProductFormProps = {
 };
 
 export default function EditProductForm({
+  const supabase = createClient();
   product,
 }: EditProductFormProps) {
   const router = useRouter();
