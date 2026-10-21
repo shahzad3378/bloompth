@@ -144,83 +144,72 @@ export default function ProductCatalog({
 
   return (
     <div>
-      <div className="rounded-2xl border border-slate-200 sm:rounded-3xl bg-white p-4 shadow-sm sm:p-5">
-        <div className="grid gap-3 lg:grid-cols-[1fr_230px]">
-          <label className="relative block">
-            <span className="sr-only">Search products</span>
+      <div className="grid gap-2 md:grid-cols-[minmax(0,1fr)_210px_190px]">
+        <label className="relative block">
+          <span className="sr-only">Search products</span>
+          <Search size={18} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <input
+            type="search"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Search products..."
+            className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-4 text-sm font-medium text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+          />
+        </label>
 
-            <Search
-              size={19}
-              className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-            />
+        <label className="text-[10px] font-black uppercase tracking-wider text-slate-500">
+          <span className="sr-only">Available in country</span>
+          <select value={originFilter} onChange={(event) => setOriginFilter(event.target.value)} className="w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm font-bold normal-case tracking-normal text-slate-800">
+            <option value="All">🌐 All countries</option>
+            {origins.slice(1).map((origin) => <option key={origin} value={origin}>{flagForCountryName(origin)}  {origin}</option>)}
+          </select>
+        </label>
 
-            <input
-              type="search"
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search by product name, category or keyword..."
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-4 text-sm font-medium text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
-            />
-          </label>
-
-          <label className="relative block">
-            <span className="sr-only">Sort products</span>
-
-            <SlidersHorizontal
-              size={18}
-              className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-            />
-
-            <select
-              value={sortBy}
-              onChange={(event) => setSortBy(event.target.value)}
-              className="w-full appearance-none rounded-xl border border-slate-200 bg-white py-3.5 pl-11 pr-10 text-sm font-bold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
-            >
-              <option value="newest">Featured First</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="name">Name: A–Z</option>
-              <option value="stock">Highest Stock</option>
-            </select>
-          </label>
-        </div>
-
-        <div className="mt-5 border-t border-slate-100 pt-4">
-          <div className="flex gap-2 overflow-x-auto pb-1">
-            {categories.map((category) => {
-              const isActive = selectedCategory === category;
-
-              return (
-                <button
-                  key={category}
-                  type="button"
-                  onClick={() => setSelectedCategory(category)}
-                  className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm font-bold transition ${
-                    isActive
-                      ? "border-blue-600 bg-blue-600 text-white shadow-sm"
-                      : "border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
-                  }`}
-                >
-                  {category}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <label className="relative block">
+          <span className="sr-only">Sort products</span>
+          <SlidersHorizontal size={17} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <select
+            value={sortBy}
+            onChange={(event) => setSortBy(event.target.value)}
+            className="w-full appearance-none rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-8 text-sm font-bold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+          >
+            <option value="newest">Featured First</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="name">Name: A–Z</option>
+            <option value="stock">Highest Stock</option>
+          </select>
+        </label>
       </div>
 
-        <div className="mt-4 grid gap-3 border-t border-slate-100 pt-4 sm:grid-cols-2">
-          <label className="text-xs font-black uppercase tracking-wider text-slate-500">
-            Available in country
-            <select value={originFilter} onChange={(event) => setOriginFilter(event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold normal-case tracking-normal text-slate-800">
-              <option value="All">All countries</option>
-              {origins.slice(1).map((origin) => <option key={origin} value={origin}>{flagForCountryName(origin)}  {origin}</option>)}
-              <option value="Not listed" disabled>Availability not listed</option>
-            </select>
-          </label>
+      <div className="mt-2 flex min-h-8 items-center justify-between gap-3">
+        <div className="flex gap-2 overflow-x-auto">
+          {categories.map((category) => {
+            const isActive = selectedCategory === category;
+            return (
+              <button
+                key={category}
+                type="button"
+                onClick={() => setSelectedCategory(category)}
+                className={`whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-bold transition ${
+                  isActive
+                    ? "border-blue-600 bg-blue-600 text-white"
+                    : "border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
+                }`}
+              >
+                {category}
+              </button>
+            );
+          })}
         </div>
+        {hasActiveFilters && (
+          <button type="button" onClick={clearFilters} className="shrink-0 text-xs font-bold text-blue-600 hover:text-blue-700">
+            Clear filters
+          </button>
+        )}
+      </div>
 
-      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mt-2 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-sm font-bold text-slate-700">
             Showing{" "}
@@ -250,7 +239,7 @@ export default function ProductCatalog({
       </div>
 
       {filteredProducts.length === 0 ? (
-        <div className="mt-6 rounded-2xl border border-slate-200 sm:rounded-3xl bg-white px-6 py-16 text-center shadow-sm">
+        <div className="mt-3 rounded-2xl border border-slate-200 bg-white px-6 py-10 text-center">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 text-slate-500">
             <PackageSearch size={30} />
           </div>
@@ -275,7 +264,7 @@ export default function ProductCatalog({
           </div>
         </div>
       ) : (
-        <div className="mt-6 grid grid-cols-2 gap-3 sm:mt-7 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="mt-3 grid grid-cols-2 gap-3 sm:mt-4 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
           {filteredProducts.map((product) => {
             const displayPrice = product.sale_price ?? product.price;
             const stock = Number(product.stock ?? 0);
