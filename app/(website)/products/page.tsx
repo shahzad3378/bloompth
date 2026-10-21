@@ -41,7 +41,7 @@ export default async function ProductsPage() {
     <main className="min-h-screen bg-white">
       
 
-      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
+      <section className="mx-auto max-w-7xl px-4 py-3 sm:px-6 sm:py-4">
         {error ? (
           <div className="rounded-3xl border border-red-200 bg-red-50 p-8 text-center shadow-sm">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-100 text-red-700">
@@ -73,23 +73,6 @@ export default async function ProductsPage() {
           </div>
         ) : (
           <>
-            <div className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <p className="text-sm font-black uppercase tracking-widest text-emerald-600">
-                  Product Collection
-                </p>
-
-                <h2 className="mt-2 text-2xl font-black text-slate-950 sm:text-3xl">
-                  Find products for your business
-                </h2>
-              </div>
-
-              <div className="inline-flex items-center gap-2 text-sm font-bold text-slate-500">
-                <Search size={17} />
-                Search and filter below
-              </div>
-            </div>
-
             <ProductCatalog products={products ?? []} />
           </>
         )}
