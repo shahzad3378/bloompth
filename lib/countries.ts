@@ -4,6 +4,9 @@ const defaults: Record<string,string> = {
  AE:"AED", CA:"CAD", US:"USD", PK:"PKR", CN:"CNY", GB:"GBP", IN:"INR", AU:"AUD", NZ:"NZD", JP:"JPY",
  SG:"SGD", SA:"SAR", QA:"QAR", KW:"KWD", BH:"BHD", OM:"OMR", TR:"TRY", CH:"CHF", ZA:"ZAR", MY:"MYR", BD:"BDT",
  AD:"EUR", AT:"EUR", BE:"EUR", CY:"EUR", DE:"EUR", EE:"EUR", ES:"EUR", FI:"EUR", FR:"EUR", GR:"EUR", HR:"EUR",
+ AG:"XCD", AI:"XCD", BI:"BIF", CD:"CDF", DM:"XCD", GD:"XCD", GM:"GMD", GN:"GNF", HT:"HTG", KN:"XCD", KP:"KPW",
+ LC:"XCD", LI:"CHF", LR:"LRD", MP:"USD", MR:"MRU", MS:"XCD", PN:"NZD", PS:"ILS", SJ:"NOK", SL:"SLE", ST:"STN",
+ TF:"EUR", TL:"USD", VC:"XCD", BV:"USD",
  IE:"EUR", IT:"EUR", LT:"EUR", LU:"EUR", LV:"EUR", MC:"EUR", ME:"EUR", MT:"EUR", NL:"EUR", PT:"EUR", SI:"EUR",
  SK:"EUR", SM:"EUR", VA:"EUR", BG:"BGN", CZ:"CZK", DK:"DKK", HU:"HUF", IS:"ISK", NO:"NOK", PL:"PLN", RO:"RON",
  RS:"RSD", SE:"SEK", UA:"UAH", RU:"RUB", BY:"BYN", AL:"ALL", BA:"BAM", MK:"MKD", MD:"MDL", GE:"GEL", AM:"AMD", AZ:"AZN",
@@ -23,6 +26,5 @@ const defaults: Record<string,string> = {
  FK:"FKP", SH:"SHP", GS:"GBP", IO:"USD", UM:"USD", AQ:"USD", EH:"MAD", XK:"EUR"
 };
 export const countries = codes.map(code=>({code,name:names.of(code)||code,flag:String.fromCodePoint(...Array.from(code).map(c=>127397+c.charCodeAt(0))),currency:defaults[code]||"USD"})).sort((a,b)=>a.name.localeCompare(b.name));
-export const currencyForCountryName = (name: string) => countries.find(c => c.name.toLowerCase() === name.toLowerCase() || c.code.toLowerCase() === name.toLowerCase())?.currency || null;
 export const currencyForCountryName = (name: string) => countries.find(c => c.name.toLowerCase() === name.toLowerCase() || c.code.toLowerCase() === name.toLowerCase())?.currency || null;
 export const flagForCountryName = (name: string) => countries.find(c => c.name.toLowerCase() === name.toLowerCase() || c.code.toLowerCase() === name.toLowerCase())?.flag || "🌐";

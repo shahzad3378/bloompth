@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { Check, ChevronDown, Globe2, MapPin, Search, X } from "lucide-react";
-import { countries, flagForCountryName } from "@/lib/countries";
+import { countries } from "@/lib/countries";
 export { countries, currencyForCountryName, flagForCountryName } from "@/lib/countries";
 const currs = (()=>{try{return ["AED",...Intl.supportedValuesOf("currency")].filter((x,i,a)=>a.indexOf(x)===i).sort()}catch{return ["AED","AUD","BDT","CAD","CHF","CNY","EUR","GBP","HKD","INR","JPY","KRW","MYR","NZD","PKR","SAR","SGD","TRY","USD","ZAR"]}})();
 const codeForName=(n:string)=>countries.find(c=>c.name.toLowerCase()===n.toLowerCase())?.code;
