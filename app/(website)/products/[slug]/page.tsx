@@ -1,6 +1,6 @@
 import Link from "next/link";
 import CurrencyPrice from "@/components/CurrencyPrice";
-import { currencyForCountryName, flagForCountryName } from "@/components/MarketPreference";
+import { currencyForCountryName, flagForCountryName } from "@/lib/countries";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
@@ -251,11 +251,11 @@ Please share wholesale pricing, minimum order quantity and dropshipping details.
             {typedProduct.title}
           </h1>
           <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-sky-50 px-4 py-2 text-sm font-bold text-slate-700">
-            <span aria-hidden="true">📍</span>
+            <span aria-hidden="true">📍 {flagForCountryName(typedProduct.stock_country || "")}</span>
             {typedProduct.stock_country ? `Available in: ${typedProduct.stock_country}` : "Stock location not listed"}
           </div>
           <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm font-bold text-slate-700">
-            <span aria-hidden="true">🌐</span>
+            <span aria-hidden="true">🌐 {flagForCountryName(typedProduct.origin_country || "")}</span>
             Origin: {typedProduct.origin_country || "Not listed"}
           </div>
 

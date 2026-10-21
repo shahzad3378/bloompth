@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Download, Plus, Upload } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/server";
+import { currencyForCountryName } from "@/lib/countries";
 import DeleteProductButton from "./DeleteProductButton";
 
 export const dynamic = "force-dynamic";
@@ -18,6 +19,9 @@ type Product = {
   image: string | null;
   featured: boolean | null;
   status: string | null;
+  origin_country?: string | null;
+  stock_country?: string | null;
+  currency_code?: string | null;
   created_at: string | null;
 };
 
@@ -239,7 +243,7 @@ export default async function AdminProductsPage() {
                           </div>
                         ) : (
                           <p className="font-bold text-slate-900">
-                            AED {regularPrice.toFixed(2)}
+                            {new Intl.NumberFormat("en", { style: "currency", currency: currencyForCountryName(product.stock_country || "") || product.currency_code || "USD" }).format(regularPrice)}
                           </p>
                         )}
                       </td>

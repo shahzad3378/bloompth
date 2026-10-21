@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, PackageSearch } from "lucide-react";
 import CurrencyPrice from "@/components/CurrencyPrice";
-import { currencyForCountryName, flagForCountryName } from "@/components/MarketPreference";
+import { currencyForCountryName, flagForCountryName } from "@/lib/countries";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireActiveSellerPage } from "@/lib/auth";
 

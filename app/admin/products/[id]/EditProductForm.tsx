@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { countries, currencyForCountryName } from "@/components/MarketPreference";
+import { countries, currencyForCountryName } from "@/lib/countries";
 
 type Product = {
   id: string | number;

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import CurrencyPrice from "@/components/CurrencyPrice";
-import { currencyForCountryName, flagForCountryName } from "@/components/MarketPreference";
+import { currencyForCountryName, flagForCountryName } from "@/lib/countries";
 import { useEffect, useMemo, useState } from "react";
 import {
   ArrowRight,
@@ -134,7 +134,6 @@ export default function ProductCatalog({
     setSelectedCategory("All");
     setSortBy("newest");
     setOriginFilter("All");
-    setDisplayCurrency("AED");
   };
 
   const hasActiveFilters =
@@ -142,7 +141,7 @@ export default function ProductCatalog({
     selectedCategory !== "All" ||
     sortBy !== "newest" ||
     originFilter !== "All" ||
-    displayCurrency !== "AED";
+    false;
 
   return (
     <div>
