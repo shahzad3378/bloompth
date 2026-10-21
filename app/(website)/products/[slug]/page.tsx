@@ -51,7 +51,7 @@ export default async function ProductDetailPage({
     const legacy = await supabase.from("products")
       .select("id, title, slug, description, category, price, sale_price, stock, image, featured, status")
       .eq("slug", slug).eq("status", "active").maybeSingle();
-    product = legacy.data ? { ...legacy.data, origin_country: null, currency_code: "AED" } : null;
+    product = legacy.data ? { ...legacy.data, images: legacy.data.image ? [legacy.data.image] : [], origin_country: null, currency_code: "AED" } : null;
     error = legacy.error;
   }
 
