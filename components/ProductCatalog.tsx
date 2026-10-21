@@ -8,7 +8,6 @@ import {
   ArrowRight,
   BadgeCheck,
   PackageSearch,
-  RotateCcw,
   Search,
   SlidersHorizontal,
   Sparkles,
@@ -226,16 +225,6 @@ export default function ProductCatalog({
           )}
         </div>
 
-        {hasActiveFilters && (
-          <button
-            type="button"
-            onClick={clearFilters}
-            className="inline-flex items-center gap-2 text-sm font-black text-blue-600 transition hover:text-blue-700"
-          >
-            <RotateCcw size={16} />
-            Clear filters
-          </button>
-        )}
       </div>
 
       {filteredProducts.length === 0 ? (
