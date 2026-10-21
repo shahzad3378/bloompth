@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, PackageSearch } from "lucide-react";
+import CurrencyPrice from "@/components/CurrencyPrice";
+import { currencyForCountryName, flagForCountryName } from "@/components/MarketPreference";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireActiveSellerPage } from "@/lib/auth";
 
@@ -12,7 +14,7 @@ export default async function SellerProductsPage() {
 
   const { data: products, error } = await supabaseAdmin
     .from("products")
-    .select("id, title, slug, category, price, sale_price, stock, image, status")
+    .select("id, title, slug, category, price, sale_price, stock, image, status, origin_country, stock_country, currency_code")
     .eq("status", "active")
     .order("created_at", { ascending: false });
 
@@ -91,13 +93,14 @@ export default async function SellerProductsPage() {
 
                     <p className="mt-1 text-base font-black text-slate-950 sm:text-xl">
                       {displayPrice !== null
-                        ? `AED ${Number(displayPrice).toFixed(2)}`
+                        ? <CurrencyPrice amount={Number(displayPrice)} baseCurrency={currencyForCountryName(product.stock_country || "") || product.currency_code || "USD"} />
                         : "Contact for Price"}
                     </p>
 
                     <p className="mt-1 text-xs text-slate-500">
                       Stock: {product.stock ?? 0}
                     </p>
+                    {product.stock_country ? <p className="mt-1 text-xs font-semibold text-slate-600">{flagForCountryName(product.stock_country)} Available in {product.stock_country}</p> : null}
                   </div>
 
                   <Link

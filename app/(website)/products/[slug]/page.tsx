@@ -1,5 +1,6 @@
 import Link from "next/link";
 import CurrencyPrice from "@/components/CurrencyPrice";
+import { currencyForCountryName, flagForCountryName } from "@/components/MarketPreference";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
@@ -30,6 +31,7 @@ type Product = {
   featured: boolean;
   status: "active" | "inactive";
   origin_country?: string | null;
+  stock_country?: string | null;
   currency_code?: string | null;
 };
 
@@ -44,14 +46,14 @@ export default async function ProductDetailPage({
 
   let { data: product, error } = await supabase
     .from("products")
-    .select("id, title, slug, description, category, price, sale_price, stock, image, images, featured, status, origin_country, currency_code")
+    .select("id, title, slug, description, category, price, sale_price, stock, image, images, featured, status, origin_country, stock_country, currency_code")
     .eq("slug", slug).eq("status", "active").maybeSingle();
 
   if (error) {
     const legacy = await supabase.from("products")
       .select("id, title, slug, description, category, price, sale_price, stock, image, featured, status")
       .eq("slug", slug).eq("status", "active").maybeSingle();
-    product = legacy.data ? { ...legacy.data, images: legacy.data.image ? [legacy.data.image] : [], origin_country: null, currency_code: "AED" } : null;
+    product = legacy.data ? { ...legacy.data, images: legacy.data.image ? [legacy.data.image] : [], origin_country: null, stock_country: null, currency_code: null } : null;
     error = legacy.error;
   }
 
@@ -250,7 +252,11 @@ Please share wholesale pricing, minimum order quantity and dropshipping details.
           </h1>
           <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-sky-50 px-4 py-2 text-sm font-bold text-slate-700">
             <span aria-hidden="true">📍</span>
-            Stock origin: {typedProduct.origin_country || "Not listed yet"}
+            {typedProduct.stock_country ? `Available in: ${typedProduct.stock_country}` : "Stock location not listed"}
+          </div>
+          <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm font-bold text-slate-700">
+            <span aria-hidden="true">🌐</span>
+            Origin: {typedProduct.origin_country || "Not listed"}
           </div>
 
           <p className="mt-5 text-base leading-8 text-slate-600">
@@ -266,7 +272,7 @@ Please share wholesale pricing, minimum order quantity and dropshipping details.
 
             <div className="mt-2">
               {displayPrice !== null
-                ? <CurrencyPrice amount={Number(displayPrice)} baseCurrency={typedProduct.currency_code ?? "AED"} />
+                ? <CurrencyPrice amount={Number(displayPrice)} baseCurrency={currencyForCountryName(typedProduct.stock_country || "") || typedProduct.currency_code || "USD"} />
                 : <span className="text-3xl font-black text-slate-950">Contact for Price</span>}
             </div>
 

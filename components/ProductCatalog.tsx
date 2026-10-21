@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import CurrencyPrice from "@/components/CurrencyPrice";
-import { flagForCountryName } from "@/components/MarketPreference";
+import { currencyForCountryName, flagForCountryName } from "@/components/MarketPreference";
 import { useEffect, useMemo, useState } from "react";
 import {
   ArrowRight,
@@ -26,6 +26,7 @@ type Product = {
   image: string | null;
   featured: boolean;
   origin_country?: string | null;
+  stock_country?: string | null;
   currency_code?: string | null;
 };
 
@@ -54,15 +55,13 @@ export default function ProductCatalog({
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState("newest");
   const [originFilter, setOriginFilter] = useState("All");
-  const [displayCurrency, setDisplayCurrency] = useState("AED");
   const [deliveryCountry, setDeliveryCountry] = useState("United Arab Emirates");
 
   useEffect(() => {
     const readMarket = (event?: Event) => {
-      const detail = (event as CustomEvent<{ country?: string; currency?: string }> | undefined)?.detail;
+      const detail = (event as CustomEvent<{ country?: string }> | undefined)?.detail;
       const country = detail?.country || localStorage.getItem("bp-deliver-country") || "United Arab Emirates";
-      const currency = detail?.currency || localStorage.getItem("bp-currency") || "AED";
-      setDeliveryCountry(country); setDisplayCurrency(currency);
+      setDeliveryCountry(country);
     };
     readMarket();
     window.addEventListener("bp-market-change", readMarket);
@@ -77,7 +76,7 @@ export default function ProductCatalog({
     return ["All", ...Array.from(new Set(productCategories)).sort()];
   }, [products]);
 
-  const origins = useMemo(() => ["All", ...Array.from(new Set(products.map((p) => p.origin_country?.trim()).filter((v): v is string => Boolean(v)))).sort()], [products]);
+  const origins = useMemo(() => ["All", ...Array.from(new Set(products.map((p) => p.stock_country?.trim()).filter((v): v is string => Boolean(v)))).sort()], [products]);
 
   const filteredProducts = useMemo(() => {
     const searchTerm = search.trim().toLowerCase();
@@ -97,14 +96,14 @@ export default function ProductCatalog({
         selectedCategory === "All" ||
         product.category === selectedCategory;
 
-      const matchesOrigin = originFilter === "All" || product.origin_country === originFilter;
+      const matchesOrigin = originFilter === "All" || product.stock_country === originFilter;
       return matchesSearch && matchesCategory && matchesOrigin;
     });
 
     return [...filtered].sort((a, b) => {
       if (sortBy === "newest") {
-        const localA = isLocalProduct(a.origin_country, deliveryCountry) && Number(a.stock) > 0;
-        const localB = isLocalProduct(b.origin_country, deliveryCountry) && Number(b.stock) > 0;
+        const localA = isLocalProduct(a.stock_country, deliveryCountry) && Number(a.stock) > 0;
+        const localB = isLocalProduct(b.stock_country, deliveryCountry) && Number(b.stock) > 0;
         if (localA !== localB) return localA ? -1 : 1;
       }
       const priceA = Number(a.sale_price ?? a.price ?? 0);
@@ -218,7 +217,7 @@ export default function ProductCatalog({
             <select value={originFilter} onChange={(event) => setOriginFilter(event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold normal-case tracking-normal text-slate-800">
               <option value="All">All countries</option>
               {origins.slice(1).map((origin) => <option key={origin} value={origin}>{flagForCountryName(origin)}  {origin}</option>)}
-              <option value="Not listed" disabled>Origin not listed</option>
+              <option value="Not listed" disabled>Availability not listed</option>
             </select>
           </label>
         </div>
@@ -337,7 +336,7 @@ export default function ProductCatalog({
                     </span>
 
                     <span className="rounded-full bg-white/95 px-3 py-1.5 text-xs font-black text-slate-800 shadow-sm">
-                      {isLocalProduct(product.origin_country, deliveryCountry) && stock > 0 ? "📍 Available in local market · " + product.origin_country : product.origin_country ? "🌐 Origin · " + product.origin_country : "🌐 Global sourcing"}
+                      {product.stock_country ? `${isLocalProduct(product.stock_country, deliveryCountry) && stock > 0 ? "📍 " : "📦 "}${product.stock_country}${product.origin_country ? ` · Origin: ${product.origin_country}` : ""}` : product.origin_country ? `🌐 Origin: ${product.origin_country} · Stock location not listed` : "🌐 Global sourcing"}
                     </span>
                     {hasSale && (
                       <span className="rounded-full bg-red-600 px-3 py-1.5 text-xs font-black text-white shadow-sm">
@@ -383,9 +382,9 @@ export default function ProductCatalog({
                     <div className="border-t border-slate-100 pt-4">
                   <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Wholesale price</p>
                   <div className="mt-2 text-2xl font-black text-slate-950">
-                    <CurrencyPrice amount={displayPrice ?? 0} baseCurrency={product.currency_code || "AED"} targetCurrency={displayCurrency} />
+                    <CurrencyPrice amount={displayPrice ?? 0} baseCurrency={currencyForCountryName(product.stock_country || "") || product.currency_code || "USD"} />
                   </div>
-                  {hasSale && product.price ? <p className="mt-1 text-xs text-slate-500">Regular price: <CurrencyPrice amount={product.price} baseCurrency={product.currency_code || "AED"} targetCurrency={displayCurrency} /></p> : null}
+                  {hasSale && product.price ? <p className="mt-1 text-xs text-slate-500">Regular price: <CurrencyPrice amount={product.price} baseCurrency={currencyForCountryName(product.stock_country || "") || product.currency_code || "USD"} /></p> : null}
                 </div>
 
                 <div className="mt-4 grid grid-cols-2 gap-2">

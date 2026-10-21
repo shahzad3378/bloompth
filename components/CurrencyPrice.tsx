@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 export default function CurrencyPrice({amount,baseCurrency,targetCurrency}:{amount:number;baseCurrency:string;targetCurrency?:string}) {
- const base=(baseCurrency||"AED").toUpperCase(), target=(targetCurrency||base).toUpperCase();
+ const base=baseCurrency.toUpperCase(), target=(targetCurrency||base).toUpperCase();
  const [rate,setRate]=useState<number|null>(base===target?1:null);
  useEffect(()=>{if(base===target){setRate(1);return}let active=true;setRate(null);fetch("https://api.frankfurter.dev/v1/latest?from="+encodeURIComponent(base)+"&to="+encodeURIComponent(target)).then(r=>{if(!r.ok)throw Error();return r.json()}).then(d=>{if(active)setRate(Number(d.rates?.[target])||null)}).catch(()=>active&&setRate(null));return()=>{active=false}},[base,target]);
  const shown=rate===null?amount:amount*rate, shownCurrency=rate===null?base:target;

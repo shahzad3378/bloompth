@@ -40,7 +40,10 @@ export default async function EditProductPage({
         images,
         featured,
         status,
-        created_at
+        created_at,
+        origin_country,
+        stock_country,
+        currency_code
       `
     )
     .eq("id", id)

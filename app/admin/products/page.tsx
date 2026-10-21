@@ -38,6 +38,9 @@ export default async function AdminProductsPage() {
         image,
         featured,
         status,
+        origin_country,
+        stock_country,
+        currency_code,
         created_at
       `
     )
@@ -227,11 +230,11 @@ export default async function AdminProductsPage() {
                         {salePrice !== null && salePrice > 0 ? (
                           <div>
                             <p className="font-bold text-emerald-600">
-                              AED {salePrice.toFixed(2)}
+                              {new Intl.NumberFormat("en", { style: "currency", currency: currencyForCountryName(product.stock_country || "") || product.currency_code || "USD" }).format(salePrice)}
                             </p>
 
                             <p className="text-xs text-slate-400 line-through">
-                              AED {regularPrice.toFixed(2)}
+                              {new Intl.NumberFormat("en", { style: "currency", currency: currencyForCountryName(product.stock_country || "") || product.currency_code || "USD" }).format(regularPrice)}
                             </p>
                           </div>
                         ) : (

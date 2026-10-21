@@ -1,5 +1,6 @@
 import Link from "next/link";
 import CurrencyPrice from "@/components/CurrencyPrice";
+import { currencyForCountryName, flagForCountryName } from "@/components/MarketPreference";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
@@ -31,14 +32,14 @@ export default async function SellerProductDetailPage({
 
   let { data: product, error } = await supabaseAdmin
     .from("products")
-    .select("id, title, slug, description, category, price, sale_price, stock, image, status, min_order_qty, origin_country, currency_code")
+    .select("id, title, slug, description, category, price, sale_price, stock, image, status, min_order_qty, origin_country, stock_country, currency_code")
     .eq("slug", slug).eq("status", "active").single();
 
   if (error) {
     const legacy = await supabaseAdmin.from("products")
       .select("id, title, slug, description, category, price, sale_price, stock, image, status, min_order_qty")
       .eq("slug", slug).eq("status", "active").single();
-    product = legacy.data ? { ...legacy.data, origin_country: null, currency_code: "AED" } : null;
+    product = legacy.data ? { ...legacy.data, origin_country: null, stock_country: null, currency_code: null } : null;
     error = legacy.error;
   }
 
@@ -123,6 +124,31 @@ export default async function SellerProductDetailPage({
               <span className="inline-flex items-center gap-1.5 rounded-full bg-sky-50 px-3 py-1.5 text-xs font-black text-slate-700">
                 <Warehouse size={14} />
                 Origin: {product.origin_country || "Not listed"}
+              </span>
+              {product.stock_country ? <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1.5 text-xs font-black text-blue-700"><Warehouse size={14} />{flagForCountryName(product.stock_country)} Available in: {product.stock_country}</span> : null}
+            </div>
+
+            <div className="mt-7 rounded-2xl bg-slate-950 p-5 text-white">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                Wholesale Price
+              </p>
+
+              <div className="mt-2">
+                {displayPrice !== null
+                  ? <CurrencyPrice amount={displayPrice} baseCurrency={product.currency_code ?? "AED"} />
+                  : <p className="text-3xl font-black">Contact for Price</p>}
+              </div>
+
+              <p className="mt-2 text-xs text-slate-400">
+                Price per unit
+              </p>
+            </div>
+
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <div className="rounded-2xl border border-slate-200 p-4">
+                <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  Available Stock
+                </p>
               </span>
             </div>
 
