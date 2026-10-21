@@ -17,6 +17,7 @@ type Product = {
   stock: number | null;
   min_order_qty: number | null;
   image: string | null;
+  images?: string[] | null;
   featured: boolean | null;
   status: string | null;
   created_at: string | null;
@@ -64,25 +65,19 @@ export default function EditProductForm({
     product.status ?? "active"
   );
 
-  const [currentImage, setCurrentImage] = useState(
-    product.image ?? ""
+  const [currentImages, setCurrentImages] = useState<string[]>(
+    product.images?.length ? product.images : product.image ? [product.image] : []
   );
-  const [imageFile, setImageFile] = useState<File | null>(
-    null
-  );
-  const [imagePreview, setImagePreview] = useState("");
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
-    return () => {
-      if (imagePreview) {
-        URL.revokeObjectURL(imagePreview);
-      }
-    };
-  }, [imagePreview]);
+    return () => imagePreviews.forEach((preview) => URL.revokeObjectURL(preview));
+  }, [imagePreviews]);
 
   function generateSlug(value: string) {
     return value
@@ -92,48 +87,33 @@ export default function EditProductForm({
       .replace(/^-+|-+$/g, "");
   }
 
-  function handleImageChange(file: File | null) {
+  function handleImageChange(fileList: FileList | null) {
     setErrorMessage("");
     setSuccessMessage("");
+    const files = Array.from(fileList ?? []);
 
-    if (imagePreview) {
-      URL.revokeObjectURL(imagePreview);
-    }
-
-    if (!file) {
-      setImageFile(null);
-      setImagePreview("");
+    if (files.length > 3) {
+      setErrorMessage("Maximum 3 product images select karein.");
       return;
     }
 
-    const allowedTypes = [
-      "image/jpeg",
-      "image/png",
-      "image/webp",
-    ];
-
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
     const maximumFileSize = 5 * 1024 * 1024;
+    const invalidFile = files.find(
+      (file) => !allowedTypes.includes(file.type) || file.size > maximumFileSize
+    );
 
-    if (!allowedTypes.includes(file.type)) {
+    if (invalidFile) {
       setErrorMessage(
-        "Sirf JPG, PNG ya WebP image upload karein."
+        !allowedTypes.includes(invalidFile.type)
+          ? "Sirf JPG, PNG ya WebP images upload karein."
+          : "Har image ka size 5 MB se zyada nahi hona chahiye."
       );
-      setImageFile(null);
-      setImagePreview("");
       return;
     }
 
-    if (file.size > maximumFileSize) {
-      setErrorMessage(
-        "Image ka size 5 MB se zyada nahi hona chahiye."
-      );
-      setImageFile(null);
-      setImagePreview("");
-      return;
-    }
-
-    setImageFile(file);
-    setImagePreview(URL.createObjectURL(file));
+    setImageFiles(files);
+    setImagePreviews(files.map((file) => URL.createObjectURL(file)));
   }
 
   function getStoragePathFromPublicUrl(imageUrl: string) {
@@ -235,54 +215,45 @@ export default function EditProductForm({
       return;
     }
 
-    let updatedImageUrl: string | null =
-      currentImage || null;
+    let updatedImages = currentImages;
+    const newlyUploadedPaths: string[] = [];
 
-    let newlyUploadedPath: string | null = null;
+    if (imageFiles.length > 0) {
+      updatedImages = [];
 
-    if (imageFile) {
-      const extensionFromName = imageFile.name
-        .split(".")
-        .pop()
-        ?.toLowerCase();
-
-      const extension =
-        extensionFromName &&
-        ["jpg", "jpeg", "png", "webp"].includes(
-          extensionFromName
-        )
-          ? extensionFromName
-          : "jpg";
-
-      const fileName = `${Date.now()}-${crypto.randomUUID()}.${extension}`;
-      const filePath = `products/${fileName}`;
-
-      const { error: uploadError } =
-        await supabase.storage
+      for (const file of imageFiles) {
+        const extensionFromName = file.name.split(".").pop()?.toLowerCase();
+        const extension =
+          extensionFromName && ["jpg", "jpeg", "png", "webp"].includes(extensionFromName)
+            ? extensionFromName
+            : "jpg";
+        const filePath = `products/${Date.now()}-${crypto.randomUUID()}.${extension}`;
+        const { error: uploadError } = await supabase.storage
           .from("product-images")
-          .upload(filePath, imageFile, {
+          .upload(filePath, file, {
             cacheControl: "3600",
             upsert: false,
-            contentType: imageFile.type,
+            contentType: file.type,
           });
 
-      if (uploadError) {
-        setErrorMessage(
-          `Image upload failed: ${uploadError.message}`
-        );
-        setLoading(false);
-        return;
-      }
+        if (uploadError) {
+          if (newlyUploadedPaths.length) {
+            await supabase.storage.from("product-images").remove(newlyUploadedPaths);
+          }
+          setErrorMessage(`Image upload failed: ${uploadError.message}`);
+          setLoading(false);
+          return;
+        }
 
-      newlyUploadedPath = filePath;
-
-      const { data: publicUrlData } =
-        supabase.storage
+        newlyUploadedPaths.push(filePath);
+        const { data: publicUrlData } = supabase.storage
           .from("product-images")
           .getPublicUrl(filePath);
-
-      updatedImageUrl = publicUrlData.publicUrl;
+        updatedImages.push(publicUrlData.publicUrl);
+      }
     }
+
+    const updatedImageUrl = updatedImages[0] ?? null;
 
     const { error: updateError } = await supabase
       .from("products")
@@ -298,16 +269,17 @@ export default function EditProductForm({
         stock: parsedStock,
         min_order_qty: parsedMinOrderQty,
         image: updatedImageUrl,
+        images: updatedImages,
         featured,
         status,
       })
       .eq("id", product.id);
 
     if (updateError) {
-      if (newlyUploadedPath) {
+      if (newlyUploadedPaths.length) {
         await supabase.storage
           .from("product-images")
-          .remove([newlyUploadedPath]);
+          .remove(newlyUploadedPaths);
       }
 
       if (updateError.code === "23505") {
@@ -322,32 +294,21 @@ export default function EditProductForm({
       return;
     }
 
-    if (imageFile && currentImage) {
-      const oldImagePath =
-        getStoragePathFromPublicUrl(currentImage);
-
-      if (oldImagePath) {
-        const { error: removeError } =
-          await supabase.storage
-            .from("product-images")
-            .remove([oldImagePath]);
-
-        if (removeError) {
-          console.error(
-            "Old image remove error:",
-            removeError
-          );
-        }
+    if (imageFiles.length > 0) {
+      const oldPaths = currentImages
+        .map(getStoragePathFromPublicUrl)
+        .filter((path): path is string => Boolean(path));
+      if (oldPaths.length) {
+        const { error: removeError } = await supabase.storage
+          .from("product-images")
+          .remove(oldPaths);
+        if (removeError) console.error("Old image remove error:", removeError);
       }
     }
 
-    setCurrentImage(updatedImageUrl ?? "");
-    setImageFile(null);
-
-    if (imagePreview) {
-      URL.revokeObjectURL(imagePreview);
-      setImagePreview("");
-    }
+    setCurrentImages(updatedImages);
+    setImageFiles([]);
+    setImagePreviews([]);
 
     setSuccessMessage(
       "Product successfully update ho gaya hai."
@@ -358,7 +319,7 @@ export default function EditProductForm({
   }
 
   async function handleRemoveCurrentImage() {
-    if (!currentImage) {
+    if (currentImages.length === 0) {
       return;
     }
 
@@ -374,13 +335,15 @@ export default function EditProductForm({
     setErrorMessage("");
     setSuccessMessage("");
 
-    const oldImagePath =
-      getStoragePathFromPublicUrl(currentImage);
+    const oldImagePaths = currentImages
+      .map(getStoragePathFromPublicUrl)
+      .filter((path): path is string => Boolean(path));
 
     const { error: updateError } = await supabase
       .from("products")
       .update({
         image: null,
+        images: [],
       })
       .eq("id", product.id);
 
@@ -390,27 +353,16 @@ export default function EditProductForm({
       return;
     }
 
-    if (oldImagePath) {
-      const { error: removeError } =
-        await supabase.storage
-          .from("product-images")
-          .remove([oldImagePath]);
-
-      if (removeError) {
-        console.error(
-          "Image storage remove error:",
-          removeError
-        );
-      }
+    if (oldImagePaths.length) {
+      const { error: removeError } = await supabase.storage
+        .from("product-images")
+        .remove(oldImagePaths);
+      if (removeError) console.error("Image storage remove error:", removeError);
     }
 
-    setCurrentImage("");
-    setImageFile(null);
-
-    if (imagePreview) {
-      URL.revokeObjectURL(imagePreview);
-      setImagePreview("");
-    }
+    setCurrentImages([]);
+    setImageFiles([]);
+    setImagePreviews([]);
 
     setSuccessMessage("Product image remove ho gayi hai.");
     setLoading(false);
@@ -587,53 +539,41 @@ export default function EditProductForm({
 
         <div className="md:col-span-2">
           <label
-            htmlFor="image"
+            htmlFor="images"
             className="text-sm font-bold text-slate-700"
           >
-            Replace Product Image
+            Product Images (up to 3)
           </label>
 
           <input
-            id="image"
+            id="images"
             type="file"
+            multiple
             accept="image/jpeg,image/png,image/webp"
-            onChange={(event) =>
-              handleImageChange(
-                event.target.files?.[0] ?? null
-              )
-            }
+            onChange={(event) => handleImageChange(event.target.files)}
             className="mt-2 block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-4 file:py-2 file:font-bold file:text-emerald-700"
           />
 
           <p className="mt-2 text-xs text-slate-500">
-            JPG, PNG ya WebP. Maximum size 5 MB.
+            JPG, PNG ya WebP. Maximum 3 images, har image 5 MB tak. Nayi images purani gallery replace karengi.
           </p>
         </div>
 
-        {(imagePreview || currentImage) && (
+        {(imagePreviews.length > 0 || currentImages.length > 0) && (
           <div className="md:col-span-2">
             <p className="mb-2 text-sm font-bold text-slate-700">
-              {imagePreview
-                ? "New Image Preview"
-                : "Current Image"}
+              {imagePreviews.length > 0 ? `New Image Preview (${imagePreviews.length}/3)` : `Current Images (${currentImages.length}/3)`}
             </p>
-
-            <div className="h-56 w-56 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
-              <img
-                src={imagePreview || currentImage}
-                alt="Product"
-                className="h-full w-full object-cover"
-              />
+            <div className="flex flex-wrap gap-3">
+              {(imagePreviews.length > 0 ? imagePreviews : currentImages).map((image, index) => (
+                <div key={image} className="h-32 w-32 overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
+                  <img src={image} alt={`Product image ${index + 1}`} className="h-full w-full object-cover" />
+                </div>
+              ))}
             </div>
-
-            {currentImage && !imagePreview && (
-              <button
-                type="button"
-                disabled={loading}
-                onClick={handleRemoveCurrentImage}
-                className="mt-3 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-bold text-red-700 transition hover:bg-red-100 disabled:opacity-60"
-              >
-                Remove Current Image
+            {currentImages.length > 0 && imagePreviews.length === 0 && (
+              <button type="button" disabled={loading} onClick={handleRemoveCurrentImage} className="mt-3 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-bold text-red-700 transition hover:bg-red-100 disabled:opacity-60">
+                Remove All Images
               </button>
             )}
           </div>

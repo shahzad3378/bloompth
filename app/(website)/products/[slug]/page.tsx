@@ -6,16 +6,15 @@ import {
   ArrowRight,
   BadgeCheck,
   CheckCircle2,
-  Expand,
   Mail,
   MessageCircle,
-  PackageSearch,
   ShieldCheck,
   Sparkles,
   Truck,
 } from "lucide-react";
 
 import { supabase } from "@/lib/supabase";
+import ProductImageGallery from "@/components/ProductImageGallery";
 
 type Product = {
   id: string;
@@ -27,6 +26,7 @@ type Product = {
   sale_price: number | null;
   stock: number;
   image: string | null;
+  images?: string[] | null;
   featured: boolean;
   status: "active" | "inactive";
   origin_country?: string | null;
@@ -44,7 +44,7 @@ export default async function ProductDetailPage({
 
   let { data: product, error } = await supabase
     .from("products")
-    .select("id, title, slug, description, category, price, sale_price, stock, image, featured, status, origin_country, currency_code")
+    .select("id, title, slug, description, category, price, sale_price, stock, image, images, featured, status, origin_country, currency_code")
     .eq("slug", slug).eq("status", "active").maybeSingle();
 
   if (error) {
@@ -60,6 +60,11 @@ export default async function ProductDetailPage({
   }
 
   const typedProduct = product as Product;
+  const productImages = typedProduct.images?.length
+    ? typedProduct.images
+    : typedProduct.image
+      ? [typedProduct.image]
+      : [];
 
   const displayPrice =
     typedProduct.sale_price ?? typedProduct.price;
@@ -121,31 +126,7 @@ Please share wholesale pricing, minimum order quantity and dropshipping details.
         <div className="relative z-20 space-y-5">
           <div className="group relative rounded-3xl border border-slate-200 bg-white shadow-sm">
             {/* Main Image Container */}
-            <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-3xl bg-white p-6 sm:p-8">
-              {typedProduct.image ? (
-                <>
-                  <img
-                    src={typedProduct.image}
-                    alt={typedProduct.title}
-                    className="h-full w-full object-contain transition-transform duration-500 ease-out group-hover:scale-105"
-                  />
-
-                  {/* Hover Instruction */}
-                  <div className="pointer-events-none absolute bottom-4 left-1/2 hidden -translate-x-1/2 items-center gap-2 rounded-full bg-slate-950/85 px-4 py-2 text-xs font-bold text-white opacity-0 shadow-lg backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100 sm:inline-flex">
-                    <Expand size={14} />
-                    Hover for larger preview
-                  </div>
-                </>
-              ) : (
-                <div className="flex h-full flex-col items-center justify-center gap-4 text-slate-400">
-                  <PackageSearch size={52} />
-
-                  <span className="font-semibold">
-                    No product image
-                  </span>
-                </div>
-              )}
-            </div>
+            <ProductImageGallery images={productImages} title={typedProduct.title} />
 
             {/* Stock and Sale Badges */}
             <div className="absolute left-4 top-4 z-20 flex flex-col items-start gap-2">

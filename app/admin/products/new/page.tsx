@@ -20,19 +20,15 @@ const [minOrderQty, setMinOrderQty] = useState("1");
   const [featured, setFeatured] = useState(false);
   const [status, setStatus] = useState("active");
 
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState("");
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    return () => {
-      if (imagePreview) {
-        URL.revokeObjectURL(imagePreview);
-      }
-    };
-  }, [imagePreview]);
+    return () => imagePreviews.forEach((preview) => URL.revokeObjectURL(preview));
+  }, [imagePreviews]);
 
   function generateSlug(value: string) {
     return value
@@ -47,37 +43,32 @@ const [minOrderQty, setMinOrderQty] = useState("1");
     setSlug(generateSlug(value));
   }
 
-  function handleImageChange(file: File | null) {
-    if (imagePreview) {
-      URL.revokeObjectURL(imagePreview);
-    }
+  function handleImageChange(fileList: FileList | null) {
+    const files = Array.from(fileList ?? []);
 
-    if (!file) {
-      setImageFile(null);
-      setImagePreview("");
+    if (files.length > 3) {
+      setErrorMessage("Maximum 3 product images select karein.");
       return;
     }
 
     const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
     const maxSize = 5 * 1024 * 1024;
+    const invalidFile = files.find(
+      (file) => !allowedTypes.includes(file.type) || file.size > maxSize
+    );
 
-    if (!allowedTypes.includes(file.type)) {
-      setErrorMessage("Sirf JPG, PNG ya WebP image upload karein.");
-      setImageFile(null);
-      setImagePreview("");
-      return;
-    }
-
-    if (file.size > maxSize) {
-      setErrorMessage("Image ka size 5 MB se zyada nahi hona chahiye.");
-      setImageFile(null);
-      setImagePreview("");
+    if (invalidFile) {
+      setErrorMessage(
+        !allowedTypes.includes(invalidFile.type)
+          ? "Sirf JPG, PNG ya WebP images upload karein."
+          : "Har image ka size 5 MB se zyada nahi hona chahiye."
+      );
       return;
     }
 
     setErrorMessage("");
-    setImageFile(file);
-    setImagePreview(URL.createObjectURL(file));
+    setImageFiles(files);
+    setImagePreviews(files.map((file) => URL.createObjectURL(file)));
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -141,41 +132,41 @@ const parsedMinOrderQty = Number(minOrderQty);
       return;
     }
 
-    let imageUrl: string | null = null;
-    let uploadedFilePath: string | null = null;
+    const uploadedFilePaths: string[] = [];
+    const imageUrls: string[] = [];
 
-    if (imageFile) {
-      const rawExtension = imageFile.name.split(".").pop()?.toLowerCase();
+    for (const file of imageFiles) {
+      const rawExtension = file.name.split(".").pop()?.toLowerCase();
       const fileExtension =
         rawExtension && ["jpg", "jpeg", "png", "webp"].includes(rawExtension)
           ? rawExtension
           : "jpg";
-
-      const fileName = `${Date.now()}-${crypto.randomUUID()}.${fileExtension}`;
-      const filePath = `products/${fileName}`;
-
+      const filePath = `products/${Date.now()}-${crypto.randomUUID()}.${fileExtension}`;
       const { error: uploadError } = await supabase.storage
         .from("product-images")
-        .upload(filePath, imageFile, {
+        .upload(filePath, file, {
           cacheControl: "3600",
           upsert: false,
-          contentType: imageFile.type,
+          contentType: file.type,
         });
 
       if (uploadError) {
+        if (uploadedFilePaths.length) {
+          await supabase.storage.from("product-images").remove(uploadedFilePaths);
+        }
         setErrorMessage(`Image upload failed: ${uploadError.message}`);
         setLoading(false);
         return;
       }
 
-      uploadedFilePath = filePath;
-
+      uploadedFilePaths.push(filePath);
       const { data: publicUrlData } = supabase.storage
         .from("product-images")
         .getPublicUrl(filePath);
-
-      imageUrl = publicUrlData.publicUrl;
+      imageUrls.push(publicUrlData.publicUrl);
     }
+
+    const imageUrl = imageUrls[0] ?? null;
 
     const { error: insertError } = await supabase.from("products").insert({
       title: title.trim(),
@@ -189,15 +180,16 @@ const parsedMinOrderQty = Number(minOrderQty);
       stock: parsedStock,
   min_order_qty: parsedMinOrderQty,
       image: imageUrl,
+      images: imageUrls,
       featured,
       status,
     });
 
     if (insertError) {
-      if (uploadedFilePath) {
+      if (uploadedFilePaths.length) {
         await supabase.storage
           .from("product-images")
-          .remove([uploadedFilePath]);
+          .remove(uploadedFilePaths);
       }
 
       if (insertError.code === "23505") {
@@ -394,39 +386,37 @@ const parsedMinOrderQty = Number(minOrderQty);
 
           <div className="md:col-span-2">
             <label
-              htmlFor="image"
+              htmlFor="images"
               className="text-sm font-bold text-slate-700"
             >
-              Product Image
+              Product Images (up to 3)
             </label>
 
             <input
-              id="image"
+              id="images"
               type="file"
+              multiple
               accept="image/jpeg,image/png,image/webp"
-              onChange={(event) =>
-                handleImageChange(event.target.files?.[0] || null)
-              }
+              onChange={(event) => handleImageChange(event.target.files)}
               className="mt-2 block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-4 file:py-2 file:font-bold file:text-emerald-700 hover:file:bg-emerald-100"
             />
 
             <p className="mt-2 text-xs text-slate-500">
-              JPG, PNG ya WebP. Maximum size 5 MB.
+              JPG, PNG ya WebP. Maximum 3 images, har image 5 MB tak. Pehli image product cover hogi.
             </p>
           </div>
 
-          {imagePreview && (
+          {imagePreviews.length > 0 && (
             <div className="md:col-span-2">
               <p className="mb-2 text-sm font-bold text-slate-700">
-                Image Preview
+                Image Preview ({imagePreviews.length}/3)
               </p>
-
-              <div className="h-56 w-56 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
-                <img
-                  src={imagePreview}
-                  alt="Product preview"
-                  className="h-full w-full object-cover"
-                />
+              <div className="flex flex-wrap gap-3">
+                {imagePreviews.map((preview, index) => (
+                  <div key={preview} className="h-32 w-32 overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
+                    <img src={preview} alt={`Product preview ${index + 1}`} className="h-full w-full object-cover" />
+                  </div>
+                ))}
               </div>
             </div>
           )}
