@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { countries, currencyForCountryName } from "@/components/MarketPreference";
 
 export default function NewProductPage() {
   const supabase = createClient();
@@ -13,7 +14,8 @@ export default function NewProductPage() {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [originCountry, setOriginCountry] = useState("");
-  const [currencyCode, setCurrencyCode] = useState("AED");
+  const [stockCountry, setStockCountry] = useState("");
+  const currencyCode = currencyForCountryName(stockCountry);
   const [price, setPrice] = useState("");
   const [salePrice, setSalePrice] = useState("");
   const [stock, setStock] = useState("0");
@@ -91,6 +93,12 @@ const parsedMinOrderQty = Number(minOrderQty);
 
     if (!slug.trim()) {
       setErrorMessage("Product slug required hai.");
+      setLoading(false);
+      return;
+    }
+
+    if (!stockCountry || !currencyCode) {
+      setErrorMessage("Stock available country select karein.");
       setLoading(false);
       return;
     }
@@ -174,7 +182,8 @@ const parsedMinOrderQty = Number(minOrderQty);
       slug: slug.trim(),
       description: description.trim() || null,
       category: category.trim() || null,
-      origin_country: originCountry.trim() || null,
+      origin_country: originCountry || null,
+      stock_country: stockCountry,
       currency_code: currencyCode,
       price: parsedPrice,
       sale_price: parsedSalePrice,
@@ -295,14 +304,19 @@ const parsedMinOrderQty = Number(minOrderQty);
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label htmlFor="originCountry" className="text-sm font-bold text-slate-700">Stock origin country</label>
-              <input id="originCountry" value={originCountry} onChange={(event) => setOriginCountry(event.target.value)} placeholder="Canada, United States, UAE..." className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-950 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100" />
+              <label htmlFor="originCountry" className="text-sm font-bold text-slate-700">Country of origin</label>
+              <select id="originCountry" value={originCountry} onChange={(event) => setOriginCountry(event.target.value)} className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-950 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+                <option value="">Select origin country</option>
+                {countries.map((country) => <option key={country.code} value={country.name}>{country.flag} {country.name}</option>)}
+              </select>
             </div>
             <div>
-              <label htmlFor="currencyCode" className="text-sm font-bold text-slate-700">Price currency</label>
-              <select id="currencyCode" value={currencyCode} onChange={(event) => setCurrencyCode(event.target.value)} className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-950 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100">
-                <option value="AED">AED — UAE dirham</option><option value="CAD">CAD — Canadian dollar</option><option value="USD">USD — US dollar</option><option value="PKR">PKR — Pakistani rupee</option><option value="CNY">CNY — Chinese yuan</option><option value="EUR">EUR — euro</option>
+              <label htmlFor="stockCountry" className="text-sm font-bold text-slate-700">Stock available in</label>
+              <select id="stockCountry" required value={stockCountry} onChange={(event) => setStockCountry(event.target.value)} className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-950 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+                <option value="">Select stock country</option>
+                {countries.map((country) => <option key={country.code} value={country.name}>{country.flag} {country.name}</option>)}
               </select>
+              <p className="mt-1 text-xs text-slate-500">Price currency: {currencyCode || "select a country"}</p>
             </div>
           </div>
 
@@ -350,7 +364,7 @@ const parsedMinOrderQty = Number(minOrderQty);
               htmlFor="price"
               className="text-sm font-bold text-slate-700"
             >
-              Price (AED)
+              Price ({currencyCode || "—"})
             </label>
 
             <input
@@ -370,7 +384,7 @@ const parsedMinOrderQty = Number(minOrderQty);
               htmlFor="salePrice"
               className="text-sm font-bold text-slate-700"
             >
-              Sale Price (AED)
+              Sale Price ({currencyCode || "—"})
             </label>
 
             <input
