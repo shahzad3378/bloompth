@@ -14,7 +14,7 @@ export const revalidate = 0;
 export default async function ProductsPage() {
   let { data: products, error } = await supabase
     .from("products")
-    .select("id, title, slug, description, category, price, sale_price, stock, image, featured, origin_country, stock_country, currency_code")
+    .select("id, title, slug, description, category, price, sale_price, stock, min_order_qty, image, featured, origin_country, stock_country, currency_code")
     .eq("status", "active")
     .order("created_at", { ascending: false });
 
@@ -22,10 +22,10 @@ export default async function ProductsPage() {
   if (error) {
     const legacy = await supabase
       .from("products")
-      .select("id, title, slug, description, category, price, sale_price, stock, image, featured")
+      .select("id, title, slug, description, category, price, sale_price, stock, min_order_qty, image, featured")
       .eq("status", "active")
       .order("created_at", { ascending: false });
-    products = legacy.data?.map((product) => ({ ...product, origin_country: null, stock_country: null, currency_code: null })) ?? null;
+    products = legacy.data?.map((product) => ({ ...product, min_order_qty: 1, origin_country: null, stock_country: null, currency_code: null })) ?? null;
     error = legacy.error;
   }
 
