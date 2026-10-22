@@ -5,6 +5,7 @@ import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminHeaderActions from "@/components/admin/AdminHeaderActions";
 
 import { requireAdminPage } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +17,11 @@ export default async function AdminLayout({
   children,
 }: AdminLayoutProps) {
   const account = await requireAdminPage();
+  const supabase = await createClient();
+  const { count: newRequestCount } = await supabase
+    .from("product_requests")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "New");
   const userEmail =
     account.profile.email || "admin@bloompath.com";
 
@@ -47,7 +53,7 @@ export default async function AdminLayout({
                 />
               </div>
 
-              <AdminHeaderActions userEmail={userEmail} />
+              <AdminHeaderActions userEmail={userEmail} newRequestCount={newRequestCount ?? 0} />
             </div>
           </div>
         </header>
