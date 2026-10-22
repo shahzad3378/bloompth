@@ -1,6 +1,7 @@
 import Link from "next/link";
 import CurrencyPrice from "@/components/CurrencyPrice";
 import { currencyForCountryName, flagForCountryName } from "@/lib/countries";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
@@ -43,6 +44,8 @@ export default async function ProductDetailPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  const visitorCountryCode = ((await headers()).get("x-vercel-ip-country") || "AE").toUpperCase();
+  const visitorCurrency = currencyForCountryName(visitorCountryCode) || "USD";
   const { slug } = await params;
 
   let { data: product, error } = await supabase
@@ -274,7 +277,7 @@ Please share wholesale pricing, minimum order quantity and dropshipping details.
 
             <div className="mt-2">
               {displayPrice !== null
-                ? <CurrencyPrice amount={Number(displayPrice)} baseCurrency={currencyForCountryName(typedProduct.stock_country || "") || typedProduct.currency_code || "USD"} />
+                ? <CurrencyPrice amount={Number(displayPrice)} baseCurrency={typedProduct.currency_code || currencyForCountryName(typedProduct.stock_country || "") || "USD"} targetCurrency={visitorCurrency} />
                 : <span className="text-3xl font-black text-slate-950">Contact for Price</span>}
             </div>
 
