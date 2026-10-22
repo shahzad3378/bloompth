@@ -87,7 +87,8 @@ export default async function ProductDetailPage({
       )
     : 0;
 
-  const stock = Number(typedProduct.stock ?? 0);\n  const minimumOrder = Math.max(1, Number(typedProduct.min_order_qty ?? 1));
+  const stock = Number(typedProduct.stock ?? 0);
+  const minimumOrder = Math.max(1, Number(typedProduct.min_order_qty ?? 1));
 
   const requestUrl = `/request-product?product=${encodeURIComponent(
     typedProduct.title
