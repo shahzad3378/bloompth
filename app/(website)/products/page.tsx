@@ -8,10 +8,14 @@ import {
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import ProductCatalog from "@/components/ProductCatalog";
+import { headers } from "next/headers";
+import { currencyForCountryName } from "@/lib/countries";
 
 export const revalidate = 0;
 
 export default async function ProductsPage() {
+  const countryCode = ((await headers()).get("x-vercel-ip-country") || "AE").toUpperCase();
+  const initialCurrencyCode = currencyForCountryName(countryCode) || "USD";
   let { data: products, error } = await supabase
     .from("products")
     .select("id, title, slug, description, category, price, sale_price, stock, min_order_qty, image, featured, origin_country, stock_country, currency_code")
@@ -73,7 +77,7 @@ export default async function ProductsPage() {
           </div>
         ) : (
           <>
-            <ProductCatalog products={products ?? []} />
+            <ProductCatalog products={products ?? []} initialCountryCode={countryCode} initialCurrencyCode={initialCurrencyCode} />
           </>
         )}
       </section>

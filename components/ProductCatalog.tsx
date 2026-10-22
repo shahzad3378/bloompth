@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import CurrencyPrice from "@/components/CurrencyPrice";
-import { currencyForCountryName, flagForCountryName } from "@/lib/countries";
+import { countries, currencyForCountryName, flagForCountryName } from "@/lib/countries";
 import { useEffect, useMemo, useState } from "react";
 import {
   ArrowRight,
@@ -33,6 +33,8 @@ type Product = {
 
 type ProductCatalogProps = {
   products: Product[];
+  initialCountryCode?: string;
+  initialCurrencyCode?: string;
 };
 
 function isLocalProduct(origin: string | null | undefined, destination: string) {
@@ -51,23 +53,28 @@ function isLocalProduct(origin: string | null | undefined, destination: string) 
 
 export default function ProductCatalog({
   products,
+  initialCountryCode = "AE",
+  initialCurrencyCode = "AED",
 }: ProductCatalogProps) {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState("newest");
   const [originFilter, setOriginFilter] = useState("All");
-  const [deliveryCountry, setDeliveryCountry] = useState("United Arab Emirates");
+  const [deliveryCountry, setDeliveryCountry] = useState(countries.find((country) => country.code === initialCountryCode)?.name ?? "United Arab Emirates");
+  const [displayCurrency, setDisplayCurrency] = useState(initialCurrencyCode);
 
   useEffect(() => {
     const readMarket = (event?: Event) => {
-      const detail = (event as CustomEvent<{ country?: string }> | undefined)?.detail;
-      const country = detail?.country || localStorage.getItem("bp-deliver-country") || "United Arab Emirates";
+      const detail = (event as CustomEvent<{ country?: string; currency?: string }> | undefined)?.detail;
+      const country = detail?.country || localStorage.getItem("bp-deliver-country") || countries.find((item) => item.code === initialCountryCode)?.name || "United Arab Emirates";
       setDeliveryCountry(country);
+      const currency = detail?.currency || localStorage.getItem("bp-currency") || currencyForCountryName(country) || initialCurrencyCode;
+      setDisplayCurrency(currency);
     };
     readMarket();
     window.addEventListener("bp-market-change", readMarket);
     return () => window.removeEventListener("bp-market-change", readMarket);
-  }, []);
+  }, [initialCountryCode, initialCurrencyCode]);
 
   const categories = useMemo(() => {
     const productCategories = products
@@ -366,9 +373,9 @@ export default function ProductCatalog({
                     <div className="border-t border-slate-100 pt-4">
                   <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Wholesale price</p>
                   <div className="mt-2 text-2xl font-black text-slate-950">
-                    <CurrencyPrice amount={displayPrice ?? 0} baseCurrency={currencyForCountryName(product.stock_country || "") || product.currency_code || "USD"} />
+                    <CurrencyPrice amount={displayPrice ?? 0} baseCurrency={product.currency_code || currencyForCountryName(product.stock_country || "") || "USD"} targetCurrency={displayCurrency} />
                   </div>
-                  {hasSale && product.price ? <p className="mt-1 text-xs text-slate-500">Regular price: <CurrencyPrice amount={product.price} baseCurrency={currencyForCountryName(product.stock_country || "") || product.currency_code || "USD"} /></p> : null}
+                  {hasSale && product.price ? <p className="mt-1 text-xs text-slate-500">Regular price: <CurrencyPrice amount={product.price} baseCurrency={product.currency_code || currencyForCountryName(product.stock_country || "") || "USD"} targetCurrency={displayCurrency} /></p> : null}
                 </div>
 
                 <div className="mt-4 grid grid-cols-2 gap-2">
