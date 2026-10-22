@@ -130,62 +130,10 @@ Please share wholesale pricing, minimum order quantity and dropshipping details.
       {/* Main Product Section */}
       <section className="mx-auto grid max-w-7xl gap-8 px-6 py-10 sm:py-12 lg:grid-cols-[1fr_1fr] lg:items-start">
         {/* Product Image */}
-        <div className="relative z-20 space-y-5">
-          <div className="group relative rounded-3xl border border-slate-200 bg-white shadow-sm">
+        <div className="relative z-20 min-w-0 space-y-5">
+          <div className="relative rounded-3xl border border-slate-200 bg-white shadow-sm">
             {/* Main Image Container */}
             <ProductImageGallery images={productImages} title={typedProduct.title} />
-
-            {/* Stock and Sale Badges */}
-            <div className="absolute left-4 top-4 z-20 flex flex-col items-start gap-2">
-              <span
-                className={`rounded-full px-4 py-2 text-xs font-black shadow-sm ${
-                  stock > 0
-                    ? "bg-white text-emerald-700"
-                    : "bg-red-600 text-white"
-                }`}
-              >
-                {stock > 0
-                  ? "Available"
-                  : "Out of Stock"}
-              </span>
-
-              {hasSale && (
-                <span className="rounded-full bg-red-600 px-4 py-2 text-xs font-black text-white shadow-sm">
-                  {discountPercentage}% Off
-                </span>
-              )}
-            </div>
-
-            {/* Featured Badge */}
-            {typedProduct.featured && (
-              <span className="absolute right-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-full bg-slate-950 px-4 py-2 text-xs font-black text-white shadow-sm">
-                <Sparkles size={14} />
-                Featured
-              </span>
-            )}
-
-            {/* Large Hover Popup Preview */}
-            {typedProduct.image && (
-              <div className="pointer-events-none absolute left-[calc(100%+20px)] top-0 z-50 hidden w-[520px] translate-x-3 rounded-3xl border border-slate-200 bg-white p-5 opacity-0 shadow-2xl transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 xl:block">
-                <div className="flex aspect-square items-center justify-center overflow-hidden rounded-2xl bg-white p-4">
-                  <img
-                    src={typedProduct.image}
-                    alt={`${typedProduct.title} large preview`}
-                    className="h-full w-full object-contain"
-                  />
-                </div>
-
-                <div className="mt-4 border-t border-slate-100 pt-4">
-                  <p className="text-xs font-black uppercase tracking-wider text-emerald-600">
-                    Product Preview
-                  </p>
-
-                  <p className="mt-1 line-clamp-1 text-base font-black text-slate-950">
-                    {typedProduct.title}
-                  </p>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Product Benefits */}
@@ -255,7 +203,7 @@ Please share wholesale pricing, minimum order quantity and dropshipping details.
           <h1 className="mt-4 text-3xl font-black leading-tight text-slate-950 sm:text-4xl lg:text-5xl">
             {typedProduct.title}
           </h1>
-          <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-sky-50 px-4 py-2 text-sm font-bold text-slate-700">
+          <div className="mt-4 inline-flex max-w-full items-center gap-2 rounded-full bg-sky-50 px-4 py-2 text-sm font-bold text-slate-700">
             <span aria-hidden="true">📍 {flagForCountryName(typedProduct.stock_country || "")}</span>
             {typedProduct.stock_country ? `Available in: ${typedProduct.stock_country}` : "Stock location not listed"}
           </div>
@@ -285,13 +233,14 @@ Please share wholesale pricing, minimum order quantity and dropshipping details.
               Final wholesale pricing may depend on quantity
               and sourcing requirements.
             </p>
+            {hasSale && <span className="mt-3 inline-flex rounded-full bg-red-50 px-3 py-1.5 text-xs font-black text-red-700">Save {discountPercentage}%</span>}
           </div>
 
           {/* Availability */}
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             <div className="rounded-2xl bg-slate-50 p-5">
               <p className="text-sm font-bold text-slate-500">
-                Availability
+                {typedProduct.stock_country ? `Available in: ${typedProduct.stock_country}` : "Availability"}
               </p>
 
               <div className="mt-2 flex items-center gap-2">
