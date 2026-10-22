@@ -11,7 +11,6 @@ import {
   RotateCcw,
   Search,
   SlidersHorizontal,
-  Sparkles,
 } from "lucide-react";
 
 type Product = {
@@ -290,13 +289,13 @@ export default function ProductCatalog({
                   href={`/products/${product.slug}`}
                   className="relative block overflow-hidden"
                 >
-                  <div className="aspect-square overflow-hidden bg-slate-100">
+                  <div className="aspect-square overflow-hidden bg-white p-3 sm:p-5">
                     {product.image ? (
                       <img
                         src={product.image}
                         alt={product.title}
                         loading="lazy"
-                        className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                        className="h-full w-full object-contain transition duration-300 group-hover:scale-[1.02]"
                       />
                     ) : (
                       <div className="flex h-full flex-col items-center justify-center gap-3 text-slate-400">
@@ -309,33 +308,6 @@ export default function ProductCatalog({
                     )}
                   </div>
 
-                  <div className="absolute left-3 top-3 flex flex-col items-start gap-2">
-                    <span
-                      className={`rounded-full px-2 py-1 text-[10px] sm:px-3 sm:py-1.5 sm:text-xs font-black shadow-sm ${
-                        stock > 0
-                          ? "bg-white text-blue-700"
-                          : "bg-red-600 text-white"
-                      }`}
-                    >
-                      {stock > 0 ? "Available" : "Out of Stock"}
-                    </span>
-
-                    <span className="rounded-full bg-white/95 px-3 py-1.5 text-xs font-black text-slate-800 shadow-sm">
-                      {product.stock_country ? `${isLocalProduct(product.stock_country, deliveryCountry) && stock > 0 ? "📍 " : "📦 "}${product.stock_country}${product.origin_country ? ` · Origin: ${product.origin_country}` : ""}` : product.origin_country ? `🌐 Origin: ${product.origin_country} · Stock location not listed` : "🌐 Global sourcing"}
-                    </span>
-                    {hasSale && (
-                      <span className="rounded-full bg-red-600 px-3 py-1.5 text-xs font-black text-white shadow-sm">
-                        {discountPercentage}% Off
-                      </span>
-                    )}
-                  </div>
-
-                  {product.featured && (
-                    <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-slate-950 px-3 py-1.5 text-xs font-black text-white shadow-sm">
-                      <Sparkles size={13} />
-                      Featured
-                    </span>
-                  )}
                 </Link>
 
                 <div className="flex flex-1 flex-col p-3 sm:p-5">
@@ -344,7 +316,11 @@ export default function ProductCatalog({
                       {product.category || "General"}
                     </p>
 
-                    {stock > 0 && (
+                    {product.featured && (
+                      <span className="shrink-0 rounded-full bg-slate-100 px-2 py-1 text-[10px] font-black text-slate-600">Featured</span>
+                    )}
+
+                    {stock > 0 && !product.featured && (
                       <span className="inline-flex items-center gap-1 text-xs font-bold text-slate-400">
                         <BadgeCheck size={14} />
                         Verified
@@ -364,7 +340,7 @@ export default function ProductCatalog({
                       <p className="mt-0.5 font-black text-slate-900">{Number(product.min_order_qty || 1)} pcs</p>
                     </div>
                     <div>
-                      <p className="font-semibold text-slate-500">Available stock</p>
+                      <p className="line-clamp-1 font-semibold text-slate-500">Available in: {product.stock_country || "Location not listed"}</p>
                       <p className={`mt-0.5 font-black ${stock > 0 ? "text-emerald-700" : "text-red-600"}`}>{stock > 0 ? `${stock} pcs` : "Out of stock"}</p>
                     </div>
                   </div>
@@ -376,6 +352,7 @@ export default function ProductCatalog({
                     <CurrencyPrice amount={displayPrice ?? 0} baseCurrency={product.currency_code || currencyForCountryName(product.stock_country || "") || "USD"} targetCurrency={displayCurrency} />
                   </div>
                   {hasSale && product.price ? <p className="mt-1 text-xs text-slate-500">Regular price: <CurrencyPrice amount={product.price} baseCurrency={product.currency_code || currencyForCountryName(product.stock_country || "") || "USD"} targetCurrency={displayCurrency} /></p> : null}
+                  {hasSale && <span className="mt-2 inline-flex w-fit rounded-full bg-red-50 px-2.5 py-1 text-xs font-black text-red-700">Save {discountPercentage}%</span>}
                 </div>
 
                 <div className="mt-4 grid grid-cols-2 gap-2">
