@@ -23,6 +23,7 @@ type Product = {
   price: number | null;
   sale_price: number | null;
   stock: number;
+  min_order_qty: number;
   image: string | null;
   featured: boolean;
   origin_country?: string | null;
@@ -349,6 +350,17 @@ export default function ProductCatalog({
                       {product.title}
                     </h2>
                   </Link>
+
+                  <div className="mt-3 grid grid-cols-2 gap-2 rounded-xl bg-slate-50 p-2.5 text-[11px] sm:text-xs">
+                    <div>
+                      <p className="font-semibold text-slate-500">Minimum order</p>
+                      <p className="mt-0.5 font-black text-slate-900">{Number(product.min_order_qty || 1)} pcs</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-slate-500">Available stock</p>
+                      <p className={`mt-0.5 font-black ${stock > 0 ? "text-emerald-700" : "text-red-600"}`}>{stock > 0 ? `${stock} pcs` : "Out of stock"}</p>
+                    </div>
+                  </div>
 
                   <p className="mt-3 hidden line-clamp-2 text-sm leading-6 text-slate-600 sm:block">
                     {product.description ||
