@@ -89,11 +89,11 @@ export default async function Footer() {
             <h3 className="mb-5 text-sm font-black uppercase tracking-[0.14em] text-brand-500">Services</h3>
 
             <ul className="space-y-3 text-sm text-slate-600">
-              <li>Product Sourcing</li>
-              <li>Global Sourcing</li>
-              <li>Wholesale Supply</li>
-              <li>Warehousing & Fulfillment</li>
-              <li>COD & Last Mile Support</li>
+              <li><Link href="/products" className="block transition hover:text-red-600">Product Sourcing</Link></li>
+              <li><Link href="/global-sourcing" className="block transition hover:text-red-600">Global Sourcing</Link></li>
+              <li><Link href="/request-product" className="block transition hover:text-red-600">Wholesale Supply</Link></li>
+              <li><Link href="/contact" className="block transition hover:text-red-600">Warehousing & Fulfillment</Link></li>
+              <li><Link href="/contact" className="block transition hover:text-red-600">COD & Last Mile Support</Link></li>
             </ul>
           </div>
 
