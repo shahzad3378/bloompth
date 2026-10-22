@@ -4,7 +4,9 @@ import { useEffect, useState, type FormEvent } from "react";
 import { useSearchParams } from "next/navigation";
 import { ArrowRight, CheckCircle2, ImagePlus, Loader2, PackageSearch, X } from "lucide-react";
 import { countries } from "@/lib/countries";
+import { dialCodes } from "@/lib/dial-codes";
 import { supabase } from "@/lib/supabase";
+import { SearchableSelect } from "@/components/SearchableSelect";
 
 type FormState = {
   customerName: string;
@@ -29,6 +31,18 @@ export default function RequestProductForm({ initialCountry }: RequestProductFor
   const [requestKind, setRequestKind] = useState<"catalog" | "custom">(productIdFromUrl ? "catalog" : "custom");
   const [selectedProductId, setSelectedProductId] = useState(productIdFromUrl);
   const [catalogProducts, setCatalogProducts] = useState<CatalogProduct[]>([]);
+  const [dialCode, setDialCode] = useState(() => {
+    const match = countries.find((country) => country.name.toLowerCase() === initialCountry.toLowerCase() || country.code.toLowerCase() === initialCountry.toLowerCase());
+    return match && dialCodes[match.code] ? match.code : "AE";
+  });
+  const dialCodeOptions = countries.filter((country) => dialCodes[country.code]).map((country) => ({
+    value: country.code,
+    label: `${country.flag}  ${country.name} (+${dialCodes[country.code]})`,
+    buttonLabel: `${country.flag}  +${dialCodes[country.code]}`,
+    searchText: `${country.code} ${dialCodes[country.code]} ${country.name}`,
+  }));
+  const countryOptions = countries.map((country) => ({ value: country.name, label: `${country.flag}  ${country.name}`, searchText: country.code }));
+  const productOptions = catalogProducts.map((product) => ({ value: String(product.id), label: product.title }));
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [form, setForm] = useState<FormState>({
     customerName: "", companyName: "", email: "", phone: "",
@@ -79,7 +93,7 @@ export default function RequestProductForm({ initialCountry }: RequestProductFor
     const selectedProduct = catalogProducts.find((item) => String(item.id) === selectedProductId);
     const productName = requestKind === "catalog" ? selectedProduct?.title ?? "" : form.productName.trim();
 
-    if (!form.customerName.trim() || !form.phone.trim() || !form.country.trim() || !form.city.trim() || !productName) {
+    if (!form.customerName.trim() || !form.phone.trim() || !dialCodes[dialCode] || !form.country.trim() || !form.city.trim() || !productName) {
       setErrorMessage("Please complete your name, phone, country, city and product details.");
       setSubmitting(false);
       return;
@@ -125,7 +139,7 @@ export default function RequestProductForm({ initialCountry }: RequestProductFor
       customer_name: form.customerName.trim(),
       company_name: form.companyName.trim() || null,
       email: form.email.trim() || null,
-      phone: form.phone.trim(),
+      phone: `+${dialCodes[dialCode]}${form.phone.replace(/\D/g, "").replace(/^0+/, "")}`,
       product_id: requestKind === "catalog" && selectedProduct ? selectedProduct.id : null,
       product_name: productName,
       quantity,
@@ -173,7 +187,7 @@ export default function RequestProductForm({ initialCountry }: RequestProductFor
 
       <div className="mt-5 grid gap-3 sm:mt-6 sm:gap-5 sm:grid-cols-2">
         <label><span className="text-sm font-bold text-slate-700">Full Name *</span><input required type="text" value={form.customerName} onChange={(event) => updateField("customerName", event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" placeholder="Your full name" /></label>
-        <label><span className="text-sm font-bold text-slate-700">Phone / WhatsApp *</span><input required type="tel" autoComplete="tel" inputMode="tel" value={form.phone} onChange={(event) => updateField("phone", event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" placeholder="+971 50 123 4567" /></label>
+        <label><span className="text-sm font-bold text-slate-700">Phone / WhatsApp *</span><div className="mt-2 flex min-w-0 gap-2"><div className="w-28 shrink-0 sm:w-32"><SearchableSelect value={dialCode} options={dialCodeOptions} onChange={setDialCode} placeholder="Code" searchPlaceholder="Search country or code" ariaLabel="Phone country code" /></div><input required type="tel" autoComplete="tel-national" inputMode="tel" value={form.phone} onChange={(event) => updateField("phone", event.target.value)} className="min-w-0 flex-1 rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" placeholder="50 123 4567" /></div><small className="mt-1 block text-slate-500">Choose your country code, then enter your number.</small></label>
         <label><span className="text-sm font-bold text-slate-700">Company Name</span><input type="text" value={form.companyName} onChange={(event) => updateField("companyName", event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" placeholder="Your business name" /></label>
         <label><span className="text-sm font-bold text-slate-700">Email</span><input type="email" value={form.email} onChange={(event) => updateField("email", event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" placeholder="name@example.com" /></label>
 
@@ -192,7 +206,7 @@ export default function RequestProductForm({ initialCountry }: RequestProductFor
         </fieldset>
 
         {requestKind === "catalog" ? (
-          <label className="sm:col-span-2"><span className="text-sm font-bold text-slate-700">Select catalog product *</span><select required value={selectedProductId} onChange={(event) => { const id = event.target.value; setSelectedProductId(id); updateField("productName", catalogProducts.find((item) => String(item.id) === id)?.title ?? ""); }} className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-emerald-500"><option value="">Choose a product</option>{catalogProducts.map((product) => <option key={product.id} value={product.id}>{product.title}</option>)}</select>{productIdFromUrl && <small className="mt-1 block text-slate-500">The product you selected is prefilled. Confirm it before submitting.</small>}</label>
+          <div className="sm:col-span-2"><span className="text-sm font-bold text-slate-700">Select catalog product *</span><SearchableSelect value={selectedProductId} options={productOptions} onChange={(id) => { setSelectedProductId(id); updateField("productName", catalogProducts.find((item) => String(item.id) === id)?.title ?? ""); }} placeholder="Choose a product" searchPlaceholder="Search products" ariaLabel="Catalog product" />{productIdFromUrl && <small className="mt-1 block text-slate-500">The product you selected is prefilled. Confirm it before submitting.</small>}</div>
         ) : (
           <>
             <label className="sm:col-span-2"><span className="text-sm font-bold text-slate-700">Custom Product Name *</span><input required type="text" value={form.productName} onChange={(event) => updateField("productName", event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" placeholder="What product should we source?" /></label>
@@ -201,7 +215,7 @@ export default function RequestProductForm({ initialCountry }: RequestProductFor
         )}
 
         <label><span className="text-sm font-bold text-slate-700">Quantity *</span><input required type="number" min="1" value={form.quantity} onChange={(event) => updateField("quantity", event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" /></label>
-        <label><span className="text-sm font-bold text-slate-700">Country *</span><select required value={form.country} onChange={(event) => updateField("country", event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-emerald-500"><option value="">Select country</option>{countries.map((country) => <option key={country.code} value={country.name}>{country.name}</option>)}</select><small className="mt-1 block text-slate-500">Preselected from your location; you can change it.</small></label>
+        <div><span className="text-sm font-bold text-slate-700">Country *</span><SearchableSelect value={form.country} options={countryOptions} onChange={(value) => updateField("country", value)} placeholder="Select country" searchPlaceholder="Search countries" ariaLabel="Country" /><small className="mt-1 block text-slate-500">Preselected from your location; you can change it.</small></div>
         <label><span className="text-sm font-bold text-slate-700">City *</span><input required type="text" value={form.city} onChange={(event) => updateField("city", event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" placeholder="Your city" /></label>
 
         <label className="sm:col-span-2"><span className="text-sm font-bold text-slate-700">{requestKind === "custom" ? "Full Product Specifications *" : "Additional Details"}</span><textarea required={requestKind === "custom"} rows={5} value={form.message} onChange={(event) => updateField("message", event.target.value)} className="mt-2 w-full resize-y rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" placeholder={requestKind === "custom" ? "Describe size, material, colour, model, target price and any other requirements." : "Tell us about target price or delivery requirements."} /></label>
