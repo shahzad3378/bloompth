@@ -26,6 +26,7 @@ type Product = {
   price: number | null;
   sale_price: number | null;
   stock: number;
+  min_order_qty: number;
   image: string | null;
   images?: string[] | null;
   featured: boolean;
@@ -46,12 +47,12 @@ export default async function ProductDetailPage({
 
   let { data: product, error } = await supabase
     .from("products")
-    .select("id, title, slug, description, category, price, sale_price, stock, image, images, featured, status, origin_country, stock_country, currency_code")
+    .select("id, title, slug, description, category, price, sale_price, stock, min_order_qty, image, images, featured, status, origin_country, stock_country, currency_code")
     .eq("slug", slug).eq("status", "active").maybeSingle();
 
   if (error) {
     const legacy = await supabase.from("products")
-      .select("id, title, slug, description, category, price, sale_price, stock, image, featured, status")
+      .select("id, title, slug, description, category, price, sale_price, stock, min_order_qty, image, featured, status")
       .eq("slug", slug).eq("status", "active").maybeSingle();
     product = legacy.data ? { ...legacy.data, images: legacy.data.image ? [legacy.data.image] : [], origin_country: null, stock_country: null, currency_code: null } : null;
     error = legacy.error;
@@ -86,7 +87,7 @@ export default async function ProductDetailPage({
       )
     : 0;
 
-  const stock = Number(typedProduct.stock ?? 0);
+  const stock = Number(typedProduct.stock ?? 0);\n  const minimumOrder = Math.max(1, Number(typedProduct.min_order_qty ?? 1));
 
   const requestUrl = `/request-product?product=${encodeURIComponent(
     typedProduct.title
@@ -315,11 +316,11 @@ Please share wholesale pricing, minimum order quantity and dropshipping details.
 
             <div className="rounded-2xl bg-slate-50 p-5">
               <p className="text-sm font-bold text-slate-500">
-                Business Model
+                Minimum Order
               </p>
 
               <p className="mt-2 font-black text-slate-950">
-                Wholesale & Dropshipping
+                {minimumOrder} pieces
               </p>
             </div>
           </div>
