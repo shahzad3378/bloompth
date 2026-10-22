@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MessageCircle, PackageSearch } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { countryFromPhone } from "@/lib/phone-country";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +17,7 @@ type ProductRequest = {
   country: string | null;
   city: string | null;
   message: string | null;
+  image_path: string | null;
   status: string;
   created_at: string;
 };
@@ -26,7 +28,7 @@ export default async function AdminRequestsPage() {
   const { data: requests, error } = await supabase
     .from("product_requests")
     .select(
-      "id, customer_name, company_name, email, phone, product_id, product_name, quantity, country, city, message, status, created_at"
+      "id, customer_name, company_name, email, phone, product_id, product_name, quantity, country, city, message, image_path, status, created_at"
     )
     .order("created_at", { ascending: false });
 
@@ -139,9 +141,15 @@ export default async function AdminRequestsPage() {
                           {request.product_name}
                         </p>
 
+                        <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-black ${request.product_id ? "bg-sky-50 text-sky-700" : "bg-violet-50 text-violet-700"}`}>
+                          {request.product_id ? "Catalog product" : "Custom product"}
+                        </span>
+
                         <p className="mt-1 text-sm text-slate-500">
                           Quantity: {request.quantity}
                         </p>
+
+                        {request.image_path && <p className="mt-1 text-xs font-bold text-emerald-700">Product photo attached</p>}
 
                         {request.message && (
                           <p className="mt-2 max-w-xs line-clamp-2 text-sm leading-6 text-slate-500">
@@ -152,7 +160,8 @@ export default async function AdminRequestsPage() {
 
                       <td className="px-5 py-5 align-top text-sm text-slate-600">
                         <p>{request.city || "—"}</p>
-                        <p className="mt-1">{request.country || "—"}</p>
+                        <p className="mt-1">{request.country || countryFromPhone(request.phone) || "—"}</p>
+                        {!request.country && countryFromPhone(request.phone) && <p className="mt-1 text-xs text-slate-400">Inferred from phone prefix</p>}
                       </td>
 
                       <td className="px-5 py-5 align-top">

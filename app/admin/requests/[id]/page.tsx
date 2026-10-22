@@ -14,6 +14,7 @@ import {
 
 import { createClient } from "@/lib/supabase/server";
 import RequestStatusForm from "@/components/admin/RequestStatusForm";
+import { countryFromPhone } from "@/lib/phone-country";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +30,7 @@ type ProductRequest = {
   country: string | null;
   city: string | null;
   message: string | null;
+  image_path: string | null;
   status: string;
   created_at: string;
 };
@@ -61,6 +63,7 @@ export default async function AdminRequestDetailPage({
         country,
         city,
         message,
+        image_path,
         status,
         created_at
       `
@@ -73,6 +76,11 @@ export default async function AdminRequestDetailPage({
   }
 
   const typedRequest = request as ProductRequest;
+
+  const { data: photoData } = typedRequest.image_path
+    ? await supabase.storage.from("product-request-images").createSignedUrl(typedRequest.image_path, 60 * 30)
+    : { data: null };
+  const photoUrl = photoData?.signedUrl ?? null;
 
   const whatsappNumber = typedRequest.phone.replace(/\D/g, "");
 
@@ -144,8 +152,21 @@ Please let us know a suitable time to discuss the details.`
                 <p className="mt-2 text-sm font-semibold text-slate-500">
                   Quantity: {typedRequest.quantity}
                 </p>
+                <span className={`mt-3 inline-flex rounded-full px-3 py-1 text-xs font-black ${typedRequest.product_id ? "bg-sky-50 text-sky-700" : "bg-violet-50 text-violet-700"}`}>
+                  {typedRequest.product_id ? "Catalog product" : "Custom product"}
+                </span>
               </div>
             </div>
+
+            {photoUrl && (
+              <div className="mt-6 border-t border-slate-100 pt-6">
+                <h3 className="text-sm font-black uppercase tracking-wider text-slate-500">Customer’s product photo</h3>
+                <a href={photoUrl} target="_blank" rel="noreferrer" className="mt-3 inline-block overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={photoUrl} alt={`Reference photo for ${typedRequest.product_name}`} className="max-h-[420px] max-w-full object-contain" />
+                </a>
+              </div>
+            )}
 
             <div className="mt-7 border-t border-slate-100 pt-6">
               <h3 className="text-sm font-black uppercase tracking-wider text-slate-500">
@@ -230,10 +251,11 @@ Please let us know a suitable time to discuss the details.`
                 </div>
 
                 <p className="mt-2 font-black text-slate-950">
-                  {[typedRequest.city, typedRequest.country]
+                  {[typedRequest.city, typedRequest.country || countryFromPhone(typedRequest.phone)]
                     .filter(Boolean)
                     .join(", ") || "Not provided"}
                 </p>
+                {!typedRequest.country && countryFromPhone(typedRequest.phone) && <p className="mt-1 text-xs text-slate-500">Country inferred from phone prefix</p>}
               </div>
 
               <div className="rounded-2xl bg-slate-50 p-5">

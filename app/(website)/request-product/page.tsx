@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { ArrowLeft, BadgeCheck, Headphones, ShieldCheck } from "lucide-react";
+import { headers } from "next/headers";
+import { countries } from "@/lib/countries";
 import RequestProductForm from "@/components/RequestProductForm";
 
-export default function RequestProductPage() {
+export default async function RequestProductPage() {
+  const countryCode = ((await headers()).get("x-vercel-ip-country") || "AE").toUpperCase();
+  const initialCountry = countries.find((country) => country.code === countryCode)?.name || "United Arab Emirates";
   return (
     <main className="min-h-screen bg-slate-50">
       <section className="border-b border-slate-800 bg-slate-950 text-white">
@@ -30,7 +34,7 @@ export default function RequestProductPage() {
 
       <section className="mx-auto grid w-full max-w-7xl min-w-0 gap-5 px-4 py-6 sm:gap-8 sm:px-6 sm:py-12 lg:grid-cols-[1fr_360px] lg:items-start">
         <Suspense fallback={<div>Loading...</div>}>
-          <RequestProductForm />
+          <RequestProductForm initialCountry={initialCountry} />
         </Suspense>
 
         <aside className="space-y-4 lg:sticky lg:top-24">
