@@ -48,6 +48,15 @@ export default async function ProductDetailPage({
   const visitorCurrency = currencyForCountryName(visitorCountryCode) || "USD";
   const { slug } = await params;
 
+  const { data: contactSettings } = await supabase
+    .from("website_settings")
+    .select("phone, whatsapp, email")
+    .eq("id", "main")
+    .maybeSingle();
+  const contactPhone = contactSettings?.phone?.trim() || "+971 50 729 7900";
+  const whatsappNumber = (contactSettings?.whatsapp?.trim() || "+971507297900").replace(/\D/g, "");
+  const contactEmail = contactSettings?.email?.trim() || "bloompathsms@gmail.com";
+
   let { data: product, error } = await supabase
     .from("products")
     .select("id, title, slug, description, category, price, sale_price, stock, min_order_qty, image, images, featured, status, origin_country, stock_country, currency_code")
@@ -300,23 +309,23 @@ Please share wholesale pricing, minimum order quantity and dropshipping details.
 
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
               <a
-                href={`https://wa.me/971000000000?text=${whatsappMessage}`}
+                href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-white px-4 py-3 text-sm font-black text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-100"
               >
                 <MessageCircle size={17} />
-                WhatsApp
+                WhatsApp {contactPhone}
               </a>
 
               <a
-                href={`mailto:sales@bloompath.com?subject=${encodeURIComponent(
+                href={`mailto:${contactEmail}?subject=${encodeURIComponent(
                   `Product Inquiry: ${typedProduct.title}`
                 )}`}
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-black text-slate-700 transition hover:border-emerald-300 hover:text-emerald-700"
               >
                 <Mail size={17} />
-                Send Email
+                {contactEmail}
               </a>
             </div>
           </div>
