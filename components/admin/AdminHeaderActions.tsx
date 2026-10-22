@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   Bell,
   LogOut,
@@ -13,10 +14,12 @@ import { createClient } from "@/lib/supabase/client";
 
 type AdminHeaderActionsProps = {
   userEmail: string;
+  newRequestCount: number;
 };
 
 export default function AdminHeaderActions({
   userEmail,
+  newRequestCount,
 }: AdminHeaderActionsProps) {
   const router = useRouter();
   const supabase = createClient();
@@ -81,7 +84,7 @@ export default function AdminHeaderActions({
         >
           <Bell size={20} />
 
-          <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-white" />
+          {newRequestCount > 0 ? <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-black text-white ring-2 ring-white">{newRequestCount > 9 ? "9+" : newRequestCount}</span> : <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-slate-300 ring-2 ring-white" />}
         </button>
 
         {notificationOpen && (
@@ -91,9 +94,7 @@ export default function AdminHeaderActions({
                 Notifications
               </h3>
 
-              <p className="mt-1 text-xs text-slate-500">
-                Admin updates and alerts
-              </p>
+              <p className="mt-1 text-xs text-slate-500">Customer requests and admin alerts</p>
             </div>
 
             <div className="px-4 py-6 text-center">
@@ -101,13 +102,9 @@ export default function AdminHeaderActions({
                 <Bell size={20} />
               </div>
 
-              <p className="mt-3 text-sm font-semibold text-slate-800">
-                No new notifications
-              </p>
-
-              <p className="mt-1 text-xs leading-5 text-slate-500">
-                New product requests and system updates will appear here.
-              </p>
+              <p className="mt-3 text-sm font-semibold text-slate-800">{newRequestCount ? `${newRequestCount} new product ${newRequestCount === 1 ? "request" : "requests"}` : "No new product requests"}</p>
+              <p className="mt-1 text-xs leading-5 text-slate-500">Customer requests are saved in BloomPath Administration.</p>
+              <Link href="/admin/requests" onClick={() => setNotificationOpen(false)} className="mt-4 inline-flex rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-bold text-white hover:bg-blue-700">View product requests</Link>
             </div>
           </div>
         )}
