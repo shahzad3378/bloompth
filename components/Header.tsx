@@ -20,7 +20,7 @@ export default async function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white shadow-sm">
       <div className="border-b border-slate-100 bg-white">
-        <div className="bp-container flex w-full min-w-0 flex-wrap items-center justify-between gap-x-3 gap-y-2 py-3 sm:min-h-[76px] sm:flex-nowrap sm:gap-4">
+        <div className="bp-container flex min-w-0 flex-wrap items-center justify-between gap-x-3 gap-y-2 py-3 sm:min-h-[76px] sm:flex-nowrap sm:gap-4">
           <Link href="/" className="shrink-0" aria-label="BloomPath homepage">
             <Image src="/images/logo-full.png" alt="BloomPath" width={420} height={140} priority sizes="(max-width: 640px) 150px, 205px" className="h-auto w-[148px] object-contain sm:w-[180px]" style={{ filter: "hue-rotate(118deg) saturate(1.15)" }} />
           </Link>

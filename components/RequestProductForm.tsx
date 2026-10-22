@@ -152,7 +152,7 @@ export default function RequestProductForm() {
     <form
       noValidate
       onSubmit={handleSubmit}
-      className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
+      className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-8"
     >
       <div className="flex items-start gap-4 border-b border-slate-100 pb-6">
         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
@@ -170,7 +170,7 @@ export default function RequestProductForm() {
         </div>
       </div>
 
-      <div className="mt-6 grid gap-5 sm:grid-cols-2">
+      <div className="mt-5 grid gap-3 sm:mt-6 sm:gap-5 sm:grid-cols-2">
         <label>
           <span className="text-sm font-bold text-slate-700">
             Full Name *
@@ -184,6 +184,25 @@ export default function RequestProductForm() {
             }
             className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
             placeholder="Your full name"
+          />
+        </label>
+
+        <label>
+          <span className="text-sm font-bold text-slate-700">
+            Phone / WhatsApp *
+          </span>
+
+          <input
+            type="tel"
+            autoComplete="tel"
+            inputMode="tel"
+            required
+            value={form.phone}
+            onChange={(event) =>
+              updateField("phone", event.target.value)
+            }
+            className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+            placeholder="+971 50 123 4567"
           />
         </label>
 
@@ -219,21 +238,7 @@ export default function RequestProductForm() {
           />
         </label>
 
-        <label>
-          <span className="text-sm font-bold text-slate-700">
-            Phone / WhatsApp *
-          </span>
 
-          <input
-            type="tel"
-            value={form.phone}
-            onChange={(event) =>
-              updateField("phone", event.target.value)
-            }
-            className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
-            placeholder="+971..."
-          />
-        </label>
 
         <label className="sm:col-span-2">
           <span className="text-sm font-bold text-slate-700">

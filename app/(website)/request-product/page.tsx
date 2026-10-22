@@ -7,7 +7,7 @@ export default function RequestProductPage() {
   return (
     <main className="min-h-screen bg-slate-50">
       <section className="border-b border-slate-800 bg-slate-950 text-white">
-        <div className="mx-auto max-w-7xl px-6 py-10 sm:py-14">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-14">
           <Link
             href="/products"
             className="inline-flex items-center gap-2 text-sm font-bold text-emerald-400 hover:text-emerald-300"
@@ -16,11 +16,11 @@ export default function RequestProductPage() {
             Back to Products
           </Link>
 
-          <h1 className="mt-6 text-4xl font-black sm:text-5xl">
+          <h1 className="mt-4 text-3xl font-black sm:mt-6 sm:text-5xl">
             Request a Product
           </h1>
 
-          <p className="mt-4 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:mt-4 sm:text-lg sm:leading-8">
             Tell us what product you need, the required quantity and your
             business location. BloomPath will review your request and contact
             you.
@@ -28,7 +28,7 @@ export default function RequestProductPage() {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-8 px-6 py-10 sm:py-12 lg:grid-cols-[1fr_360px] lg:items-start">
+      <section className="mx-auto grid w-full max-w-7xl min-w-0 gap-5 px-4 py-6 sm:gap-8 sm:px-6 sm:py-12 lg:grid-cols-[1fr_360px] lg:items-start">
         <Suspense fallback={<div>Loading...</div>}>
           <RequestProductForm />
         </Suspense>
