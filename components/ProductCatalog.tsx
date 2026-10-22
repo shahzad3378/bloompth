@@ -362,11 +362,6 @@ export default function ProductCatalog({
                     </div>
                   </div>
 
-                  <p className="mt-3 hidden line-clamp-2 text-sm leading-6 text-slate-600 sm:block">
-                    {product.description ||
-                      "Product details and sourcing information are available on request."}
-                  </p>
-
                   <div className="mt-auto pt-5">
                     <div className="border-t border-slate-100 pt-4">
                   <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Wholesale price</p>
