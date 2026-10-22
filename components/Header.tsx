@@ -4,6 +4,7 @@ import AccountMenu from "@/components/AccountMenu";
 import MarketPreference from "@/components/MarketPreference";
 import Link from "next/link";
 import { headers } from "next/headers";
+import { createClient } from "@/lib/supabase/server";
 
 
 const mainNavLinks = [
@@ -17,6 +18,10 @@ const mainNavLinks = [
 
 export default async function Header() {
   const countryCode = ((await headers()).get("x-vercel-ip-country") || "AE").toUpperCase();
+  const supabase = await createClient();
+  const { data: settings } = await supabase.from("website_settings").select("phone, email").eq("id", "main").maybeSingle();
+  const phone = settings?.phone?.trim() || "+971 50 729 7900";
+  const email = settings?.email?.trim() || "bloompathsms@gmail.com";
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white shadow-sm">
       <div className="border-b border-slate-100 bg-white">
@@ -26,7 +31,7 @@ export default async function Header() {
           </Link>
           <div className="hidden flex-1 justify-end sm:flex"><MarketPreference initialCountryCode={countryCode} /></div>
           <div className="ml-auto flex min-w-0 items-center gap-1 sm:gap-3">
-            <AccountMenu />
+            <AccountMenu phone={phone} email={email} />
             <Link href="/products" aria-label="View product catalog" className="rounded-lg p-2.5 text-slate-700 hover:bg-blue-50"><ShoppingBag size={21}/></Link>
             <div className="w-full sm:hidden [&>div]:w-full [&>div]:justify-between [&_button]:whitespace-nowrap [&_button]:px-2"><MarketPreference initialCountryCode={countryCode} /></div>
           </div>
