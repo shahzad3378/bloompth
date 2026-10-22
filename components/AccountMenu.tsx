@@ -25,8 +25,8 @@ export default function AccountMenu() {
 
   return (
     <div ref={root} className="relative">
-      <button type="button" aria-expanded={open} aria-haspopup="dialog" onClick={() => setOpen(value => !value)} className="flex cursor-pointer items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-bold text-slate-700 hover:border-blue-400 hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600">
-        <CircleUserRound size={20} /><span>Account</span><ChevronDown size={14} />
+      <button type="button" aria-expanded={open} aria-haspopup="dialog" onClick={() => setOpen(value => !value)} aria-label="Account" className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-slate-200 px-2 py-2 text-sm font-bold text-slate-700 hover:border-blue-400 hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600 sm:gap-2 sm:px-3">
+        <CircleUserRound size={20} /><span className="hidden sm:inline">Account</span><ChevronDown size={14} className="hidden sm:block" />
       </button>
       {open && (
         <section role="dialog" aria-label="BloomPath account menu" className="absolute right-0 top-full z-[80] mt-2 w-[min(92vw,350px)] overflow-hidden rounded-2xl border border-slate-200 bg-white text-slate-900 shadow-2xl">
