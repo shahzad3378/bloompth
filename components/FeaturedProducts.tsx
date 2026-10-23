@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ImageIcon, PackageCheck } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import ProductCardMedia from "@/components/ProductCardMedia";
 
 type Product = {
   id: string | number;
@@ -13,6 +13,7 @@ type Product = {
   stock: number | null;
   image: string | null;
   featured: boolean;
+  video_url?: string | null;
 };
 
 export const revalidate = 0;
@@ -20,7 +21,7 @@ export const revalidate = 0;
 export default async function FeaturedProducts() {
   const { data: featuredProducts, error: featuredError } = await supabase
     .from("products")
-    .select("id, title, slug, category, price, sale_price, stock, image, featured")
+    .select("id, title, slug, category, price, sale_price, stock, image, featured, video_url")
     .eq("status", "active")
     .eq("featured", true)
     .order("created_at", { ascending: false })
@@ -32,7 +33,7 @@ export default async function FeaturedProducts() {
   if (!featuredError && (!featuredProducts || featuredProducts.length === 0)) {
     const { data: latestProducts, error: latestError } = await supabase
       .from("products")
-      .select("id, title, slug, category, price, sale_price, stock, image, featured")
+      .select("id, title, slug, category, price, sale_price, stock, image, featured, video_url")
       .eq("status", "active")
       .order("created_at", { ascending: false })
       .limit(4);
@@ -71,7 +72,7 @@ export default async function FeaturedProducts() {
           </Link>
         </div>
 
-        <div className="mt-8 grid grid-cols-2 gap-3 sm:mt-10 sm:gap-5 lg:grid-cols-4">
+        <div className="mt-8 grid grid-cols-1 gap-3 min-[360px]:grid-cols-2 sm:mt-10 sm:gap-5 lg:grid-cols-4">
           {products.map((product) => {
             const price = product.price === null ? null : Number(product.price);
             const salePrice =
@@ -90,15 +91,8 @@ export default async function FeaturedProducts() {
                   className="relative block cursor-pointer overflow-hidden bg-sand-100"
                 >
                   <div className="relative flex aspect-square items-center justify-center">
-                    {product.image ? (
-                      <Image
-                        src={product.image}
-                        alt={product.title}
-                        fill
-                        unoptimized
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 300px"
-                        className="object-contain p-3 transition-transform duration-500 group-hover:scale-105 sm:p-5"
-                      />
+                    {product.image || product.video_url ? (
+                      <ProductCardMedia image={product.image} videoUrl={product.video_url} title={product.title} />
                     ) : (
                       <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-muted">
                         <ImageIcon size={34} />
