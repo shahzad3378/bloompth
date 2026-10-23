@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import ProductCatalog from "@/components/ProductCatalog";
+import ProductVideoShowcase from "@/components/ProductVideoShowcase";
 import { headers } from "next/headers";
 import { currencyForCountryName } from "@/lib/countries";
 
@@ -78,6 +79,7 @@ export default async function ProductsPage() {
         ) : (
           <>
             <ProductCatalog products={products ?? []} initialCountryCode={countryCode} initialCurrencyCode={initialCurrencyCode} />
+            <ProductVideoShowcase />
           </>
         )}
       </section>
