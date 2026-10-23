@@ -9,8 +9,8 @@ export default async function RequestProductPage() {
   const countryCode = ((await headers()).get("x-vercel-ip-country") || "AE").toUpperCase();
   const initialCountry = countries.find((country) => country.code === countryCode)?.name || "United Arab Emirates";
   return (
-    <main className="min-h-screen bg-slate-50">
-      <section className="border-b border-slate-800 bg-slate-950 text-white">
+    <main className="min-h-screen bg-white">
+      <section className="border-b border-brand-900 bg-brand-950 text-white">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-14">
           <Link
             href="/products"
@@ -40,7 +40,7 @@ export default async function RequestProductPage() {
         </Suspense>
 
         <aside className="space-y-4 lg:sticky lg:top-24">
-          <div className="rounded-3xl bg-slate-950 p-6 text-white">
+          <div className="rounded-3xl bg-brand-950 p-6 text-white">
             <h2 className="text-xl font-black">
               Source and shop with BloomPath
             </h2>
