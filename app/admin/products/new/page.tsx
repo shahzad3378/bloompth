@@ -23,6 +23,8 @@ const [minOrderQty, setMinOrderQty] = useState("1");
   const [featured, setFeatured] = useState(false);
   const [status, setStatus] = useState("active");
 
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
@@ -72,6 +74,30 @@ const [minOrderQty, setMinOrderQty] = useState("1");
     setErrorMessage("");
     setImageFiles(files);
     setImagePreviews(files.map((file) => URL.createObjectURL(file)));
+  }
+
+  function handleVideoChange(file: File | null) {
+    setErrorMessage("");
+    if (!file) { setVideoFile(null); return; }
+    if (!["video/mp4", "video/webm"].includes(file.type) || file.size > 20 * 1024 * 1024) {
+      setErrorMessage("MP4/WebM video 20 MB tak upload karein.");
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    const checker = document.createElement("video");
+    checker.preload = "metadata";
+    checker.onloadedmetadata = () => {
+      URL.revokeObjectURL(url);
+      if (checker.duration < 10 || checker.duration > 15) {
+        setErrorMessage("Product video 10 se 15 seconds ki honi chahiye.");
+        setVideoFile(null);
+      } else setVideoFile(file);
+    };
+    checker.onerror = () => {
+      URL.revokeObjectURL(url);
+      setErrorMessage("Video duration read nahi ho saki. MP4 ya WebM try karein.");
+    };
+    checker.src = url;
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -176,6 +202,20 @@ const parsedMinOrderQty = Number(minOrderQty);
     }
 
     const imageUrl = imageUrls[0] ?? null;
+    let videoUrl: string | null = null;
+    let videoPath: string | null = null;
+    if (videoFile) {
+      const extension = videoFile.type === "video/webm" ? "webm" : "mp4";
+      videoPath = `products/${slug.trim()}/${Date.now()}-${crypto.randomUUID()}.${extension}`;
+      const { error: videoUploadError } = await supabase.storage.from("product-videos").upload(videoPath, videoFile, { cacheControl: "3600", upsert: false, contentType: videoFile.type });
+      if (videoUploadError) {
+        if (uploadedFilePaths.length) await supabase.storage.from("product-images").remove(uploadedFilePaths);
+        setErrorMessage(`Video upload failed: ${videoUploadError.message}`);
+        setLoading(false);
+        return;
+      }
+      videoUrl = supabase.storage.from("product-videos").getPublicUrl(videoPath).data.publicUrl;
+    }
 
     const { error: insertError } = await supabase.from("products").insert({
       title: title.trim(),
@@ -191,16 +231,16 @@ const parsedMinOrderQty = Number(minOrderQty);
   min_order_qty: parsedMinOrderQty,
       image: imageUrl,
       images: imageUrls,
+      video_url: videoUrl,
       featured,
       status,
     });
 
     if (insertError) {
       if (uploadedFilePaths.length) {
-        await supabase.storage
-          .from("product-images")
-          .remove(uploadedFilePaths);
+        await supabase.storage.from("product-images").remove(uploadedFilePaths);
       }
+      if (videoPath) await supabase.storage.from("product-videos").remove([videoPath]);
 
       if (insertError.code === "23505") {
         setErrorMessage(
@@ -397,6 +437,13 @@ const parsedMinOrderQty = Number(minOrderQty);
               placeholder="69.00"
               className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-950 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
             />
+          </div>
+
+          <div className="md:col-span-2">
+            <label htmlFor="productVideo" className="text-sm font-bold text-slate-700">Product Video (10–15 sec)</label>
+            <input id="productVideo" type="file" accept="video/mp4,video/webm" onChange={(event) => handleVideoChange(event.target.files?.[0] ?? null)} className="mt-2 block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-4 file:py-2 file:font-bold file:text-emerald-700" />
+            <p className="mt-2 text-xs text-slate-500">MP4/WebM, 10–15 seconds, maximum 20 MB. Public catalog mein video rotate hogi.</p>
+            {videoFile && <p className="mt-2 text-xs font-semibold text-emerald-700">Selected: {videoFile.name}</p>}
           </div>
 
           <div className="md:col-span-2">
