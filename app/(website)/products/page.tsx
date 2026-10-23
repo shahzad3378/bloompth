@@ -62,12 +62,10 @@ export default async function ProductsPage() {
           </div>
         ) : (
           <div className="min-w-0">
-            <ProductCatalog products={products ?? []} initialCountryCode={countryCode} initialCurrencyCode={initialCurrencyCode} />
-            <div className="mt-10 flex justify-end">
-              <div className="w-full max-w-[280px]">
-                <ProductVideoShowcase products={(products ?? []).map((product) => ({ id: product.id, title: product.title, slug: product.slug, video_url: product.video_url ?? "", featured: Boolean(product.featured) }))} />
-              </div>
+            <div className="mb-6">
+              <ProductVideoShowcase products={(products ?? []).map((product) => ({ id: product.id, title: product.title, slug: product.slug, video_url: product.video_url ?? "", featured: Boolean(product.featured) }))} />
             </div>
+            <ProductCatalog products={products ?? []} initialCountryCode={countryCode} initialCurrencyCode={initialCurrencyCode} />
           </div>
         )}
       </section>
