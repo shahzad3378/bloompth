@@ -132,6 +132,7 @@ export default function ProductVideoShowcase({
   }
 
   return (
+    <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
     <article
       aria-label={active.title + " featured product video"}
       className="w-full overflow-hidden rounded-2xl border border-brand-900/10 bg-white shadow-lg"
@@ -166,5 +167,15 @@ export default function ProductVideoShowcase({
         </Link>
       </div>
     </article>
+    <Link href="/global-sourcing" className="group flex min-h-full flex-col justify-center overflow-hidden rounded-2xl border border-brand-900/10 bg-gradient-to-br from-brand-950 via-brand-900 to-emerald-800 p-5 text-white shadow-lg transition hover:-translate-y-1 hover:shadow-xl">
+      <div className="flex items-center justify-between gap-3">
+        <span className="text-[11px] font-black uppercase tracking-[0.15em] text-emerald-200">BLOOMPATH × FAST DROP</span>
+        <img src={FASTDROP_LOGO_URL} alt="FastDrop Worldwide Logistics" className="h-9 max-w-[88px] rounded bg-white object-contain p-1" />
+      </div>
+      <h2 className="mt-5 text-2xl font-black leading-tight">Source anywhere.<br />Ship worldwide.</h2>
+      <p className="mt-2 text-sm leading-6 text-white/80">Personal sourcing and international delivery, with FastDrop B2B and B2C solutions for Canada, the USA and worldwide.</p>
+      <span className="mt-4 inline-flex items-center gap-2 text-sm font-black underline decoration-emerald-300 underline-offset-4 group-hover:text-emerald-200">Explore Personal Sourcing <span aria-hidden="true">→</span></span>
+    </Link>
+    </div>
   );
 }
