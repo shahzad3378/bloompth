@@ -143,18 +143,8 @@ Please share wholesale pricing, minimum order quantity and dropshipping details.
         <div className="relative z-20 min-w-0 space-y-5">
           <div className="relative rounded-3xl border border-slate-200 bg-white shadow-sm">
             {/* Main Image Container */}
-            <ProductImageGallery images={productImages} title={typedProduct.title} />
+            <ProductImageGallery images={productImages} videoUrl={typedProduct.video_url} title={typedProduct.title} />
           </div>
-
-          {typedProduct.video_url && (
-            <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-              <div className="p-4 sm:p-5">
-                <p className="text-xs font-black uppercase tracking-wider text-emerald-600">Product video</p>
-                <h2 className="mt-1 text-lg font-black text-slate-950">{typedProduct.title}</h2>
-              </div>
-              <video src={typedProduct.video_url} controls muted playsInline preload="metadata" className="max-h-[620px] w-full bg-slate-950 object-contain" />
-            </div>
-          )}
 
           {/* Product Benefits */}
           <div className="grid gap-3 sm:grid-cols-3">

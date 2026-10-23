@@ -4,6 +4,7 @@ import Link from "next/link";
 import CurrencyPrice from "@/components/CurrencyPrice";
 import { countries, currencyForCountryName, flagForCountryName } from "@/lib/countries";
 import { useEffect, useMemo, useState } from "react";
+import ProductCardMedia from "@/components/ProductCardMedia";
 import {
   ArrowRight,
   BadgeCheck,
@@ -28,6 +29,7 @@ type Product = {
   origin_country?: string | null;
   stock_country?: string | null;
   currency_code?: string | null;
+  video_url?: string | null;
 };
 
 type ProductCatalogProps = {
@@ -261,7 +263,7 @@ export default function ProductCatalog({
           </div>
         </div>
       ) : (
-        <div className="mt-3 grid grid-cols-2 gap-3 sm:mt-4 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="mt-3 grid grid-cols-1 gap-3 min-[360px]:grid-cols-2 sm:mt-4 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
           {filteredProducts.map((product) => {
             const displayPrice = product.sale_price ?? product.price;
             const stock = Number(product.stock ?? 0);
@@ -290,13 +292,8 @@ export default function ProductCatalog({
                   className="relative block overflow-hidden"
                 >
                   <div className="aspect-square overflow-hidden bg-white p-3 sm:p-5">
-                    {product.image ? (
-                      <img
-                        src={product.image}
-                        alt={product.title}
-                        loading="lazy"
-                        className="h-full w-full object-contain transition duration-300 group-hover:scale-[1.02]"
-                      />
+                    {product.image || product.video_url ? (
+                      <ProductCardMedia image={product.image} videoUrl={product.video_url} title={product.title} />
                     ) : (
                       <div className="flex h-full flex-col items-center justify-center gap-3 text-slate-400">
                         <PackageSearch size={38} />

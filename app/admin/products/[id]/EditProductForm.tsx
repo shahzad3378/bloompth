@@ -136,8 +136,8 @@ export default function EditProductForm({
     checker.preload = "metadata";
     checker.onloadedmetadata = () => {
       URL.revokeObjectURL(url);
-      if (checker.duration < 10 || checker.duration > 15) {
-        setErrorMessage("Product video 10 se 15 seconds ki honi chahiye.");
+      if (checker.duration < 8 || checker.duration > 10) {
+        setErrorMessage("Product promo video 8 se 10 seconds ki honi chahiye.");
         setVideoFile(null);
       } else { setVideoFile(file); setClearVideo(false); }
     };
@@ -606,9 +606,9 @@ export default function EditProductForm({
         </div>
 
         <div className="md:col-span-2">
-          <label htmlFor="productVideo" className="text-sm font-bold text-slate-700">Product Video (10–15 sec)</label>
+          <label htmlFor="productVideo" className="text-sm font-bold text-slate-700">Product Promo Video (8–10 sec)</label>
           <input id="productVideo" type="file" accept="video/mp4,video/webm" onChange={(event) => handleVideoChange(event.target.files?.[0] ?? null)} className="mt-2 block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-4 file:py-2 file:font-bold file:text-emerald-700" />
-          <p className="mt-2 text-xs text-slate-500">MP4/WebM, 10–15 seconds, maximum 20 MB. Video catalog mein rotate hogi.</p>
+          <p className="mt-2 text-xs text-slate-500">MP4/WebM, 8–10 seconds, maximum 20 MB. Catalog mein product photo ki jagah muted video chalegi.</p>
           {videoUrl && !clearVideo && <div className="mt-3 flex items-center gap-3"><video src={videoUrl} controls muted className="h-32 rounded-xl" /><button type="button" onClick={() => { setClearVideo(true); setVideoFile(null); }} className="text-sm font-bold text-red-600">Remove video</button></div>}
           {videoFile && <p className="mt-2 text-xs font-semibold text-emerald-700">New video selected: {videoFile.name}</p>}
           {clearVideo && <p className="mt-2 text-xs font-semibold text-red-600">Video will be removed when you save.</p>}
