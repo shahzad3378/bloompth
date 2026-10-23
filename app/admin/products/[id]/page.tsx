@@ -43,7 +43,8 @@ export default async function EditProductPage({
         created_at,
         origin_country,
         stock_country,
-        currency_code
+        currency_code,
+        video_url
       `
     )
     .eq("id", id)
