@@ -61,11 +61,11 @@ export default async function ProductsPage() {
             </p>
           </div>
         ) : (
-          <div className="min-w-0">
-            <div className="mb-6">
-              <ProductVideoShowcase products={(products ?? []).map((product) => ({ id: product.id, title: product.title, slug: product.slug, video_url: product.video_url ?? "", featured: Boolean(product.featured) }))} />
-            </div>
+          <div className="grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_210px] lg:items-start">
             <ProductCatalog products={products ?? []} initialCountryCode={countryCode} initialCurrencyCode={initialCurrencyCode} />
+            <aside className="w-full max-w-[140px] justify-self-end lg:sticky lg:top-24 lg:max-w-[210px]">
+              <ProductVideoShowcase products={(products ?? []).map((product) => ({ id: product.id, title: product.title, slug: product.slug, video_url: product.video_url ?? "", featured: Boolean(product.featured) }))} />
+            </aside>
           </div>
         )}
       </section>
