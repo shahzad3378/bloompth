@@ -21,13 +21,15 @@ export default async function RequestProductPage() {
           </Link>
 
           <h1 className="mt-4 text-3xl font-black sm:mt-6 sm:text-5xl">
-            Request a Product
+            Sourcing for Business or Personal Needs
           </h1>
 
           <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:mt-4 sm:text-lg sm:leading-8">
-            Tell us what product you need, the required quantity and your
-            business location. BloomPath will review your request and contact
-            you.
+            Looking for a product anywhere in the world? Whether you are
+            shopping for yourself, trading, buying wholesale or running an
+            online business, BloomPath can help source it and arrange delivery
+            to your country. We will confirm the product cost, service fee and
+            delivery charges with you before proceeding.
           </p>
         </div>
       </section>
@@ -40,7 +42,7 @@ export default async function RequestProductPage() {
         <aside className="space-y-4 lg:sticky lg:top-24">
           <div className="rounded-3xl bg-slate-950 p-6 text-white">
             <h2 className="text-xl font-black">
-              Why request through BloomPath?
+              Source and shop with BloomPath
             </h2>
 
             <div className="mt-6 space-y-5">
@@ -51,9 +53,10 @@ export default async function RequestProductPage() {
                 />
 
                 <div>
-                  <p className="font-black">Product Sourcing</p>
+                  <p className="font-black">Worldwide Product Sourcing</p>
                   <p className="mt-1 text-sm leading-6 text-slate-400">
-                    We review products suitable for your online business.
+                    Tell us the product and where you want it sourced from. We
+                    help individuals, traders and online businesses.
                   </p>
                 </div>
               </div>
@@ -65,9 +68,10 @@ export default async function RequestProductPage() {
                 />
 
                 <div>
-                  <p className="font-black">Business Support</p>
+                  <p className="font-black">Personal Shopping &amp; Trading</p>
                   <p className="mt-1 text-sm leading-6 text-slate-400">
-                    Discuss pricing, stock and fulfillment requirements.
+                    If you cannot shop in person, we can help purchase the
+                    items and arrange delivery to your country.
                   </p>
                 </div>
               </div>
@@ -79,9 +83,10 @@ export default async function RequestProductPage() {
                 />
 
                 <div>
-                  <p className="font-black">Direct Assistance</p>
+                  <p className="font-black">Clear Costs, Global Delivery</p>
                   <p className="mt-1 text-sm leading-6 text-slate-400">
-                    Our team will contact you after reviewing the request.
+                    We confirm the product price, BloomPath service fee and
+                    delivery charges before moving ahead.
                   </p>
                 </div>
               </div>
