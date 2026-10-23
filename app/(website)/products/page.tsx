@@ -19,7 +19,7 @@ export default async function ProductsPage() {
   const initialCurrencyCode = currencyForCountryName(countryCode) || "USD";
   let { data: products, error } = await supabase
     .from("products")
-    .select("id, title, slug, description, category, price, sale_price, stock, min_order_qty, image, images, featured, origin_country, stock_country, currency_code")
+    .select("id, title, slug, description, category, price, sale_price, stock, min_order_qty, image, images, featured, origin_country, stock_country, currency_code, video_url")
     .eq("status", "active")
     .order("created_at", { ascending: false });
 
@@ -80,7 +80,7 @@ export default async function ProductsPage() {
             <div className="min-w-0">
               <ProductCatalog products={products ?? []} initialCountryCode={countryCode} initialCurrencyCode={initialCurrencyCode} />
             </div>
-            <ProductVideoShowcase />
+            <ProductVideoShowcase products={(products ?? []).map((product) => ({ id: product.id, title: product.title, slug: product.slug, video_url: product.video_url ?? "" }))} />
           </div>
         )}
       </section>
