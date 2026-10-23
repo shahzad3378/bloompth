@@ -46,7 +46,7 @@
 }
 
 html {
-  overflow-x: hidden;
+  overflow-x: clip;
   scroll-behavior: smooth;
   scroll-padding-top: 7rem;
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
@@ -55,13 +55,21 @@ html {
 
 body {
   width: 100%;
+  min-width: 320px;
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: clip;
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+}
+
+img,
+video,
+iframe,
+canvas {
+  max-width: 100%;
 }
 
 ::selection {
@@ -94,8 +102,14 @@ body {
 }
 
 .bp-container {
-  width: min(100% - 2.5rem, 80rem);
+  width: min(100% - 2rem, 80rem);
   margin-inline: auto;
+}
+
+@media (min-width: 640px) {
+  .bp-container {
+    width: min(100% - 3rem, 80rem);
+  }
 }
 
 .bp-eyebrow {
