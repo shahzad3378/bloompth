@@ -145,6 +145,13 @@ Please share wholesale pricing, minimum order quantity and dropshipping details.
             <ProductImageGallery images={productImages} title={typedProduct.title} />
           </div>
 
+          {typedProduct.slug === "long-lasting-gray-coverage-easy-to-use-at-home-or-on-the-go-portable-hair-color-stick-with-applicator-brush-for-touch-ups-between-salon-visits-ideal-for-brown-black-hair-contains-plant-based-squalane" && (
+            <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+              <div className="p-4 sm:p-5"><p className="text-xs font-black uppercase tracking-wider text-emerald-600">Product video</p><h2 className="mt-1 text-lg font-black text-slate-950">See the Hair Color Stick</h2></div>
+              <video controls muted playsInline preload="metadata" className="max-h-[620px] w-full bg-slate-950 object-contain"><source src="/videos/hair-color-stick-preview.mp4" type="video/mp4" />Your browser does not support the video tag.</video>
+            </div>
+          )}
+
           {/* Product Benefits */}
           <div className="grid gap-3 sm:grid-cols-3">
             <div className="rounded-2xl border border-slate-200 bg-white p-4">
