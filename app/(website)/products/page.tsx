@@ -9,6 +9,7 @@ import {
 import { supabase } from "@/lib/supabase";
 import ProductCatalog from "@/components/ProductCatalog";
 import ProductVideoShowcase from "@/components/ProductVideoShowcase";
+import ProductVideoShowcase from "@/components/ProductVideoShowcase";
 import { headers } from "next/headers";
 import { currencyForCountryName } from "@/lib/countries";
 
@@ -78,7 +79,7 @@ export default async function ProductsPage() {
           </div>
         ) : (
           <>
-            <ProductCatalog products={products ?? []} initialCountryCode={countryCode} initialCurrencyCode={initialCurrencyCode} />
+            <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_220px] lg:items-start"><div className="min-w-0"><ProductCatalog products={products ?? []} initialCountryCode={countryCode} initialCurrencyCode={initialCurrencyCode} /></div><ProductVideoShowcase /></div>
             <ProductVideoShowcase />
           </>
         )}
