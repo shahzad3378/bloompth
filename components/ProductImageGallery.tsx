@@ -41,7 +41,7 @@ export default function ProductImageGallery({ images, videoUrl, title }: Product
   }
 
   const renderMedia = (item: GalleryItem, inLightbox = false) => item.type === "video" ? (
-    <video key={item.src} src={item.src} autoPlay muted playsInline loop controls preload="metadata" aria-label={`${title} product video`} className={inLightbox ? "max-h-full max-w-full rounded-xl object-contain" : "h-full w-full object-contain"} />
+    <video key={item.src} src={item.src} autoPlay muted playsInline loop controls preload="metadata" onTimeUpdate={(event) => { if (event.currentTarget.currentTime >= 9) event.currentTarget.currentTime = 0; }} aria-label={`${title} product video`} className={inLightbox ? "max-h-full max-w-full rounded-xl object-contain" : "h-full w-full object-contain"} />
   ) : (
     <img src={item.src} alt={`${title} product photo`} className={inLightbox ? "max-h-full max-w-full object-contain" : "h-full w-full object-contain"} />
   );
