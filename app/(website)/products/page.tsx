@@ -9,7 +9,6 @@ import {
 import { supabase } from "@/lib/supabase";
 import ProductCatalog from "@/components/ProductCatalog";
 import ProductVideoShowcase from "@/components/ProductVideoShowcase";
-import ProductVideoShowcase from "@/components/ProductVideoShowcase";
 import { headers } from "next/headers";
 import { currencyForCountryName } from "@/lib/countries";
 
@@ -46,7 +45,6 @@ export default async function ProductsPage() {
   return (
     <main className="min-h-screen bg-white">
       
-
       <section className="mx-auto max-w-7xl px-4 py-3 sm:px-6 sm:py-4">
         {error ? (
           <div className="rounded-3xl border border-red-200 bg-red-50 p-8 text-center shadow-sm">
@@ -78,10 +76,12 @@ export default async function ProductsPage() {
             </p>
           </div>
         ) : (
-          <>
-            <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_220px] lg:items-start"><div className="min-w-0"><ProductCatalog products={products ?? []} initialCountryCode={countryCode} initialCurrencyCode={initialCurrencyCode} /></div><ProductVideoShowcase /></div>
+          <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_220px] lg:items-start">
+            <div className="min-w-0">
+              <ProductCatalog products={products ?? []} initialCountryCode={countryCode} initialCurrencyCode={initialCurrencyCode} />
+            </div>
             <ProductVideoShowcase />
-          </>
+          </div>
         )}
       </section>
     </main>
