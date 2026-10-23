@@ -1,11 +1,4 @@
-import Link from "next/link";
-import {
-  ArrowLeft,
-  ArrowRight,
-  PackageSearch,
-  Search,
-  ShoppingBag,
-} from "lucide-react";
+import { PackageSearch } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import ProductCatalog from "@/components/ProductCatalog";
 import ProductVideoShowcase from "@/components/ProductVideoShowcase";
@@ -33,14 +26,6 @@ export default async function ProductsPage() {
     products = legacy.data?.map((product) => ({ ...product, images: product.image ? [product.image] : [], min_order_qty: 1, origin_country: null, stock_country: null, currency_code: null, video_url: null })) ?? null;
     error = legacy.error;
   }
-
-  const totalProducts = products?.length ?? 0;
-
-  const featuredProducts =
-    products?.filter((product) => product.featured).length ?? 0;
-
-  const availableProducts =
-    products?.filter((product) => Number(product.stock) > 0).length ?? 0;
 
   return (
     <main className="min-h-screen bg-white">
@@ -80,7 +65,7 @@ export default async function ProductsPage() {
             <ProductCatalog products={products ?? []} initialCountryCode={countryCode} initialCurrencyCode={initialCurrencyCode} />
             <div className="mt-10 flex justify-end">
               <div className="w-full max-w-[280px]">
-                <ProductVideoShowcase products={(products ?? []).map((product) => ({ id: product.id, title: product.title, slug: product.slug, video_url: product.video_url ?? "" }))} />
+                <ProductVideoShowcase products={(products ?? []).map((product) => ({ id: product.id, title: product.title, slug: product.slug, video_url: product.video_url ?? "", featured: Boolean(product.featured) }))} />
               </div>
             </div>
           </div>
