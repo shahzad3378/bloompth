@@ -76,11 +76,13 @@ export default async function ProductsPage() {
             </p>
           </div>
         ) : (
-          <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_220px] lg:items-start">
-            <div className="min-w-0">
-              <ProductCatalog products={products ?? []} initialCountryCode={countryCode} initialCurrencyCode={initialCurrencyCode} />
+          <div className="min-w-0">
+            <ProductCatalog products={products ?? []} initialCountryCode={countryCode} initialCurrencyCode={initialCurrencyCode} />
+            <div className="mt-10 flex justify-end">
+              <div className="w-full max-w-[280px]">
+                <ProductVideoShowcase products={(products ?? []).map((product) => ({ id: product.id, title: product.title, slug: product.slug, video_url: product.video_url ?? "" }))} />
+              </div>
             </div>
-            <ProductVideoShowcase products={(products ?? []).map((product) => ({ id: product.id, title: product.title, slug: product.slug, video_url: product.video_url ?? "" }))} />
           </div>
         )}
       </section>
