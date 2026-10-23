@@ -30,6 +30,7 @@ type Product = {
   min_order_qty: number;
   image: string | null;
   images?: string[] | null;
+  video_url?: string | null;
   featured: boolean;
   status: "active" | "inactive";
   origin_country?: string | null;
