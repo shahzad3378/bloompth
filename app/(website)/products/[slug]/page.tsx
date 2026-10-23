@@ -30,6 +30,7 @@ type Product = {
   min_order_qty: number;
   image: string | null;
   images?: string[] | null;
+  video_url?: string | null;
   featured: boolean;
   status: "active" | "inactive";
   origin_country?: string | null;
@@ -59,14 +60,14 @@ export default async function ProductDetailPage({
 
   let { data: product, error } = await supabase
     .from("products")
-    .select("id, title, slug, description, category, price, sale_price, stock, min_order_qty, image, images, featured, status, origin_country, stock_country, currency_code")
+    .select("id, title, slug, description, category, price, sale_price, stock, min_order_qty, image, images, featured, status, origin_country, stock_country, currency_code, video_url")
     .eq("slug", slug).eq("status", "active").maybeSingle();
 
   if (error) {
     const legacy = await supabase.from("products")
       .select("id, title, slug, description, category, price, sale_price, stock, min_order_qty, image, featured, status")
       .eq("slug", slug).eq("status", "active").maybeSingle();
-    product = legacy.data ? { ...legacy.data, images: legacy.data.image ? [legacy.data.image] : [], origin_country: null, stock_country: null, currency_code: null } : null;
+    product = legacy.data ? { ...legacy.data, images: legacy.data.image ? [legacy.data.image] : [], origin_country: null, stock_country: null, currency_code: null, video_url: null } : null;
     error = legacy.error;
   }
 
@@ -145,10 +146,13 @@ Please share wholesale pricing, minimum order quantity and dropshipping details.
             <ProductImageGallery images={productImages} title={typedProduct.title} />
           </div>
 
-          {typedProduct.slug === "long-lasting-gray-coverage-easy-to-use-at-home-or-on-the-go-portable-hair-color-stick-with-applicator-brush-for-touch-ups-between-salon-visits-ideal-for-brown-black-hair-contains-plant-based-squalane" && (
+          {typedProduct.video_url && (
             <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-              <div className="p-4 sm:p-5"><p className="text-xs font-black uppercase tracking-wider text-emerald-600">Product video</p><h2 className="mt-1 text-lg font-black text-slate-950">See the Hair Color Stick</h2></div>
-              <video controls muted playsInline preload="metadata" className="max-h-[620px] w-full bg-slate-950 object-contain"><source src="/videos/hair-color-stick-preview.mp4" type="video/mp4" />Your browser does not support the video tag.</video>
+              <div className="p-4 sm:p-5">
+                <p className="text-xs font-black uppercase tracking-wider text-emerald-600">Product video</p>
+                <h2 className="mt-1 text-lg font-black text-slate-950">{typedProduct.title}</h2>
+              </div>
+              <video src={typedProduct.video_url} controls muted playsInline preload="metadata" className="max-h-[620px] w-full bg-slate-950 object-contain" />
             </div>
           )}
 

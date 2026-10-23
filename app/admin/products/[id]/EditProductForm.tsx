@@ -20,6 +20,7 @@ type Product = {
   min_order_qty: number | null;
   image: string | null;
   images?: string[] | null;
+  video_url?: string | null;
   featured: boolean | null;
   status: string | null;
   created_at: string | null;
@@ -72,6 +73,9 @@ export default function EditProductForm({
   const [currentImages, setCurrentImages] = useState<string[]>(
     product.images?.length ? product.images : product.image ? [product.image] : []
   );
+  const [videoUrl, setVideoUrl] = useState(product.video_url ?? "");
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [clearVideo, setClearVideo] = useState(false);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
@@ -118,6 +122,30 @@ export default function EditProductForm({
 
     setImageFiles(files);
     setImagePreviews(files.map((file) => URL.createObjectURL(file)));
+  }
+
+  function handleVideoChange(file: File | null) {
+    setErrorMessage("");
+    if (!file) { setVideoFile(null); return; }
+    if (!["video/mp4", "video/webm"].includes(file.type) || file.size > 20 * 1024 * 1024) {
+      setErrorMessage("MP4/WebM video 20 MB tak upload karein.");
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    const checker = document.createElement("video");
+    checker.preload = "metadata";
+    checker.onloadedmetadata = () => {
+      URL.revokeObjectURL(url);
+      if (checker.duration < 10 || checker.duration > 15) {
+        setErrorMessage("Product video 10 se 15 seconds ki honi chahiye.");
+        setVideoFile(null);
+      } else { setVideoFile(file); setClearVideo(false); }
+    };
+    checker.onerror = () => {
+      URL.revokeObjectURL(url);
+      setErrorMessage("Video duration read nahi ho saki. MP4 ya WebM try karein.");
+    };
+    checker.src = url;
   }
 
   function getStoragePathFromPublicUrl(imageUrl: string) {
@@ -264,6 +292,20 @@ export default function EditProductForm({
     }
 
     const updatedImageUrl = updatedImages[0] ?? null;
+    let updatedVideoUrl = clearVideo ? null : videoUrl || null;
+    let newlyUploadedVideoPath: string | null = null;
+    if (videoFile) {
+      const extension = videoFile.type === "video/webm" ? "webm" : "mp4";
+      newlyUploadedVideoPath = `products/${cleanSlug}/${Date.now()}-${crypto.randomUUID()}.${extension}`;
+      const { error: videoUploadError } = await supabase.storage.from("product-videos").upload(newlyUploadedVideoPath, videoFile, { cacheControl: "3600", upsert: false, contentType: videoFile.type });
+      if (videoUploadError) {
+        if (newlyUploadedPaths.length) await supabase.storage.from("product-images").remove(newlyUploadedPaths);
+        setErrorMessage(`Video upload failed: ${videoUploadError.message}`);
+        setLoading(false);
+        return;
+      }
+      updatedVideoUrl = supabase.storage.from("product-videos").getPublicUrl(newlyUploadedVideoPath).data.publicUrl;
+    }
 
     const { error: updateError } = await supabase
       .from("products")
@@ -281,6 +323,7 @@ export default function EditProductForm({
         min_order_qty: parsedMinOrderQty,
         image: updatedImageUrl,
         images: updatedImages,
+        video_url: updatedVideoUrl,
         featured,
         status,
       })
@@ -288,10 +331,9 @@ export default function EditProductForm({
 
     if (updateError) {
       if (newlyUploadedPaths.length) {
-        await supabase.storage
-          .from("product-images")
-          .remove(newlyUploadedPaths);
+        await supabase.storage.from("product-images").remove(newlyUploadedPaths);
       }
+      if (newlyUploadedVideoPath) await supabase.storage.from("product-videos").remove([newlyUploadedVideoPath]);
 
       if (updateError.code === "23505") {
         setErrorMessage(
@@ -316,6 +358,16 @@ export default function EditProductForm({
         if (removeError) console.error("Old image remove error:", removeError);
       }
     }
+
+    if (newlyUploadedVideoPath || clearVideo) {
+      const oldVideoPath = videoUrl.includes("/storage/v1/object/public/product-videos/")
+        ? decodeURIComponent(videoUrl.split("/storage/v1/object/public/product-videos/")[1])
+        : null;
+      if (oldVideoPath) await supabase.storage.from("product-videos").remove([oldVideoPath]);
+    }
+    setVideoUrl(updatedVideoUrl ?? "");
+    setVideoFile(null);
+    setClearVideo(false);
 
     setCurrentImages(updatedImages);
     setImageFiles([]);
@@ -551,6 +603,15 @@ export default function EditProductForm({
             }
             className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-950 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
           />
+        </div>
+
+        <div className="md:col-span-2">
+          <label htmlFor="productVideo" className="text-sm font-bold text-slate-700">Product Video (10–15 sec)</label>
+          <input id="productVideo" type="file" accept="video/mp4,video/webm" onChange={(event) => handleVideoChange(event.target.files?.[0] ?? null)} className="mt-2 block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-4 file:py-2 file:font-bold file:text-emerald-700" />
+          <p className="mt-2 text-xs text-slate-500">MP4/WebM, 10–15 seconds, maximum 20 MB. Video catalog mein rotate hogi.</p>
+          {videoUrl && !clearVideo && <div className="mt-3 flex items-center gap-3"><video src={videoUrl} controls muted className="h-32 rounded-xl" /><button type="button" onClick={() => { setClearVideo(true); setVideoFile(null); }} className="text-sm font-bold text-red-600">Remove video</button></div>}
+          {videoFile && <p className="mt-2 text-xs font-semibold text-emerald-700">New video selected: {videoFile.name}</p>}
+          {clearVideo && <p className="mt-2 text-xs font-semibold text-red-600">Video will be removed when you save.</p>}
         </div>
 
         <div className="md:col-span-2">
