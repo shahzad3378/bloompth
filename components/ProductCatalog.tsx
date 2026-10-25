@@ -153,8 +153,8 @@ export default function ProductCatalog({
 
   return (
     <div>
-      <div className="grid gap-2 md:grid-cols-[minmax(0,1fr)_210px_190px]">
-        <label className="relative block">
+      <div className="grid grid-cols-2 gap-2 md:grid-cols-[minmax(0,1fr)_210px_190px]">
+        <label className="relative col-span-2 block md:col-span-1">
           <span className="sr-only">Search products</span>
           <Search size={18} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
@@ -168,7 +168,7 @@ export default function ProductCatalog({
 
         <label className="text-[10px] font-black uppercase tracking-wider text-slate-500">
           <span className="sr-only">Available in country</span>
-          <select value={originFilter} onChange={(event) => setOriginFilter(event.target.value)} className="w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm font-bold normal-case tracking-normal text-slate-800">
+          <select value={originFilter} onChange={(event) => setOriginFilter(event.target.value)} className="w-full min-w-0 rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm font-bold normal-case tracking-normal text-slate-800">
             <option value="All">🌐 All countries</option>
             {origins.slice(1).map((origin) => <option key={origin} value={origin}>{flagForCountryName(origin)}  {origin}</option>)}
           </select>
@@ -180,7 +180,7 @@ export default function ProductCatalog({
           <select
             value={sortBy}
             onChange={(event) => setSortBy(event.target.value)}
-            className="w-full appearance-none rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-8 text-sm font-bold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+            className="w-full min-w-0 appearance-none rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-8 text-sm font-bold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
           >
             <option value="newest">Featured First</option>
             <option value="price-low">Price: Low to High</option>
@@ -192,7 +192,7 @@ export default function ProductCatalog({
       </div>
 
       <div className="mt-2 flex min-h-8 items-center justify-between gap-3">
-        <div className="flex gap-2 overflow-x-auto">
+        <div className="flex min-w-0 flex-1 gap-2 overflow-x-auto">
           {categories.map((category) => {
             const isActive = selectedCategory === category;
             return (
@@ -200,7 +200,7 @@ export default function ProductCatalog({
                 key={category}
                 type="button"
                 onClick={() => setSelectedCategory(category)}
-                className={`whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-bold transition ${
+                className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-bold transition ${
                   isActive
                     ? "border-blue-600 bg-blue-600 text-white"
                     : "border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
@@ -291,7 +291,7 @@ export default function ProductCatalog({
                   href={`/products/${product.slug}`}
                   className="relative block overflow-hidden"
                 >
-                  <div className="aspect-square overflow-hidden bg-white p-3 sm:p-5">
+                  <div className="aspect-[4/3] overflow-hidden bg-white p-2 sm:aspect-square sm:p-5">
                     {product.image || product.video_url ? (
                       <ProductCardMedia image={product.image} videoUrl={product.video_url} title={product.title} />
                     ) : (
@@ -307,31 +307,31 @@ export default function ProductCatalog({
 
                 </Link>
 
-                <div className="flex flex-1 flex-col p-3 sm:p-5">
-                  <div className="flex items-center justify-between gap-3">
-                    <p className="line-clamp-1 text-xs font-black uppercase tracking-wider text-blue-600">
+                <div className="flex flex-1 flex-col p-2.5 sm:p-5">
+                  <div className="flex min-w-0 items-center justify-between gap-1.5 sm:gap-3">
+                    <p className="line-clamp-1 min-w-0 text-[10px] font-black uppercase tracking-wider text-blue-600 sm:text-xs">
                       {product.category || "General"}
                     </p>
 
                     {product.featured && (
-                      <span className="shrink-0 rounded-full bg-slate-100 px-2 py-1 text-[10px] font-black text-slate-600">Featured</span>
+                      <span className="shrink-0 rounded-full bg-slate-100 px-1.5 py-1 text-[9px] font-black text-slate-600 sm:px-2 sm:text-[10px]">Featured</span>
                     )}
 
                     {stock > 0 && !product.featured && (
-                      <span className="inline-flex items-center gap-1 text-xs font-bold text-slate-400">
-                        <BadgeCheck size={14} />
+                      <span className="inline-flex shrink-0 items-center gap-1 text-[10px] font-bold text-slate-400 sm:text-xs">
+                        <BadgeCheck size={12} />
                         Verified
                       </span>
                     )}
                   </div>
 
                   <Link href={`/products/${product.slug}`}>
-                    <h2 className="mt-2 line-clamp-2 text-sm font-black leading-5 sm:text-lg sm:leading-6 text-slate-950 transition group-hover:text-blue-600">
+                    <h2 className="mt-1.5 line-clamp-2 min-h-10 text-xs font-black leading-5 sm:mt-2 sm:text-lg sm:leading-6 text-slate-950 transition group-hover:text-blue-600">
                       {product.title}
                     </h2>
                   </Link>
 
-                  <div className="mt-3 grid grid-cols-2 gap-2 rounded-xl bg-slate-50 p-2.5 text-[11px] sm:text-xs">
+                  <div className="mt-2 grid grid-cols-2 gap-1.5 rounded-xl bg-slate-50 p-2 text-[10px] sm:mt-3 sm:gap-2 sm:p-2.5 sm:text-xs">
                     <div>
                       <p className="font-semibold text-slate-500">Minimum order</p>
                       <p className="mt-0.5 font-black text-slate-900">{Number(product.min_order_qty || 1)} pcs</p>
@@ -342,20 +342,20 @@ export default function ProductCatalog({
                     </div>
                   </div>
 
-                  <div className="mt-auto pt-5">
-                    <div className="border-t border-slate-100 pt-4">
-                  <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Wholesale price</p>
-                  <div className="mt-2 text-2xl font-black text-slate-950">
+                  <div className="mt-auto pt-3 sm:pt-5">
+                    <div className="border-t border-slate-100 pt-3 sm:pt-4">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:text-xs">Wholesale price</p>
+                  <div className="mt-1 text-lg font-black text-slate-950 sm:mt-2 sm:text-2xl">
                     <CurrencyPrice amount={displayPrice ?? 0} baseCurrency={product.currency_code || currencyForCountryName(product.stock_country || "") || "USD"} targetCurrency={displayCurrency} />
                   </div>
-                  {hasSale && product.price ? <p className="mt-1 text-xs text-slate-500">Regular price: <CurrencyPrice amount={product.price} baseCurrency={product.currency_code || currencyForCountryName(product.stock_country || "") || "USD"} targetCurrency={displayCurrency} /></p> : null}
-                  {hasSale && <span className="mt-2 inline-flex w-fit rounded-full bg-red-50 px-2.5 py-1 text-xs font-black text-red-700">Save {discountPercentage}%</span>}
+                  {hasSale && product.price ? <p className="mt-1 text-[10px] text-slate-500 sm:text-xs">Regular price: <CurrencyPrice amount={product.price} baseCurrency={product.currency_code || currencyForCountryName(product.stock_country || "") || "USD"} targetCurrency={displayCurrency} /></p> : null}
+                  {hasSale && <span className="mt-1.5 inline-flex w-fit rounded-full bg-red-50 px-2 py-1 text-[10px] font-black text-red-700 sm:mt-2 sm:px-2.5 sm:text-xs">Save {discountPercentage}%</span>}
                 </div>
 
-                <div className="mt-4 grid grid-cols-2 gap-2">
+                <div className="mt-3 grid grid-cols-2 gap-1.5 sm:mt-4 sm:gap-2">
                       <Link
                         href={`/products/${product.slug}`}
-                        className="inline-flex items-center justify-center rounded-xl border border-slate-200 px-2 py-2.5 text-center text-xs sm:px-3 sm:py-3 sm:text-sm font-black text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+                        className="inline-flex min-w-0 items-center justify-center whitespace-nowrap rounded-xl border border-slate-200 px-1 py-2 text-center text-[10px] sm:px-3 sm:py-3 sm:text-sm font-black text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
                       >
                         View Details
                       </Link>
@@ -364,7 +364,7 @@ export default function ProductCatalog({
                         href={`/request-product?product=${encodeURIComponent(
                           product.title
                         )}&productId=${product.id}`}
-                        className="inline-flex items-center justify-center gap-1 rounded-xl bg-slate-950 px-2 py-2.5 text-center text-xs sm:px-3 sm:py-3 sm:text-sm font-black text-white transition hover:bg-blue-600"
+                        className="inline-flex min-w-0 items-center justify-center gap-0.5 whitespace-nowrap rounded-xl bg-slate-950 px-1 py-2 text-center text-[10px] sm:gap-1 sm:px-3 sm:py-3 sm:text-sm font-black text-white transition hover:bg-blue-600"
                       >
                         Request
                         <ArrowRight size={15} />
