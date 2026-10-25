@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ArrowRight, CheckCircle2, ImagePlus, Loader2, PackageSearch, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, ImagePlus, Loader2, PackageSearch, X } from "lucide-react";
 import { countries } from "@/lib/countries";
 import { dialCodes } from "@/lib/dial-codes";
 import { supabase } from "@/lib/supabase";
@@ -169,31 +170,38 @@ export default function RequestProductForm({ initialCountry }: RequestProductFor
 
   if (success) {
     return (
-      <div className="rounded-3xl border border-emerald-200 bg-emerald-50 p-8 text-center">
+      <div className="w-full max-w-full min-w-0 rounded-3xl border border-emerald-200 bg-emerald-50 p-5 text-center sm:p-8">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-600 text-white"><CheckCircle2 size={30} /></div>
         <h2 className="mt-5 text-2xl font-black text-slate-950">Request submitted successfully</h2>
         <p className="mx-auto mt-3 max-w-xl leading-7 text-slate-600">Thank you. The BloomPath team will review your request and contact you using the information provided.</p>
-        <button type="button" onClick={() => setSuccess(false)} className="mt-6 rounded-xl bg-slate-950 px-6 py-3 font-black text-white transition hover:bg-emerald-600">Submit Another Request</button>
+        <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+          <Link href="/products" className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 font-bold text-slate-800 hover:bg-slate-50"><ArrowLeft size={17} />Back to products</Link>
+          <button type="button" onClick={() => setSuccess(false)} className="rounded-xl bg-slate-950 px-6 py-3 font-black text-white transition hover:bg-emerald-600">Submit Another Request</button>
+        </div>
       </div>
     );
   }
 
   return (
-    <form noValidate onSubmit={handleSubmit} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-8">
-      <div className="flex items-start gap-4 border-b border-slate-100 pb-6">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700"><PackageSearch size={24} /></div>
-        <div><h2 className="text-xl font-black text-slate-950">Product Requirement</h2><p className="mt-1 text-sm leading-6 text-slate-500">Complete the form and our team will contact you.</p></div>
+    <form noValidate onSubmit={handleSubmit} className="w-full max-w-full min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-8">
+      <div className="mb-4 flex min-w-0 flex-wrap items-center justify-between gap-2">
+        <Link href="/products" className="inline-flex items-center gap-1.5 text-sm font-bold text-blue-700 hover:text-blue-900"><ArrowLeft size={16} />Back to products</Link>
+        <span className="text-xs font-semibold text-slate-500">Request only · no payment now</span>
+      </div>
+      <div className="flex min-w-0 items-start gap-3 border-b border-slate-100 pb-5 sm:gap-4 sm:pb-6">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 sm:h-12 sm:w-12 sm:rounded-2xl"><PackageSearch size={22} /></div>
+        <div className="min-w-0"><h2 className="text-lg font-black text-slate-950 sm:text-xl">Tell us what you need</h2><p className="mt-1 text-sm leading-6 text-slate-500">Send your requirement. We’ll confirm the product, price and delivery before you decide.</p></div>
       </div>
 
-      <div className="mt-5 grid gap-3 sm:mt-6 sm:gap-5 sm:grid-cols-2">
-        <label><span className="text-sm font-bold text-slate-700">Full Name *</span><input required type="text" value={form.customerName} onChange={(event) => updateField("customerName", event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" placeholder="Your full name" /></label>
-        <label><span className="text-sm font-bold text-slate-700">Phone / WhatsApp *</span><div className="mt-2 flex min-w-0 gap-2"><div className="w-28 shrink-0 sm:w-32"><SearchableSelect value={dialCode} options={dialCodeOptions} onChange={setDialCode} placeholder="Code" searchPlaceholder="Search country or code" ariaLabel="Phone country code" /></div><input required type="tel" autoComplete="tel-national" inputMode="tel" value={form.phone} onChange={(event) => updateField("phone", event.target.value)} className="min-w-0 flex-1 rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" placeholder="50 123 4567" /></div><small className="mt-1 block text-slate-500">Choose your country code, then enter your number.</small></label>
-        <label><span className="text-sm font-bold text-slate-700">Company Name</span><input type="text" value={form.companyName} onChange={(event) => updateField("companyName", event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" placeholder="Your business name" /></label>
-        <label><span className="text-sm font-bold text-slate-700">Email</span><input type="email" value={form.email} onChange={(event) => updateField("email", event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" placeholder="name@example.com" /></label>
+      <div className="mt-5 grid min-w-0 gap-3 sm:mt-6 sm:gap-5 sm:grid-cols-2">
+        <label className="min-w-0"><span className="text-sm font-bold text-slate-700">Full Name *</span><input required type="text" value={form.customerName} onChange={(event) => updateField("customerName", event.target.value)} className="mt-2 w-full min-w-0 rounded-xl border border-slate-200 px-4 py-3 text-base outline-none focus:border-emerald-500"  /></label>
+        <label className="min-w-0"><span className="text-sm font-bold text-slate-700">Phone / WhatsApp *</span><div className="mt-2 flex w-full max-w-full min-w-0 gap-2"><div className="w-24 shrink-0 sm:w-32"><SearchableSelect value={dialCode} options={dialCodeOptions} onChange={setDialCode} placeholder="Code" searchPlaceholder="Search country or code" ariaLabel="Phone country code" /></div><input required type="tel" autoComplete="tel-national" inputMode="tel" value={form.phone} onChange={(event) => updateField("phone", event.target.value)} className="min-w-0 flex-1 rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500"  /></div></label>
+        <label className="min-w-0"><span className="text-sm font-bold text-slate-700">Company Name</span><input type="text" value={form.companyName} onChange={(event) => updateField("companyName", event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500"  /></label>
+        <label className="min-w-0"><span className="text-sm font-bold text-slate-700">Email</span><input type="email" value={form.email} onChange={(event) => updateField("email", event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500"  /></label>
 
-        <fieldset className="sm:col-span-2">
+        <fieldset className="min-w-0 sm:col-span-2">
           <legend className="text-sm font-bold text-slate-700">What product do you need? *</legend>
-          <div className="mt-2 grid gap-3 sm:grid-cols-2">
+          <div className="mt-2 grid min-w-0 gap-3 sm:grid-cols-2">
             <label className={`flex cursor-pointer items-start gap-3 rounded-xl border p-4 ${requestKind === "catalog" ? "border-emerald-500 bg-emerald-50" : "border-slate-200"}`}>
               <input type="radio" name="request-kind" checked={requestKind === "catalog"} onChange={() => chooseKind("catalog")} className="mt-1 accent-emerald-600" />
               <span><b className="block text-sm text-slate-900">A product in the BloomPath catalog</b><small className="mt-1 block text-slate-500">Choose the exact listed product.</small></span>
@@ -206,19 +214,19 @@ export default function RequestProductForm({ initialCountry }: RequestProductFor
         </fieldset>
 
         {requestKind === "catalog" ? (
-          <div className="sm:col-span-2"><span className="text-sm font-bold text-slate-700">Select catalog product *</span><SearchableSelect value={selectedProductId} options={productOptions} onChange={(id) => { setSelectedProductId(id); updateField("productName", catalogProducts.find((item) => String(item.id) === id)?.title ?? ""); }} placeholder="Choose a product" searchPlaceholder="Search products" ariaLabel="Catalog product" />{productIdFromUrl && <small className="mt-1 block text-slate-500">The product you selected is prefilled. Confirm it before submitting.</small>}</div>
+          <div className="min-w-0 sm:col-span-2"><span className="text-sm font-bold text-slate-700">Select catalog product *</span><SearchableSelect value={selectedProductId} options={productOptions} onChange={(id) => { setSelectedProductId(id); updateField("productName", catalogProducts.find((item) => String(item.id) === id)?.title ?? ""); }} placeholder="Choose a product" searchPlaceholder="Search products" ariaLabel="Catalog product" />{productIdFromUrl && <small className="mt-1 block text-slate-500">The product you selected is prefilled. Confirm it before submitting.</small>}</div>
         ) : (
           <>
-            <label className="sm:col-span-2"><span className="text-sm font-bold text-slate-700">Custom Product Name *</span><input required type="text" value={form.productName} onChange={(event) => updateField("productName", event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" placeholder="What product should we source?" /></label>
-            <label className="sm:col-span-2"><span className="text-sm font-bold text-slate-700">Product photo *</span><span className="mt-1 block text-sm text-slate-500">Upload a JPG, PNG or WebP image, up to 5 MB.</span><span className="mt-2 flex items-center gap-3 rounded-xl border border-dashed border-slate-300 p-4"><ImagePlus className="shrink-0 text-emerald-700" size={20} /><input required type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => setPhotoFile(event.target.files?.[0] ?? null)} className="min-w-0 flex-1 text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-3 file:py-2 file:font-bold file:text-emerald-700" />{photoFile && <button type="button" aria-label="Remove photo" onClick={() => setPhotoFile(null)} className="rounded-lg p-2 text-slate-500 hover:bg-slate-100"><X size={17} /></button>}</span>{photoFile && <small className="mt-1 block truncate text-slate-600">Selected: {photoFile.name}</small>}</label>
+            <label className="min-w-0 sm:col-span-2"><span className="text-sm font-bold text-slate-700">Custom Product Name *</span><input required type="text" value={form.productName} onChange={(event) => updateField("productName", event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500"  /></label>
+            <label className="min-w-0 sm:col-span-2"><span className="text-sm font-bold text-slate-700">Product photo *</span><span className="mt-1 block text-sm text-slate-500">Upload a JPG, PNG or WebP image, up to 5 MB.</span><span className="mt-2 flex items-center gap-3 rounded-xl border border-dashed border-slate-300 p-4"><ImagePlus className="shrink-0 text-emerald-700" size={20} /><input required type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => setPhotoFile(event.target.files?.[0] ?? null)} className="min-w-0 flex-1 text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-3 file:py-2 file:font-bold file:text-emerald-700" />{photoFile && <button type="button" aria-label="Remove photo" onClick={() => setPhotoFile(null)} className="rounded-lg p-2 text-slate-500 hover:bg-slate-100"><X size={17} /></button>}</span>{photoFile && <small className="mt-1 block truncate text-slate-600">Selected: {photoFile.name}</small>}</label>
           </>
         )}
 
-        <label><span className="text-sm font-bold text-slate-700">Quantity *</span><input required type="number" min="1" value={form.quantity} onChange={(event) => updateField("quantity", event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" /></label>
-        <div><span className="text-sm font-bold text-slate-700">Country *</span><SearchableSelect value={form.country} options={countryOptions} onChange={(value) => updateField("country", value)} placeholder="Select country" searchPlaceholder="Search countries" ariaLabel="Country" /><small className="mt-1 block text-slate-500">Preselected from your location; you can change it.</small></div>
-        <label><span className="text-sm font-bold text-slate-700">City *</span><input required type="text" value={form.city} onChange={(event) => updateField("city", event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" placeholder="Your city" /></label>
+        <label className="min-w-0"><span className="text-sm font-bold text-slate-700">Quantity *</span><input required type="number" min="1" value={form.quantity} onChange={(event) => updateField("quantity", event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" /></label>
+        <div className="min-w-0"><span className="text-sm font-bold text-slate-700">Country *</span><SearchableSelect value={form.country} options={countryOptions} onChange={(value) => updateField("country", value)} placeholder="Select country" searchPlaceholder="Search countries" ariaLabel="Country" /><small className="mt-1 block text-slate-500">Preselected from your location; you can change it.</small></div>
+        <label className="min-w-0"><span className="text-sm font-bold text-slate-700">City *</span><input required type="text" value={form.city} onChange={(event) => updateField("city", event.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500"  /></label>
 
-        <label className="sm:col-span-2"><span className="text-sm font-bold text-slate-700">{requestKind === "custom" ? "Full Product Specifications *" : "Additional Details"}</span><textarea required={requestKind === "custom"} rows={5} value={form.message} onChange={(event) => updateField("message", event.target.value)} className="mt-2 w-full resize-y rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" placeholder={requestKind === "custom" ? "Describe size, material, colour, model, target price and any other requirements." : "Tell us about target price or delivery requirements."} /></label>
+        <label className="min-w-0 sm:col-span-2"><span className="text-sm font-bold text-slate-700">{requestKind === "custom" ? "Full Product Specifications *" : "Additional Details"}</span><textarea required={requestKind === "custom"} rows={5} value={form.message} onChange={(event) => updateField("message", event.target.value)} className="mt-2 w-full min-w-0 resize-y rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" /></label>
       </div>
 
       {errorMessage && <div role="alert" className="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">{errorMessage}</div>}

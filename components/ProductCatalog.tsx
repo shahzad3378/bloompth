@@ -6,8 +6,8 @@ import { countries, currencyForCountryName, flagForCountryName } from "@/lib/cou
 import { useEffect, useMemo, useState } from "react";
 import ProductCardMedia from "@/components/ProductCardMedia";
 import {
-  ArrowRight,
-  BadgeCheck,
+  MapPin,
+  ShoppingCart,
   PackageSearch,
   RotateCcw,
   Search,
@@ -266,8 +266,6 @@ export default function ProductCatalog({
         <div className="mt-3 grid grid-cols-2 gap-3 sm:mt-4 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
           {filteredProducts.map((product) => {
             const displayPrice = product.sale_price ?? product.price;
-            const stock = Number(product.stock ?? 0);
-
             return (
               <article
                 key={product.id}
@@ -303,12 +301,6 @@ export default function ProductCatalog({
                       <span className="shrink-0 rounded-full bg-slate-100 px-1.5 py-1 text-[9px] font-black text-slate-600 sm:px-2 sm:text-[10px]">Featured</span>
                     )}
 
-                    {stock > 0 && !product.featured && (
-                      <span className="inline-flex shrink-0 items-center gap-1 text-[10px] font-bold text-slate-400 sm:text-xs">
-                        <BadgeCheck size={12} />
-                        Verified
-                      </span>
-                    )}
                   </div>
 
                   <Link href={`/products/${product.slug}`}>
@@ -322,36 +314,24 @@ export default function ProductCatalog({
                       <p className="font-semibold text-slate-500">Minimum order</p>
                       <p className="mt-0.5 font-black text-slate-900">{Number(product.min_order_qty || 1)} pcs</p>
                     </div>
-                    <div>
-                      <p className="line-clamp-1 font-semibold text-slate-500">Available in: {product.stock_country || "Location not listed"}</p>
-                      <p className={`mt-0.5 font-black ${stock > 0 ? "text-emerald-700" : "text-red-600"}`}>{stock > 0 ? `${stock} pcs` : "Out of stock"}</p>
+                    <div className="min-w-0">
+                      <p className="flex items-center gap-1 font-semibold text-slate-500"><MapPin size={12} className="shrink-0 text-blue-600" />Available in</p>
+                      <p className="mt-0.5 line-clamp-1 font-black text-slate-900">{flagForCountryName(product.stock_country || "")} {product.stock_country || "Location not listed"}</p>
                     </div>
                   </div>
 
                   <div className="mt-auto pt-2 sm:pt-5">
-                    <div className="border-t border-slate-100 pt-2 sm:pt-4">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:text-xs">Wholesale price</p>
-                  <div className="mt-1 text-lg font-black text-slate-950 sm:mt-2 sm:text-2xl">
-                    <CurrencyPrice amount={displayPrice ?? 0} baseCurrency={product.currency_code || currencyForCountryName(product.stock_country || "") || "USD"} targetCurrency={displayCurrency} />
-                  </div>
-                </div>
-
-                <div className="mt-2 grid grid-cols-2 gap-1.5 sm:mt-4 sm:gap-2">
+                    <div className="flex items-center justify-between gap-2 border-t border-slate-100 pt-2 sm:pt-3">
+                      <div className="text-sm font-black text-slate-950 sm:text-base">
+                        <CurrencyPrice amount={displayPrice ?? 0} baseCurrency={product.currency_code || currencyForCountryName(product.stock_country || "") || "USD"} targetCurrency={displayCurrency} />
+                      </div>
                       <Link
-                        href={`/products/${product.slug}`}
-                        className="inline-flex min-w-0 items-center justify-center whitespace-nowrap rounded-xl border border-slate-200 px-1 py-2 text-center text-[10px] sm:px-3 sm:py-3 sm:text-sm font-black text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+                        href={`/request-product?product=${encodeURIComponent(product.title)}&productId=${product.id}`}
+                        aria-label={`Request ${product.title}`}
+                        title="Request this product"
+                        className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-slate-900 bg-white text-slate-900 transition hover:bg-slate-900 hover:text-white sm:h-10 sm:w-10"
                       >
-                        View Details
-                      </Link>
-
-                      <Link
-                        href={`/request-product?product=${encodeURIComponent(
-                          product.title
-                        )}&productId=${product.id}`}
-                        className="inline-flex min-w-0 items-center justify-center gap-0.5 whitespace-nowrap rounded-xl bg-slate-950 px-1 py-2 text-center text-[10px] sm:gap-1 sm:px-3 sm:py-3 sm:text-sm font-black text-white transition hover:bg-blue-600"
-                      >
-                        Request
-                        <ArrowRight size={15} />
+                        <ShoppingCart size={18} strokeWidth={2} />
                       </Link>
                     </div>
                   </div>

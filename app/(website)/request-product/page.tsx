@@ -21,25 +21,21 @@ export default async function RequestProductPage() {
           </Link>
 
           <h1 className="mt-4 text-3xl font-black sm:mt-6 sm:text-5xl">
-            Sourcing for Business or Personal Needs
+            Request a Product
           </h1>
 
           <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:mt-4 sm:text-lg sm:leading-8">
-            Looking for a product anywhere in the world? Whether you are
-            shopping for yourself, trading, buying wholesale or running an
-            online business, BloomPath can help source it and arrange delivery
-            to your country. We will confirm the product cost, service fee and
-            delivery charges with you before proceeding.
+            Tell us what you need. We’ll review the details, confirm the product price and delivery charges, and contact you. Submitting this form does not place an order.
           </p>
         </div>
       </section>
 
-      <section className="mx-auto grid w-full max-w-7xl min-w-0 gap-5 px-4 py-6 sm:gap-8 sm:px-6 sm:py-12 lg:grid-cols-[1fr_360px] lg:items-start">
+      <section className="mx-auto grid w-full max-w-7xl min-w-0 gap-5 px-4 py-6 sm:gap-8 sm:px-6 sm:py-12 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
         <Suspense fallback={<div>Loading...</div>}>
           <RequestProductForm initialCountry={initialCountry} />
         </Suspense>
 
-        <aside className="space-y-4 lg:sticky lg:top-24">
+        <aside className="min-w-0 space-y-4 lg:sticky lg:top-24">
           <div className="rounded-3xl bg-brand-950 p-6 text-white">
             <h2 className="text-xl font-black">
               Source and shop with BloomPath
