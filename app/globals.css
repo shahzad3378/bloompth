@@ -101,6 +101,12 @@ canvas {
   outline-offset: 3px;
 }
 
+:where(input, textarea, select, button[aria-haspopup="listbox"]):focus {
+  outline-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
 .bp-container {
   width: min(100% - 2rem, 80rem);
   margin-inline: auto;
