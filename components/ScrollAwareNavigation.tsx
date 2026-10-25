@@ -7,10 +7,8 @@ export default function ScrollAwareNavigation() {
     const header = document.querySelector<HTMLElement>("[data-scroll-hide-header]");
     if (!header) return;
 
-    const mobileViewport = window.matchMedia("(max-width: 767px)");
+    const isCompactViewport = () => window.innerWidth < 1024;
     let previousY = window.scrollY;
-    let direction = 0;
-    let directionDistance = 0;
 
     const show = () => {
       header.style.transform = "";
@@ -24,9 +22,12 @@ export default function ScrollAwareNavigation() {
       header.style.pointerEvents = "none";
     };
 
+    const readScrollY = () =>
+      Math.max(window.scrollY, document.documentElement.scrollTop, document.body.scrollTop);
+
     const handleScroll = () => {
-      const currentY = window.scrollY;
-      if (!mobileViewport.matches) {
+      const currentY = readScrollY();
+      if (!isCompactViewport() || currentY <= 32) {
         show();
         previousY = currentY;
         return;
@@ -34,39 +35,23 @@ export default function ScrollAwareNavigation() {
 
       const delta = currentY - previousY;
       previousY = currentY;
-      if (delta === 0) return;
-
-      const nextDirection = Math.sign(delta);
-      if (nextDirection !== direction) {
-        direction = nextDirection;
-        directionDistance = Math.abs(delta);
-      } else {
-        directionDistance += Math.abs(delta);
-      }
-
-      if (currentY < 64) {
-        show();
-        directionDistance = 0;
-      } else if (direction < 0 && directionDistance >= 8) {
-        show();
-      } else if (direction > 0 && directionDistance >= 14 && currentY > 120) {
-        hide();
-      }
+      if (delta > 0) hide();
+      else if (delta < 0) show();
     };
 
-    const handleViewportChange = () => {
-      previousY = window.scrollY;
-      direction = 0;
-      directionDistance = 0;
-      if (!mobileViewport.matches) show();
+    const handleResize = () => {
+      previousY = readScrollY();
+      if (!isCompactViewport()) show();
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    mobileViewport.addEventListener("change", handleViewportChange);
+    document.addEventListener("scroll", handleScroll, { passive: true, capture: true });
+    window.addEventListener("resize", handleResize, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      mobileViewport.removeEventListener("change", handleViewportChange);
+      document.removeEventListener("scroll", handleScroll, true);
+      window.removeEventListener("resize", handleResize);
       show();
     };
   }, []);
