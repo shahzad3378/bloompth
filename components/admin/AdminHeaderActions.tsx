@@ -29,8 +29,62 @@ export default function AdminHeaderActions({
   const [menuOpen, setMenuOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
+  const [newChatCount, setNewChatCount] = useState(0);
+  const [chatAlert, setChatAlert] = useState("");
+  const chatSnapshotRef = useRef<Record<string, string>>({});
+  const hasChatSnapshotRef = useRef(false);
 
   const initial = userEmail.charAt(0).toUpperCase() || "A";
+
+  useEffect(() => {
+    let active = true;
+
+    async function refreshChatNotifications() {
+      try {
+        const response = await fetch("/api/admin/chat", { cache: "no-store" });
+        if (!response.ok) return;
+        const data = await response.json() as {
+          conversations: Array<{
+            id: string;
+            customer_name: string;
+            last_sender_role: "customer" | "team" | null;
+            unread_for_team: boolean;
+            updated_at: string;
+          }>;
+        };
+        if (!active) return;
+
+        const unreadChats = (data.conversations ?? []).filter(
+          (chat) => chat.unread_for_team && chat.last_sender_role === "customer"
+        );
+        setNewChatCount(unreadChats.length);
+
+        const newestIncoming = unreadChats
+          .filter((chat) => chatSnapshotRef.current[chat.id] !== chat.updated_at)
+          .sort((a, b) => b.updated_at.localeCompare(a.updated_at))[0];
+
+        if (hasChatSnapshotRef.current && newestIncoming) {
+          setChatAlert(newestIncoming.customer_name);
+        }
+
+        chatSnapshotRef.current = Object.fromEntries(
+          unreadChats.map((chat) => [chat.id, chat.updated_at])
+        );
+        hasChatSnapshotRef.current = true;
+      } catch {
+        // The next poll retries if a request briefly fails.
+      }
+    }
+
+    const initial = window.setTimeout(() => void refreshChatNotifications(), 0);
+    const timer = window.setInterval(() => void refreshChatNotifications(), 7000);
+    return () => {
+      active = false;
+      window.clearTimeout(initial);
+      window.clearInterval(timer);
+    };
+  }, []);
+
 
   useEffect(() => {
     function handleOutsideClick(event: MouseEvent) {
@@ -84,7 +138,7 @@ export default function AdminHeaderActions({
         >
           <Bell size={20} />
 
-          {newRequestCount > 0 ? <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-black text-white ring-2 ring-white">{newRequestCount > 9 ? "9+" : newRequestCount}</span> : <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-slate-300 ring-2 ring-white" />}
+          {newRequestCount + newChatCount > 0 ? <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-black text-white ring-2 ring-white">{newRequestCount + newChatCount > 9 ? "9+" : newRequestCount + newChatCount}</span> : <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-slate-300 ring-2 ring-white" />}
         </button>
 
         {notificationOpen && (
@@ -97,14 +151,15 @@ export default function AdminHeaderActions({
               <p className="mt-1 text-xs text-slate-500">Customer requests and admin alerts</p>
             </div>
 
-            <div className="px-4 py-6 text-center">
-              <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-                <Bell size={20} />
+            <div className="space-y-3 p-4">
+              <div className="rounded-xl bg-slate-50 p-3">
+                <p className="text-sm font-semibold text-slate-800">{newRequestCount ? `${newRequestCount} new product ${newRequestCount === 1 ? "request" : "requests"}` : "No new product requests"}</p>
+                <Link href="/admin/requests" onClick={() => setNotificationOpen(false)} className="mt-2 inline-flex rounded-lg bg-slate-950 px-3 py-2 text-xs font-bold text-white hover:bg-blue-700">View product requests</Link>
               </div>
-
-              <p className="mt-3 text-sm font-semibold text-slate-800">{newRequestCount ? `${newRequestCount} new product ${newRequestCount === 1 ? "request" : "requests"}` : "No new product requests"}</p>
-              <p className="mt-1 text-xs leading-5 text-slate-500">Customer requests are saved in BloomPath Administration.</p>
-              <Link href="/admin/requests" onClick={() => setNotificationOpen(false)} className="mt-4 inline-flex rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-bold text-white hover:bg-blue-700">View product requests</Link>
+              <div className="rounded-xl bg-blue-50 p-3">
+                <p className="text-sm font-semibold text-slate-800">{newChatCount ? `${newChatCount} customer ${newChatCount === 1 ? "chat needs" : "chats need"} a reply` : "No new customer chats"}</p>
+                <Link href="/admin/chats" onClick={() => setNotificationOpen(false)} className="mt-2 inline-flex rounded-lg bg-blue-800 px-3 py-2 text-xs font-bold text-white hover:bg-blue-900">Open Live Chat</Link>
+              </div>
             </div>
           </div>
         )}
@@ -177,6 +232,7 @@ export default function AdminHeaderActions({
           </div>
         )}
       </div>
+      {chatAlert && <Link href="/admin/chats" onClick={() => setChatAlert("")} role="status" aria-live="polite" className="fixed right-5 top-20 z-[100] max-w-[calc(100vw-2.5rem)] rounded-xl bg-blue-950 px-4 py-3 text-sm font-bold text-white shadow-xl">New customer message from {chatAlert} · Open Live Chat</Link>}
     </div>
   );
 }

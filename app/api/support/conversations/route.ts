@@ -44,7 +44,7 @@ export async function POST(request: Request) {
     {
       conversation_id: conversation.id,
       sender_role: "team",
-      body: "Thanks for contacting BloomPath. We’ve received your message. Our team will reply here. If you need a human right away, use the WhatsApp or email options below.",
+      body: "Thanks for contacting BloomPath. We’ve received your message. Our team will reply here as soon as possible.",
       created_at: new Date(messageTime.getTime() + 1).toISOString(),
     },
   ]);
