@@ -23,7 +23,7 @@ type Product = {
   price: number | null;
   sale_price: number | null;
   stock: number;
-  min_order_qty: number;
+  min_order_qty: number | null;
   image: string | null;
   featured: boolean;
   origin_country?: string | null;
@@ -266,6 +266,7 @@ export default function ProductCatalog({
         <div className="mt-3 grid grid-cols-2 gap-3 sm:mt-4 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
           {filteredProducts.map((product) => {
             const displayPrice = product.sale_price ?? product.price;
+            const minimumOrder = Number(product.min_order_qty ?? 0);
             return (
               <article
                 key={product.id}
@@ -309,11 +310,13 @@ export default function ProductCatalog({
                     </h2>
                   </Link>
 
-                  <div className="mt-1 grid grid-cols-2 gap-1 rounded-xl bg-slate-50 p-1.5 text-[10px] sm:mt-3 sm:gap-2 sm:p-2.5 sm:text-xs">
-                    <div>
-                      <p className="font-semibold text-slate-500">Minimum order</p>
-                      <p className="mt-0.5 font-black text-slate-900">{Number(product.min_order_qty || 1)} pcs</p>
-                    </div>
+                  <div className={`mt-1 grid gap-1 rounded-xl bg-slate-50 p-1.5 text-[10px] sm:mt-3 sm:gap-2 sm:p-2.5 sm:text-xs ${minimumOrder > 0 ? "grid-cols-2" : "grid-cols-1"}`}>
+                    {minimumOrder > 0 && (
+                      <div>
+                        <p className="font-semibold text-slate-500">Minimum order</p>
+                        <p className="mt-0.5 font-black text-slate-900">{minimumOrder} pcs</p>
+                      </div>
+                    )}
                     <div className="min-w-0">
                       <p className="flex items-center gap-1 font-semibold text-slate-500"><MapPin size={12} className="shrink-0 text-blue-600" />Available in</p>
                       <p className="mt-0.5 line-clamp-1 font-black text-slate-900">{flagForCountryName(product.stock_country || "")} {product.stock_country || "Location not listed"}</p>
