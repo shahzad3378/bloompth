@@ -22,7 +22,7 @@ export default async function ProductsPage() {
       .select("id, title, slug, description, category, price, sale_price, stock, min_order_qty, image, featured")
       .eq("status", "active")
       .order("created_at", { ascending: false });
-    products = legacy.data?.map((product) => ({ ...product, images: product.image ? [product.image] : [], min_order_qty: 1, origin_country: null, stock_country: null, currency_code: null, video_url: null })) ?? null;
+    products = legacy.data?.map((product) => ({ ...product, images: product.image ? [product.image] : [], min_order_qty: null, origin_country: null, stock_country: null, currency_code: null, video_url: null })) ?? null;
     error = legacy.error;
   }
 
