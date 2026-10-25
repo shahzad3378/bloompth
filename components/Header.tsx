@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ChevronDown, Globe2, ShoppingBag } from "lucide-react";
 import AccountMenu from "@/components/AccountMenu";
 import MarketPreference from "@/components/MarketPreference";
+import ScrollAwareNavigation from "@/components/ScrollAwareNavigation";
 import Link from "next/link";
 import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
@@ -37,11 +38,11 @@ export default async function Header() {
           </div>
         </div>
       </div>
-      <div className="bg-slate-50">
-        <nav className="bp-container flex min-h-12 items-center gap-7 overflow-x-auto whitespace-nowrap text-sm font-semibold text-slate-700" aria-label="Main navigation">
+      <div data-scroll-hide-nav className="max-h-12 overflow-hidden bg-slate-50 opacity-100 transition-[max-height,opacity,transform] duration-200 ease-in-out">
+        <ScrollAwareNavigation />
+        <nav className="bp-container flex min-h-12 items-center justify-start gap-x-5 overflow-x-auto whitespace-nowrap text-sm font-semibold text-slate-700 md:justify-center md:gap-x-7 lg:gap-x-10" aria-label="Main navigation">
           <Link href="/products" className="inline-flex items-center gap-2 text-slate-900 hover:text-blue-700"><Globe2 size={16}/> Products <ChevronDown size={14}/></Link>
           {mainNavLinks.map(link => <Link key={link.href} href={link.href} className="py-3 transition-colors hover:text-blue-700">{link.name}</Link>)}
-
         </nav>
       </div>
     </header>
