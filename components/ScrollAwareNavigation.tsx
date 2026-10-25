@@ -4,8 +4,8 @@ import { useEffect } from "react";
 
 export default function ScrollAwareNavigation() {
   useEffect(() => {
-    const nav = document.querySelector<HTMLElement>("[data-scroll-hide-nav]");
-    if (!nav) return;
+    const header = document.querySelector<HTMLElement>("[data-scroll-hide-header]");
+    if (!header) return;
 
     const mobileViewport = window.matchMedia("(max-width: 767px)");
     let previousY = window.scrollY;
@@ -13,17 +13,15 @@ export default function ScrollAwareNavigation() {
     let directionDistance = 0;
 
     const show = () => {
-      nav.style.maxHeight = "";
-      nav.style.opacity = "";
-      nav.style.transform = "";
-      nav.style.pointerEvents = "";
+      header.style.transform = "";
+      header.style.opacity = "";
+      header.style.pointerEvents = "";
     };
 
     const hide = () => {
-      nav.style.maxHeight = "0px";
-      nav.style.opacity = "0";
-      nav.style.transform = "translateY(-8px)";
-      nav.style.pointerEvents = "none";
+      header.style.transform = "translateY(-100%)";
+      header.style.opacity = "0";
+      header.style.pointerEvents = "none";
     };
 
     const handleScroll = () => {
