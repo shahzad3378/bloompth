@@ -270,12 +270,15 @@ export default function ProductCatalog({
             return (
               <article
                 key={product.id}
-                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 sm:rounded-3xl bg-white transition duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-xl"
+                className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-xl sm:rounded-3xl"
               >
                 <Link
                   href={`/products/${product.slug}`}
-                  className="relative block overflow-hidden"
-                >
+                  aria-label={`View ${product.title} details`}
+                  title={`View ${product.title}`}
+                  className="absolute inset-0 z-10 cursor-pointer rounded-2xl"
+                />
+                <div className="relative block overflow-hidden">
                   <div className="aspect-[4/3] overflow-hidden bg-white p-2 sm:aspect-square sm:p-5">
                     {product.image || product.video_url ? (
                       <ProductCardMedia image={product.image} videoUrl={product.video_url} title={product.title} />
@@ -289,8 +292,7 @@ export default function ProductCatalog({
                       </div>
                     )}
                   </div>
-
-                </Link>
+                </div>
 
                 <div className="flex flex-1 flex-col p-2 sm:p-5">
                   <div className="flex min-w-0 items-center justify-between gap-1.5 sm:gap-3">
@@ -304,11 +306,9 @@ export default function ProductCatalog({
 
                   </div>
 
-                  <Link href={`/products/${product.slug}`}>
-                    <h2 className="mt-1.5 line-clamp-2 min-h-10 text-xs font-black leading-5 sm:mt-2 sm:text-lg sm:leading-6 text-slate-950 transition group-hover:text-blue-600">
-                      {product.title}
-                    </h2>
-                  </Link>
+                  <h2 className="mt-1.5 line-clamp-2 min-h-10 text-xs font-black leading-5 sm:mt-2 sm:text-lg sm:leading-6 text-slate-950 transition group-hover:text-blue-600">
+                    {product.title}
+                  </h2>
 
                   <div className={`mt-1 grid gap-1 rounded-xl bg-slate-50 p-1.5 text-[10px] sm:mt-3 sm:gap-2 sm:p-2.5 sm:text-xs ${minimumOrder > 0 ? "grid-cols-2" : "grid-cols-1"}`}>
                     {minimumOrder > 0 && (
@@ -332,7 +332,7 @@ export default function ProductCatalog({
                         href={`/request-product?product=${encodeURIComponent(product.title)}&productId=${product.id}`}
                         aria-label={`Request ${product.title}`}
                         title="Request this product"
-                        className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-slate-900 bg-white text-slate-900 transition hover:bg-slate-900 hover:text-white sm:h-10 sm:w-10"
+                        className="relative z-20 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-slate-900 bg-white text-slate-900 transition hover:bg-slate-900 hover:text-white sm:h-10 sm:w-10"
                       >
                         <ShoppingCart size={18} strokeWidth={2} />
                       </Link>
