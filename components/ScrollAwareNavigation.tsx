@@ -9,6 +9,8 @@ export default function ScrollAwareNavigation() {
 
     const mobileViewport = window.matchMedia("(max-width: 767px)");
     let previousY = window.scrollY;
+    let direction = 0;
+    let directionDistance = 0;
 
     const show = () => {
       nav.style.maxHeight = "";
@@ -28,16 +30,36 @@ export default function ScrollAwareNavigation() {
       const currentY = window.scrollY;
       if (!mobileViewport.matches) {
         show();
-      } else if (currentY < 64 || currentY < previousY - 8) {
+        previousY = currentY;
+        return;
+      }
+
+      const delta = currentY - previousY;
+      previousY = currentY;
+      if (delta === 0) return;
+
+      const nextDirection = Math.sign(delta);
+      if (nextDirection !== direction) {
+        direction = nextDirection;
+        directionDistance = Math.abs(delta);
+      } else {
+        directionDistance += Math.abs(delta);
+      }
+
+      if (currentY < 64) {
         show();
-      } else if (currentY > 120 && currentY > previousY + 8) {
+        directionDistance = 0;
+      } else if (direction < 0 && directionDistance >= 8) {
+        show();
+      } else if (direction > 0 && directionDistance >= 14 && currentY > 120) {
         hide();
       }
-      previousY = currentY;
     };
 
     const handleViewportChange = () => {
       previousY = window.scrollY;
+      direction = 0;
+      directionDistance = 0;
       if (!mobileViewport.matches) show();
     };
 
