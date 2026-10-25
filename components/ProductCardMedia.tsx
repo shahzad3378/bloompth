@@ -23,7 +23,7 @@ export default function ProductCardMedia({ image, videoUrl, title }: ProductCard
       } else {
         video.pause();
       }
-    }, { threshold: 0.35 });
+    }, { rootMargin: "180px 0px", threshold: 0.15 });
 
     observer.observe(video);
     const onVisibilityChange = () => {
@@ -48,7 +48,8 @@ export default function ProductCardMedia({ image, videoUrl, title }: ProductCard
         muted
         playsInline
         loop
-        preload="metadata"
+        poster={image || undefined}
+        preload="none"
         aria-label={`${title} product video`}
         onTimeUpdate={(event) => {
           if (event.currentTarget.currentTime >= 9) event.currentTarget.currentTime = 0;
