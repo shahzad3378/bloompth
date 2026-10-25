@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   Menu,
   MessageSquareText,
+  MessagesSquare,
   Package,
 ShoppingCart,
   Settings,
@@ -42,6 +43,11 @@ const adminLinks = [
     name: "Product Requests",
     href: "/admin/requests",
     icon: MessageSquareText,
+  },
+  {
+    name: "Live Chat",
+    href: "/admin/chats",
+    icon: MessagesSquare,
   },
 {
 name: "Orders",

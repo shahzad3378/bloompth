@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AttributionTracker from "@/components/AttributionTracker";
+import SupportChatWidget from "@/components/SupportChatWidget";
 
 export default function WebsiteLayout({
   children,
@@ -16,6 +17,7 @@ export default function WebsiteLayout({
       <main className="min-w-0 flex-1">{children}</main>
 
       <Footer />
+      <SupportChatWidget />
     </>
   );
 }
