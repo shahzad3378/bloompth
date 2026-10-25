@@ -268,20 +268,6 @@ export default function ProductCatalog({
             const displayPrice = product.sale_price ?? product.price;
             const stock = Number(product.stock ?? 0);
 
-            const hasSale =
-              product.sale_price !== null &&
-              product.price !== null &&
-              Number(product.sale_price) < Number(product.price);
-
-            const discountPercentage = hasSale
-              ? Math.round(
-                  ((Number(product.price) -
-                    Number(product.sale_price)) /
-                    Number(product.price)) *
-                    100
-                )
-              : 0;
-
             return (
               <article
                 key={product.id}
@@ -307,7 +293,7 @@ export default function ProductCatalog({
 
                 </Link>
 
-                <div className="flex flex-1 flex-col p-2.5 sm:p-5">
+                <div className="flex flex-1 flex-col p-2 sm:p-5">
                   <div className="flex min-w-0 items-center justify-between gap-1.5 sm:gap-3">
                     <p className="line-clamp-1 min-w-0 text-[10px] font-black uppercase tracking-wider text-blue-600 sm:text-xs">
                       {product.category || "General"}
@@ -331,7 +317,7 @@ export default function ProductCatalog({
                     </h2>
                   </Link>
 
-                  <div className="mt-2 grid grid-cols-2 gap-1.5 rounded-xl bg-slate-50 p-2 text-[10px] sm:mt-3 sm:gap-2 sm:p-2.5 sm:text-xs">
+                  <div className="mt-1 grid grid-cols-2 gap-1 rounded-xl bg-slate-50 p-1.5 text-[10px] sm:mt-3 sm:gap-2 sm:p-2.5 sm:text-xs">
                     <div>
                       <p className="font-semibold text-slate-500">Minimum order</p>
                       <p className="mt-0.5 font-black text-slate-900">{Number(product.min_order_qty || 1)} pcs</p>
@@ -342,17 +328,15 @@ export default function ProductCatalog({
                     </div>
                   </div>
 
-                  <div className="mt-auto pt-3 sm:pt-5">
-                    <div className="border-t border-slate-100 pt-3 sm:pt-4">
+                  <div className="mt-auto pt-2 sm:pt-5">
+                    <div className="border-t border-slate-100 pt-2 sm:pt-4">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:text-xs">Wholesale price</p>
                   <div className="mt-1 text-lg font-black text-slate-950 sm:mt-2 sm:text-2xl">
                     <CurrencyPrice amount={displayPrice ?? 0} baseCurrency={product.currency_code || currencyForCountryName(product.stock_country || "") || "USD"} targetCurrency={displayCurrency} />
                   </div>
-                  {hasSale && product.price ? <p className="mt-1 text-[10px] text-slate-500 sm:text-xs">Regular price: <CurrencyPrice amount={product.price} baseCurrency={product.currency_code || currencyForCountryName(product.stock_country || "") || "USD"} targetCurrency={displayCurrency} /></p> : null}
-                  {hasSale && <span className="mt-1.5 inline-flex w-fit rounded-full bg-red-50 px-2 py-1 text-[10px] font-black text-red-700 sm:mt-2 sm:px-2.5 sm:text-xs">Save {discountPercentage}%</span>}
                 </div>
 
-                <div className="mt-3 grid grid-cols-2 gap-1.5 sm:mt-4 sm:gap-2">
+                <div className="mt-2 grid grid-cols-2 gap-1.5 sm:mt-4 sm:gap-2">
                       <Link
                         href={`/products/${product.slug}`}
                         className="inline-flex min-w-0 items-center justify-center whitespace-nowrap rounded-xl border border-slate-200 px-1 py-2 text-center text-[10px] sm:px-3 sm:py-3 sm:text-sm font-black text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
