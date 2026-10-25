@@ -149,7 +149,7 @@ export default function SettingsForm({
               name="phone"
               type="text"
               defaultValue={settings.phone ?? ""}
-              placeholder="+971 50 123 4567"
+              
               className={inputClassName}
             />
           </label>
@@ -164,12 +164,11 @@ export default function SettingsForm({
               name="whatsapp"
               type="text"
               defaultValue={settings.whatsapp ?? ""}
-              placeholder="971501234567"
+              
               className={inputClassName}
             />
 
             <span className="mt-2 block text-xs font-semibold text-slate-400">
-              Country code ke saath number likhein. Example: 971501234567
             </span>
           </label>
 
@@ -183,7 +182,7 @@ export default function SettingsForm({
               name="email"
               type="email"
               defaultValue={settings.email ?? ""}
-              placeholder="info@bloompath.com"
+              
               className={inputClassName}
             />
           </label>

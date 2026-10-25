@@ -144,7 +144,6 @@ export default function SignupPage() {
                 required
                 value={phone}
                 onChange={(event) => setPhone(event.target.value)}
-                placeholder="+971 50 123 4567"
                 className="w-full rounded-xl border border-slate-300 px-4 py-3.5 text-slate-950 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
               />
             </div>
@@ -163,7 +162,6 @@ export default function SignupPage() {
                 required
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                placeholder="you@example.com"
                 className="w-full rounded-xl border border-slate-300 px-4 py-3.5 text-slate-950 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
               />
             </div>

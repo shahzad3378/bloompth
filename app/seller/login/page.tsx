@@ -118,7 +118,6 @@ export default function SellerLoginPage() {
                 required
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                placeholder="you@example.com"
                 className="w-full rounded-xl border border-slate-300 px-4 py-3.5 text-slate-950 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
               />
             </div>

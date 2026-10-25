@@ -110,7 +110,6 @@ export default function LoginForm() {
           onChange={(event) =>
             setEmail(event.target.value)
           }
-          placeholder="admin@bloompath.com"
           className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
         />
       </div>

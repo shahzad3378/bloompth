@@ -38,7 +38,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Could not start the chat. Please try again." }, { status: 500 });
   }
 
-  const { error: messageError } = await supabase.from("support_messages").insert({ conversation_id: conversation.id, sender_role: "customer", body: firstMessage });
+  const messageTime = new Date();
+  const { error: messageError } = await supabase.from("support_messages").insert([
+    { conversation_id: conversation.id, sender_role: "customer", body: firstMessage, created_at: messageTime.toISOString() },
+    {
+      conversation_id: conversation.id,
+      sender_role: "team",
+      body: "Thanks for contacting BloomPath. We’ve received your message. Our team will reply here. If you need a human right away, use the WhatsApp or email options below.",
+      created_at: new Date(messageTime.getTime() + 1).toISOString(),
+    },
+  ]);
   if (messageError) {
     await supabase.from("support_conversations").delete().eq("id", conversation.id);
     return NextResponse.json({ error: "Could not send your message. Please try again." }, { status: 500 });

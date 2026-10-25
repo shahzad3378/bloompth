@@ -265,7 +265,7 @@ export default async function AdminUsersPage({
               name="email"
               type="email"
               required
-              placeholder="user@example.com"
+              
               className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
             />
           </div>

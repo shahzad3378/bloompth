@@ -83,7 +83,7 @@ export default function SupportChatWidget() {
         </header>
         {!session ? <form onSubmit={startChat} className="flex flex-1 flex-col gap-3 p-4">
           <label className="text-xs font-bold text-slate-700">Your name<input required maxLength={120} value={name} onChange={e=>setName(e.target.value)} className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" placeholder="Name"/></label>
-          <label className="text-xs font-bold text-slate-700">Email <span className="font-normal text-slate-400">(optional)</span><input type="email" maxLength={254} value={email} onChange={e=>setEmail(e.target.value)} className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" placeholder="you@example.com"/></label>
+          <label className="text-xs font-bold text-slate-700">Email <span className="font-normal text-slate-400">(optional)</span><input type="email" maxLength={254} value={email} onChange={e=>setEmail(e.target.value)} className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"/></label>
           <label className="flex flex-1 flex-col text-xs font-bold text-slate-700">How can we help?<textarea required maxLength={2000} value={firstMessage} onChange={e=>setFirstMessage(e.target.value)} className="mt-1 min-h-24 flex-1 resize-none rounded-lg border border-slate-300 px-3 py-2 text-sm" placeholder="Write your message..."/></label>
           {error && <p role="alert" className="text-xs text-red-600">{error}</p>}
           <button disabled={busy} className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-700 px-4 py-3 text-sm font-black text-white disabled:opacity-60">{busy&&<LoaderCircle className="animate-spin" size={16}/>}Start chat</button>
@@ -91,6 +91,13 @@ export default function SupportChatWidget() {
           <div className="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-4" aria-live="polite">
             {messages.map(message=><div key={message.id} className={`flex ${message.sender_role==="customer"?"justify-end":"justify-start"}`}><div className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm ${message.sender_role==="customer"?"bg-blue-700 text-white":"border border-slate-200 bg-white text-slate-800"}`}><p className="whitespace-pre-wrap break-words">{message.body}</p><time className={`mt-1 block text-[10px] ${message.sender_role==="customer"?"text-blue-100":"text-slate-400"}`}>{new Date(message.created_at).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</time></div></div>)}
             {messages.length===0&&<p className="text-center text-sm text-slate-500">Your chat is ready. Send us a message.</p>}
+          </div>
+          <div className="border-t border-slate-200 bg-white px-4 py-3">
+            <p className="text-xs font-semibold text-slate-600">Need a person to help? Contact the team directly:</p>
+            <div className="mt-2 flex gap-2">
+              <a href="https://wa.me/971507297900" target="_blank" rel="noopener noreferrer" className="flex-1 rounded-lg bg-emerald-50 px-3 py-2 text-center text-xs font-bold text-emerald-800 hover:bg-emerald-100">WhatsApp</a>
+              <a href="mailto:bloompathsms@gmail.com" className="flex-1 rounded-lg bg-blue-50 px-3 py-2 text-center text-xs font-bold text-blue-800 hover:bg-blue-100">Email</a>
+            </div>
           </div>
           <form onSubmit={sendMessage} className="border-t border-slate-200 bg-white p-3"><div className="flex items-end gap-2"><textarea aria-label="Message" rows={1} maxLength={2000} value={draft} onChange={e=>setDraft(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();e.currentTarget.form?.requestSubmit()}}} className="max-h-28 min-h-10 flex-1 resize-y rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Type a message..."/><button aria-label="Send message" disabled={busy||!draft.trim()} className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-700 text-white disabled:opacity-50"><Send size={17}/></button></div>{error&&<p role="alert" className="mt-2 text-xs text-red-600">{error}</p>}</form>
         </>}
