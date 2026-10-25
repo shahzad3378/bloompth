@@ -263,7 +263,7 @@ export default function ProductCatalog({
           </div>
         </div>
       ) : (
-        <div className="mt-3 grid grid-cols-1 gap-3 min-[360px]:grid-cols-2 sm:mt-4 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
+        <div className="mt-3 grid grid-cols-2 gap-3 sm:mt-4 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
           {filteredProducts.map((product) => {
             const displayPrice = product.sale_price ?? product.price;
             const stock = Number(product.stock ?? 0);
