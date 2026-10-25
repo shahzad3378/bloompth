@@ -24,7 +24,7 @@ export default async function Header() {
   const phone = settings?.phone?.trim() || "+971 50 729 7900";
   const email = settings?.email?.trim() || "bloompathsms@gmail.com";
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white shadow-sm">
+    <header data-scroll-hide-header className="sticky top-0 z-50 border-b border-slate-200 bg-white shadow-sm transition-transform duration-200 ease-in-out">
       <div className="border-b border-slate-100 bg-white">
         <div className="bp-container flex min-w-0 flex-wrap items-center justify-between gap-x-3 gap-y-2 py-3 sm:min-h-[76px] sm:flex-nowrap sm:gap-4">
           <Link href="/" className="shrink-0" aria-label="BloomPath homepage">
@@ -38,7 +38,7 @@ export default async function Header() {
           </div>
         </div>
       </div>
-      <div data-scroll-hide-nav className="max-h-12 overflow-hidden bg-slate-50 opacity-100 transition-[max-height,opacity,transform] duration-200 ease-in-out">
+      <div className="bg-slate-50">
         <ScrollAwareNavigation />
         <nav className="bp-container flex min-h-12 items-center justify-start gap-x-5 overflow-x-auto whitespace-nowrap text-sm font-semibold text-slate-700 md:justify-center md:gap-x-7 lg:gap-x-10" aria-label="Main navigation">
           <Link href="/products" className="inline-flex items-center gap-2 text-slate-900 hover:text-blue-700"><Globe2 size={16}/> Products <ChevronDown size={14}/></Link>
