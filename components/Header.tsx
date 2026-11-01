@@ -8,6 +8,8 @@ import { createClient } from "@/lib/supabase/server";
 
 
 const mainNavLinks = [
+  { name: "Services", href: "/#services" },
+  { name: "Get a Quote", href: "/#get-quote" },
   { name: "Dropshipping", href: "/dropshipping-uae" },
   { name: "About BloomPath", href: "/about" },
   { name: "How it works", href: "/how-it-works" },

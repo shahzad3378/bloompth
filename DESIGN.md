@@ -53,7 +53,7 @@ The public website should feel like a well-run global sourcing and fulfillment c
 ### Product context and register
 
 - **Audience and primary job:** online sellers and businesses sourcing products across markets evaluating product sourcing, wholesale supply, dropshipping and local fulfillment support.
-- **Target market:** UAE first. GCC references are removed from primary conversion copy until the UAE offer is complete.
+- **Target market:** Worldwide sourcing buyers; warehousing and fulfillment in UAE and Canada; wholesale/liquidation inquiries for USA, Canada and UAE.
 - **Locale and language policy:** English-first public site with plain business language. Arabic can be introduced as a separate reviewed phase.
 - **Usage scene:** Mobile-first discovery from ads, WhatsApp and social media, with desktop research before contacting the team.
 - **Register:** Brand-led marketing website with a practical product catalogue and seller/admin applications.
@@ -118,3 +118,7 @@ Voice is specific, operational and honest. Avoid unsupported counts, delivery gu
 - **Do:** Pair every strong claim with a clear next action or qualification.
 - **Don't:** Copy MyZambeel layouts, wording, plans or operational claims.
 - **Don't:** use gradients, floating orbs and identical icon cards as the primary identity.
+
+## Service landing and customer conversations
+
+The homepage introduces three service paths before the catalogue. Ocean-blue actions lead to a short email-based quote form; the catalogue stays at /products. Never invent price, stock, delivery guarantees or testimonials. WebsiteChat is the shared public conversation surface, explicitly labeled as an automated service guide with asynchronous team follow-up. No phone is required. LeadForm and chat use /api/website-chat; a secure visitor cookie identifies each conversation. Staff use /admin/conversations, protected by the existing active-admin role contract. Visitor session credentials and database service credentials are never rendered or logged.
