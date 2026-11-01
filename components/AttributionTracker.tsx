@@ -9,6 +9,7 @@ const TRACKING_KEYS = [
   "utm_content",
   "utm_term",
   "fbclid",
+  "gclid",
 ] as const;
 
 export default function AttributionTracker() {

@@ -22,12 +22,13 @@ export default async function AdminLayout({
     .from("product_requests")
     .select("id", { count: "exact", head: true })
     .eq("status", "New");
+  const { count: chatCount } = await supabase.from("website_conversations").select("id", { count: "exact", head: true }).eq("status", "waiting");
   const userEmail =
     account.profile.email || "admin@bloompath.com";
 
   return (
     <div className="min-h-screen bg-slate-100 lg:flex">
-      <AdminSidebar userEmail={userEmail} />
+      <AdminSidebar userEmail={userEmail} chatCount={chatCount ?? 0} />
 
       <div className="min-w-0 flex-1">
         <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 px-5 py-4 backdrop-blur lg:px-8">

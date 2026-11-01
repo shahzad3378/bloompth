@@ -1,3 +1,4 @@
+import WebsiteChat from "@/components/WebsiteChat";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AttributionTracker from "@/components/AttributionTracker";
@@ -16,6 +17,7 @@ export default function WebsiteLayout({
       <main className="flex-1">{children}</main>
 
       <Footer />
+      <WebsiteChat />
     </>
   );
 }

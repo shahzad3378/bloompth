@@ -20,9 +20,11 @@ UserCheck,
 
 type AdminSidebarProps = {
   userEmail: string;
+  chatCount?: number;
 };
 
 const adminLinks = [
+  { name: "Chat & Quote Inbox", href: "/admin/conversations", icon: MessageSquareText },
   {
     name: "Dashboard",
     href: "/admin",
@@ -66,7 +68,7 @@ icon: UserCheck,
 ];
 
 export default function AdminSidebar({
-  userEmail,
+  userEmail, chatCount = 0,
 }: AdminSidebarProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -173,7 +175,7 @@ export default function AdminSidebar({
                       strokeWidth={active ? 2.5 : 2}
                     />
 
-                    {link.name}
+                    {link.name}{link.href === "/admin/conversations" && chatCount > 0 ? <span className="ml-2 rounded-full bg-red-600 px-2 py-0.5 text-xs text-white">{chatCount}</span> : null}
                   </span>
 
                   <ChevronRight
