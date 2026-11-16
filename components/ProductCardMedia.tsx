@@ -11,6 +11,9 @@ type ProductCardMediaProps = {
 export default function ProductCardMedia({ image, videoUrl, title }: ProductCardMediaProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoFailed, setVideoFailed] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
+
+  useEffect(() => { setImageFailed(false); }, [image]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -59,9 +62,16 @@ export default function ProductCardMedia({ image, videoUrl, title }: ProductCard
     );
   }
 
-  if (image) {
-    return <img src={image} alt={title} loading="lazy" className="h-full w-full object-contain" />;
+  if (image && !imageFailed) {
+    return <img src={image} alt={title} loading="lazy" onError={() => setImageFailed(true)} className="h-full w-full object-contain" />;
   }
 
-  return <span className="text-xs font-semibold text-slate-400">No product media</span>;
+  const brand = title.toLowerCase().startsWith("cerave") ? "CeraVe" : title.toLowerCase().startsWith("centrum") ? "Centrum" : "BloomPath";
+  return (
+    <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-slate-50 via-white to-blue-50 px-5 text-center" role="img" aria-label={`${title} product photo coming soon`}>
+      <div className="rounded-xl border border-blue-100 bg-white px-5 py-3 text-xl font-black tracking-tight text-blue-800 shadow-sm">{brand}</div>
+      <span className="line-clamp-3 max-w-[220px] text-sm font-semibold leading-snug text-slate-700">{title}</span>
+      <span className="text-[11px] font-medium text-slate-400">Product photo coming soon</span>
+    </div>
+  );
 }
