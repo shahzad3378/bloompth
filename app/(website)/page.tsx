@@ -182,13 +182,13 @@ export default function Home() {
         <p className="mt-4 max-w-3xl text-slate-600">Focus on finding customers and growing sales. BloomPath helps arrange products, storage, picking, packing, delivery and cash-on-delivery collection.</p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[
-            {icon:PackageSearch,title:"Personal & product sourcing",text:"Supplier coordination and product sourcing tailored to your needs."},
-            {icon:Warehouse,title:"Storage & inventory",text:"Stock receiving, organized storage and inventory visibility."},
-            {icon:ScanBarcode,title:"Picking & packing",text:"Order picking, careful packing and dispatch preparation."},
-            {icon:Truck,title:"Last-mile delivery",text:"Delivery coordination with tracking and status visibility."},
-            {icon:Wallet,title:"COD collection",text:"Cash-on-delivery collection, reconciliation and agreed settlement schedules."},
-            {icon:BarChart3,title:"Grow your sales",text:"Spend more time marketing while we coordinate logistics."}
-          ].map(item=><article key={item.title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><item.icon size={30} className="text-blue-800"/><h3 className="mt-4 text-lg font-bold">{item.title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{item.text}</p></article>)}
+            {icon:PackageSearch,title:"Personal & product sourcing",image:"https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=900&q=80",text:"Supplier coordination and product sourcing tailored to your needs."},
+            {icon:Warehouse,title:"Storage & inventory",image:"https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=900&q=80",text:"Stock receiving, organized storage and inventory visibility."},
+            {icon:ScanBarcode,title:"Picking & packing",image:"https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=900&q=80",text:"Order picking, careful packing and dispatch preparation."},
+            {icon:Truck,title:"Last-mile delivery",image:"https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&w=900&q=80",text:"Delivery coordination with tracking and status visibility."},
+            {icon:Wallet,title:"COD collection",image:"https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=80",text:"Cash-on-delivery collection, reconciliation and agreed settlement schedules."},
+            {icon:BarChart3,title:"Grow your sales",image:"https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=80",text:"Spend more time marketing while we coordinate logistics."}
+          ].map(item=><article key={item.title} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"><img src={item.image} alt={`${item.title} illustrative service photo`} loading="lazy" className="h-44 w-full object-cover" /><div className="p-6"><item.icon size={30} className="text-blue-800"/><h3 className="mt-4 text-lg font-bold">{item.title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{item.text}</p></div></article>)}
         </div>
         <a href="#get-quote" className="mt-7 inline-flex items-center gap-2 rounded-xl bg-blue-800 px-6 py-3 font-bold text-white hover:bg-blue-900">Request fulfillment quote <ArrowRight size={18}/></a>
       </section>
@@ -224,13 +224,13 @@ export default function Home() {
           <h2 className="mt-3 text-3xl font-black sm:text-4xl">More than fulfillment.</h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              {icon:PackageSearch,title:"Personal sourcing",text:"Custom product requests, supplier sourcing and procurement coordination."},
-              {icon:Luggage,title:"Personal baggage handling",text:"Personal effects, excess baggage and relocation shipment support."},
-              {icon:Container,title:"Commercial shipments",text:"Commercial cargo, air freight, import/export and documentation coordination."},
-              {icon:Plane,title:"DDP shipping solutions",text:"Duties-paid cross-border options on eligible routes and shipments."},
-              {icon:Wallet,title:"COD management",text:"Payment collection reporting, reconciliation and agreed settlement cycles."},
-              {icon:ShieldCheck,title:"Quality, flexibility & value",text:"Careful handling, reasonable quotations and flexible volume-based solutions."}
-            ].map(item=><article key={item.title} className="rounded-2xl bg-white p-6 shadow-sm"><item.icon className="text-blue-800" size={30}/><h3 className="mt-4 text-lg font-bold">{item.title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{item.text}</p></article>)}
+              {icon:PackageSearch,title:"Personal sourcing",image:"https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=900&q=80",text:"Custom product requests, supplier sourcing and procurement coordination."},
+              {icon:Luggage,title:"Personal baggage handling",image:"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=900&q=80",text:"Personal effects, excess baggage and relocation shipment support."},
+              {icon:Container,title:"Commercial shipments",image:"https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=900&q=80",text:"Commercial cargo, air freight, import/export and documentation coordination."},
+              {icon:Plane,title:"DDP shipping solutions",image:"https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=900&q=80",text:"Duties-paid cross-border options on eligible routes and shipments."},
+              {icon:Wallet,title:"COD management",image:"https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=80",text:"Payment collection reporting, reconciliation and agreed settlement cycles."},
+              {icon:ShieldCheck,title:"Quality, flexibility & value",image:"https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=900&q=80",text:"Careful handling, reasonable quotations and flexible volume-based solutions."}
+            ].map(item=><article key={item.title} className="overflow-hidden rounded-2xl bg-white shadow-sm"><img src={item.image} alt={`${item.title} illustrative service photo`} loading="lazy" className="h-44 w-full object-cover" /><div className="p-6"><item.icon className="text-blue-800" size={30}/><h3 className="mt-4 text-lg font-bold">{item.title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{item.text}</p></div></article>)}
           </div>
         </div>
       </section>
