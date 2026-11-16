@@ -14,7 +14,7 @@ export async function notifyWebsiteChat(input: { conversationId: string; message
         body: JSON.stringify({ chat_id: chatId, text, disable_web_page_preview: true }),
         signal: AbortSignal.timeout(8000),
       });
-      if (!response.ok) console.error("Telegram notification failed", response.status);
+      if (!response.ok) { const detail = await response.json().catch(() => ({})); console.error("Telegram notification failed", response.status, detail.description ?? "Unknown Telegram API error"); }
       else {
         const data = await response.json();
         if (data.ok && data.result?.message_id) {
