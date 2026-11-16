@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { createHash, randomBytes } from "node:crypto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { serviceAnswer, services } from "@/lib/service-guide";
+import { notifyWebsiteChat } from "@/lib/chat-notifications";
 export const dynamic = "force-dynamic";
 const reply = (body: unknown, status = 200) =>
   Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
@@ -168,6 +169,8 @@ export async function POST(request: Request) {
       })
       .eq("id", c.id);
     if (updateError) throw updateError;
+    // Notify after the conversation is safely persisted. Notification errors never lose the chat.
+    await notifyWebsiteChat({ conversationId: c.id, message: body, kind, name, email, country });
     return reply({ ok: true });
   } catch {
     return reply(
