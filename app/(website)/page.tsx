@@ -6,12 +6,13 @@ import {
   Boxes,
   ArrowRight,
   Globe2,
+  Truck, Wallet, PackageCheck, ScanBarcode, Plane, Luggage, Container, ShieldCheck, BadgeDollarSign, MonitorSmartphone, Network, BarChart3, MapPin, Store, CheckCircle2,
 } from "lucide-react";
 import LeadForm from "@/components/LeadForm";
 export const metadata = {
-  title: "Product Sourcing, Wholesale & Fulfillment in UAE and Canada",
+  title: "Global Fulfillment, Sourcing, Logistics & Technology | BloomPath",
   description:
-    "Source products worldwide, explore wholesale stock and arrange warehousing and fulfillment in the UAE and Canada. Request a quote from BloomPath.",
+    "BloomPath offers 10,000 orders/day handling capacity, international fulfillment, product sourcing, COD, DDP and technology-driven logistics across the Middle East, South Asia, USA and Canada.",
 };
 const offers = [
   {
@@ -49,17 +50,12 @@ export default function Home() {
               BLOOMPATH · SOURCING & FULFILLMENT
             </p>
             <h1 className="mt-5 max-w-3xl text-4xl font-black leading-[1.07] tracking-tight text-[#102b42] sm:text-6xl">
-              Source products worldwide.
+              You Sell. We Source.
               <br />
-              <span className="text-blue-800">
-                Fulfill in UAE
-                <br className="hidden lg:block" /> & Canada.
-              </span>
+              <span className="text-blue-800">We Fulfill. We Deliver.</span>
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-8 text-slate-600">
-              From finding the right product to storing stock and sending
-              orders, BloomPath helps buyers, traders and online sellers take
-              the next step.
+              From product sourcing and warehousing to picking, packing, delivery and COD collection, BloomPath connects your business to international logistics through our own technology-driven platform.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <a
@@ -76,8 +72,7 @@ export default function Home() {
               </a>
             </div>
             <p className="mt-5 text-sm text-slate-600">
-              Worldwide sourcing · UAE & Canada operations · Personal & business
-              inquiries
+              10,000 orders/day handling capacity · Global logistics network · Own logistics technology
             </p>
           </div>
           <div className="rounded-3xl bg-[#123b57] p-6 text-white sm:p-9">
@@ -166,6 +161,85 @@ export default function Home() {
               </li>
             ))}
           </ol>
+        </div>
+      </section>
+
+      {/* New homepage service banners: existing navigation, catalogue and lead form remain unchanged. */}
+      <section className="border-y border-blue-100 bg-[#eaf4fc] py-14 sm:py-20">
+        <div className="bp-container">
+          <p className="text-xs font-bold uppercase tracking-widest text-blue-800">BUILT TO SCALE WITH YOUR BUSINESS</p>
+          <h2 className="mt-3 text-3xl font-black text-[#102b42] sm:text-4xl">Global logistics. Serious fulfillment capacity.</h2>
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            <div className="rounded-2xl bg-white p-7 shadow-sm"><p className="text-4xl font-black text-blue-800">10,000</p><h3 className="mt-2 font-bold">Orders per day</h3><p className="mt-2 text-sm text-slate-600">Actual daily order handling capacity — not a claim of daily completed volume.</p></div>
+            <div className="rounded-2xl bg-white p-7 shadow-sm"><Globe2 className="text-blue-800" size={34}/><h3 className="mt-4 font-bold">International logistics network</h3><p className="mt-2 text-sm text-slate-600">Middle East, Pakistan, India, Nepal, Bangladesh, United States and Canada.</p></div>
+            <div className="rounded-2xl bg-white p-7 shadow-sm"><MonitorSmartphone className="text-blue-800" size={34}/><h3 className="mt-4 font-bold">Powered by our own technology</h3><p className="mt-2 text-sm text-slate-600">Connected tools for inventory, fulfillment, shipments, tracking and reporting.</p></div>
+          </div>
+        </div>
+      </section>
+      <section className="bp-container py-14 sm:py-20">
+        <p className="text-xs font-bold uppercase tracking-widest text-blue-800">ONE PARTNER. END-TO-END SUPPORT.</p>
+        <h2 className="mt-3 text-3xl font-black sm:text-4xl">You sell. We arrange everything.</h2>
+        <p className="mt-4 max-w-3xl text-slate-600">Focus on finding customers and growing sales. BloomPath helps arrange products, storage, picking, packing, delivery and cash-on-delivery collection.</p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {[
+            {icon:PackageSearch,title:"Personal & product sourcing",text:"Supplier coordination and product sourcing tailored to your needs."},
+            {icon:Warehouse,title:"Storage & inventory",text:"Stock receiving, organized storage and inventory visibility."},
+            {icon:ScanBarcode,title:"Picking & packing",text:"Order picking, careful packing and dispatch preparation."},
+            {icon:Truck,title:"Last-mile delivery",text:"Delivery coordination with tracking and status visibility."},
+            {icon:Wallet,title:"COD collection",text:"Cash-on-delivery collection, reconciliation and agreed settlement schedules."},
+            {icon:BarChart3,title:"Grow your sales",text:"Spend more time marketing while we coordinate logistics."}
+          ].map(item=><article key={item.title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><item.icon size={30} className="text-blue-800"/><h3 className="mt-4 text-lg font-bold">{item.title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{item.text}</p></article>)}
+        </div>
+        <a href="#get-quote" className="mt-7 inline-flex items-center gap-2 rounded-xl bg-blue-800 px-6 py-3 font-bold text-white hover:bg-blue-900">Request fulfillment quote <ArrowRight size={18}/></a>
+      </section>
+      <section className="bg-[#102b42] py-14 text-white sm:py-20">
+        <div className="bp-container">
+          <p className="text-xs font-bold uppercase tracking-widest text-sky-300">BLOOMPATH TECHNOLOGY ECOSYSTEM</p>
+          <h2 className="mt-3 max-w-3xl text-3xl font-black sm:text-4xl">Our own logistics software. Your operations in focus.</h2>
+          <p className="mt-4 max-w-3xl leading-7 text-slate-200">Our in-house logistics management platform connects shipment creation, warehouse workflows, fulfillment orders, inventory visibility, tracking and multi-carrier shipping integrations. Features are available according to the enabled service and operational setup.</p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {icon:MonitorSmartphone,title:"Logistics dashboard",text:"Shipment and operational visibility"},
+              {icon:Warehouse,title:"Warehouse & inventory",text:"Stock, scanning and fulfillment workflows"},
+              {icon:Network,title:"Multi-carrier connectivity",text:"Connected shipping integrations"},
+              {icon:MapPin,title:"Tracking & reporting",text:"Shipment milestones and reports"}
+            ].map(item=><div key={item.title} className="rounded-2xl border border-white/20 bg-white/10 p-6"><item.icon className="text-sky-300" size={30}/><h3 className="mt-4 font-bold">{item.title}</h3><p className="mt-2 text-sm text-slate-200">{item.text}</p></div>)}
+          </div>
+        </div>
+      </section>
+      <section className="bp-container py-14 sm:py-20">
+        <p className="text-xs font-bold uppercase tracking-widest text-blue-800">INTERNATIONAL LOGISTICS</p>
+        <h2 className="mt-3 text-3xl font-black sm:text-4xl">Across borders. Connected solutions.</h2>
+        <p className="mt-4 max-w-3xl text-slate-600">Flexible sourcing, shipment coordination and fulfillment solutions serving businesses across the Middle East, Pakistan, India, Nepal, Bangladesh, the United States and Canada. Service availability depends on route and shipment requirements.</p>
+        <div className="mt-7 flex flex-wrap gap-3">{["Middle East","Pakistan","India","Nepal","Bangladesh","United States","Canada"].map(place=><span key={place} className="rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-900">{place}</span>)}</div>
+        <div className="mt-8 rounded-2xl border border-blue-100 bg-[#eef6fc] p-7">
+          <p className="text-xs font-bold uppercase tracking-widest text-blue-800">CANADA FULFILLMENT</p>
+          <h3 className="mt-2 text-2xl font-black">Canada logistics in collaboration with FastDrop Worldwide Logistics Inc.</h3>
+          <p className="mt-3 leading-7 text-slate-600">BloomPath coordinates Canada-focused fulfillment, commercial shipments, customs support and domestic delivery solutions in collaboration with FastDrop Worldwide Logistics Inc., with access to supported carrier networks.</p>
+        </div>
+      </section>
+      <section className="bg-slate-50 py-14 sm:py-20">
+        <div className="bp-container">
+          <p className="text-xs font-bold uppercase tracking-widest text-blue-800">FLEXIBLE SERVICES FOR INDIVIDUALS & BUSINESSES</p>
+          <h2 className="mt-3 text-3xl font-black sm:text-4xl">More than fulfillment.</h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              {icon:PackageSearch,title:"Personal sourcing",text:"Custom product requests, supplier sourcing and procurement coordination."},
+              {icon:Luggage,title:"Personal baggage handling",text:"Personal effects, excess baggage and relocation shipment support."},
+              {icon:Container,title:"Commercial shipments",text:"Commercial cargo, air freight, import/export and documentation coordination."},
+              {icon:Plane,title:"DDP shipping solutions",text:"Duties-paid cross-border options on eligible routes and shipments."},
+              {icon:Wallet,title:"COD management",text:"Payment collection reporting, reconciliation and agreed settlement cycles."},
+              {icon:ShieldCheck,title:"Quality, flexibility & value",text:"Careful handling, reasonable quotations and flexible volume-based solutions."}
+            ].map(item=><article key={item.title} className="rounded-2xl bg-white p-6 shadow-sm"><item.icon className="text-blue-800" size={30}/><h3 className="mt-4 text-lg font-bold">{item.title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{item.text}</p></article>)}
+          </div>
+        </div>
+      </section>
+      <section className="bp-container py-14 sm:py-20">
+        <p className="text-xs font-bold uppercase tracking-widest text-blue-800">HAPPY FULFILLMENT CUSTOMERS</p>
+        <h2 className="mt-3 text-3xl font-black sm:text-4xl">Businesses we are proud to support.</h2>
+        <p className="mt-4 text-slate-600">Long-term relationships built on responsive service, careful handling and practical logistics support.</p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[["Royal Blunts","Pakistan"],["Shifa Mart","UAE"],["Quickmart","UAE"],["Discount Hub","UAE"]].map(([name,country])=><div key={name} className="rounded-2xl border border-slate-200 p-6"><Store className="text-blue-800" size={30}/><h3 className="mt-4 text-lg font-bold">{name}</h3><p className="mt-1 text-sm text-slate-600">{country}</p></div>)}
         </div>
       </section>
       <section
