@@ -1,6 +1,7 @@
 import { requireAdminPage } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import ConversationReply from "@/components/admin/ConversationReply";
+import TelegramSetup from "@/components/admin/TelegramSetup";
 export const dynamic = "force-dynamic";
 export default async function Conversations() {
   await requireAdminPage();
@@ -27,6 +28,7 @@ export default async function Conversations() {
           Refresh inbox
         </a>
       </div>
+      <TelegramSetup />
       {error ? (
         <p role="alert">Inbox could not load. Please refresh.</p>
       ) : !data?.length ? (
