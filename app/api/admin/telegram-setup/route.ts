@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   try {
     const response = await fetch(`https://api.telegram.org/bot${token}/setWebhook`, {
       method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url: "https://fulfillmena.com/api/integrations/telegram", secret_token: secret, allowed_updates: ["message"], drop_pending_updates: false }),
+      body: JSON.stringify({ url: "https://www.fulfillmena.com/api/integrations/telegram", secret_token: secret, allowed_updates: ["message"], drop_pending_updates: false }),
       signal: AbortSignal.timeout(12000),
     });
     const result = await response.json();
