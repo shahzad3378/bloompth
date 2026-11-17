@@ -14,7 +14,16 @@ export async function notifyWebsiteChat(input: { conversationId: string; message
         body: JSON.stringify({ chat_id: chatId, text, disable_web_page_preview: true }),
         signal: AbortSignal.timeout(8000),
       });
-      if (!response.ok) { const detail = await response.json().catch(() => ({})); console.error("Telegram notification failed", response.status, detail.description ?? "Unknown Telegram API error"); }
+      if (!response.ok) {
+        const detail = await response.json().catch(() => ({}));
+        console.error("Telegram notification failed", response.status, detail.description ?? "Unknown Telegram API error");
+        // Diagnose bot mismatches without logging credentials or visitor content.
+        try {
+          const identityResponse = await fetch(`https://api.telegram.org/bot${token}/getMe`, { signal: AbortSignal.timeout(5000) });
+          const identity = await identityResponse.json();
+          console.error("Telegram configured bot", identity.ok ? identity.result?.username : "Identity unavailable");
+        } catch { console.error("Telegram bot identity check unavailable"); }
+      }
       else {
         const data = await response.json();
         if (data.ok && data.result?.message_id) {
